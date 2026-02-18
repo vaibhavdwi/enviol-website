@@ -61,6 +61,19 @@ export default function Contact() {
               Our technical team is ready to support your requirements
               for sustainable polyester and polyether polyols.
             </p>
+          
+		  {/* ADDRESS SECTION */}
+            <div className="mb-6 text-lg space-y-1">
+              <h3 className="font-semibold mb-2">Our Office:</h3>
+              <p>Khasra No.164, Prasiddhpur Bhant,</p>
+              <p>Near Parshuram Mandir,</p>
+              <p>Khanchandpur Road,</p>
+              <p>Rania Industrial Area,</p>
+              <p>Tehsil Akbarpur,</p>
+              <p>Kanpur Dehat, Uttar Pradesh, India - 209304</p>
+              <p>Phone: <a href="tel:+919625093722" className="text-primary underline">+91 96250 93722</a></p>
+              <p>Email: <a href="mailto:info@enviol.com" className="text-primary underline">info@enviol.com</a></p>
+            </div>
           </div>
 
           {/* RIGHT SIDE - FORM */}
