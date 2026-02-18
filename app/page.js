@@ -159,56 +159,93 @@ export default function Home() {
         </div>
       </section>
 
-      {/* INDUSTRIES */}
-      <section className="py-20 bg-white text-center">
+     {/* INDUSTRIES */}
+<section className="py-20 bg-white text-center">
   <div className="max-w-6xl mx-auto px-6">
-    <h2 className="text-3xl font-bold mb-12">
-      Industries We Serve
-    </h2>
 
+    {/* Clickable Heading */}
+    <div className="mb-12">
+      <Link href="/industries" className="group inline-block">
+        <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
+          Industries We Serve
+          <span className="absolute left-0 -bottom-2 h-[3px] w-full bg-[#42b3a5] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+        </h2>
+      </Link>
+    </div>
+
+    {/* Industry Cards */}
     <div className="grid md:grid-cols-3 gap-8">
 
-      <Link href="/industries/polyurethane" className="group">
-        <div className="bg-gray-100 p-6 rounded shadow transition duration-300 group-hover:bg-[#42b3a5] group-hover:text-white">
-          Polyurethane Manufacturing
-        </div>
-      </Link>
+      {[
+        { name: "Polyurethane Manufacturing", path: "/industries/polyurethane" },
+        { name: "Foam Production", path: "/industries/foam-production" },
+        { name: "Paint & Coatings", path: "/industries/paint-coatings" },
+        { name: "Adhesives", path: "/industries/adhesives" },
+        { name: "Powder Coating", path: "/industries/powder-coating" },
+        { name: "Elastomers", path: "/industries/elastomers" },
+        { name: "Artificial Leather", path: "/industries/artificial-leather" },
+      ].map((industry, index) => (
+        <Link key={index} href={industry.path} className="group">
+          <div className="bg-gray-100 p-6 rounded shadow transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-lg group-hover:bg-[#42b3a5] group-hover:text-white">
+            {industry.name}
+          </div>
+        </Link>
+      ))}
 
-      <Link href="/industries/foam-production" className="group">
-        <div className="bg-gray-100 p-6 rounded shadow transition duration-300 group-hover:bg-[#42b3a5] group-hover:text-white">
-          Foam Production
-        </div>
-      </Link>
+    </div>
 
-      <Link href="/industries/paint-coatings" className="group">
-        <div className="bg-gray-100 p-6 rounded shadow transition duration-300 group-hover:bg-[#42b3a5] group-hover:text-white">
-          Paint & Coatings
-        </div>
-      </Link>
+  </div>
+</section>
 
-      <Link href="/industries/adhesives" className="group">
-        <div className="bg-gray-100 p-6 rounded shadow transition duration-300 group-hover:bg-[#42b3a5] group-hover:text-white">
-          Adhesives
-        </div>
-      </Link>
+{/* IMPACT METRICS SECTION */}
+<section className="py-20 bg-gray-50 border-t">
+  <div className="max-w-6xl mx-auto px-6 text-center">
 
-      <Link href="/industries/powder-coating" className="group">
-        <div className="bg-gray-100 p-6 rounded shadow transition duration-300 group-hover:bg-[#42b3a5] group-hover:text-white">
-          Powder Coating
-        </div>
-      </Link>
+    <h2 className="text-3xl font-bold mb-12">
+      Our Industrial Impact Commitment
+    </h2>
 
-      <Link href="/industries/elastomers" className="group">
-        <div className="bg-gray-100 p-6 rounded shadow transition duration-300 group-hover:bg-[#42b3a5] group-hover:text-white">
-          Elastomers
-        </div>
-      </Link>
+    <div className="grid md:grid-cols-4 gap-10">
 
-      <Link href="/industries/artificial-leather" className="group">
-        <div className="bg-gray-100 p-6 rounded shadow transition duration-300 group-hover:bg-[#42b3a5] group-hover:text-white">
-          Artificial Leather
-        </div>
-      </Link>
+      {/* Metric 1 */}
+      <div>
+        <h3 className="text-4xl font-bold text-[#42b3a5] mb-2">
+          30 TPD
+        </h3>
+        <p className="text-sm uppercase tracking-wide text-gray-600">
+          Target Recycling Capacity
+        </p>
+      </div>
+
+      {/* Metric 2 */}
+      <div>
+        <h3 className="text-4xl font-bold text-[#42b3a5] mb-2">
+          PET & PU
+        </h3>
+        <p className="text-sm uppercase tracking-wide text-gray-600">
+          Polymer Waste Streams Processed
+        </p>
+      </div>
+
+      {/* Metric 3 */}
+      <div>
+        <h3 className="text-4xl font-bold text-[#42b3a5] mb-2">
+          Low Carbon
+        </h3>
+        <p className="text-sm uppercase tracking-wide text-gray-600">
+          Regeneration Model
+        </p>
+      </div>
+
+      {/* Metric 4 */}
+      <div>
+        <h3 className="text-4xl font-bold text-[#42b3a5] mb-2">
+          Make in India
+        </h3>
+        <p className="text-sm uppercase tracking-wide text-gray-600">
+          Import Substitution Focus
+        </p>
+      </div>
 
     </div>
   </div>
