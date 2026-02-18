@@ -1,6 +1,3 @@
 {
-  "/page": "app/page.js",
-  "/industries/polyurethane/page": "app/industries/polyurethane/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/products/page": "app/products/page.js"
+  "/page": "app/page.js"
 }

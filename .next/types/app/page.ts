@@ -1,4 +1,4 @@
-// File: C:\Users\x\Downloads\enviol-enterprise-nextjs\app\page.js
+// File: D:\enviol-enterprise-nextjs\app\page.js
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
