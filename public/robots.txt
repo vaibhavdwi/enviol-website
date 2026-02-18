@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://enviol.com
+
+# Sitemaps
+Sitemap: https://enviol.com/sitemap.xml
