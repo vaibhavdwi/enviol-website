@@ -33,7 +33,7 @@ export const metadata = {
     siteName: "Enviol Polytech Solutions",
     images: [
       {
-        url: "/images/og-image.jpg", // Replace with your Open Graph image
+        url: "/images/og-image.png", // Replace with your Open Graph image
         width: 1200,
         height: 630,
         alt: "Enviol Polytech Solutions Logo"
@@ -53,7 +53,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Enviol Polytech Solutions | Sustainable & Recycled Polyols",
     description: "Providing high-quality sustainable, recycled, and blended Polyester & Polyether Polyols for CASE applications from Kanpur, India.",
-    images: ["/images/og-image.jpg"], // Replace with Twitter image
+    images: ["/images/og-image.png"], // Replace with Twitter image
     creator: "@EnviolPolytech"
   }
 };
