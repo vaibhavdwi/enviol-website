@@ -1,6 +1,8 @@
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Script from "next/script";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 export const metadata = {
   title: "Enviol Polytech Solutions | Sustainable & Recycled Polyols for CASE Applications",
@@ -24,7 +26,7 @@ export const metadata = {
   metadataBase: new URL("https://www.enviol.com"),
   icons: {
     icon: "/favicon.ico",
-    apple: "/favicon.ico" // iOS devices
+    apple: "/favicon.ico"
   },
   openGraph: {
     title: "Enviol Polytech Solutions | Sustainable & Recycled Polyols",
@@ -33,7 +35,7 @@ export const metadata = {
     siteName: "Enviol Polytech Solutions",
     images: [
       {
-        url: "/images/og-image.png", // Replace with your Open Graph image
+        url: "/images/og-image.png",
         width: 1200,
         height: 630,
         alt: "Enviol Polytech Solutions Logo"
@@ -53,7 +55,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Enviol Polytech Solutions | Sustainable & Recycled Polyols",
     description: "Providing high-quality sustainable, recycled, and blended Polyester & Polyether Polyols for CASE applications from Kanpur, India.",
-    images: ["/images/og-image.png"], // Replace with Twitter image
+    images: ["/images/og-image.png"],
     creator: "@EnviolPolytech"
   }
 };
@@ -61,8 +63,29 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* Google Analytics GA4 */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-WYLMK5RJJH"
+        />
+        <Script
+          id="ga-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-WYLMK5RJJH', { page_path: window.location.pathname });
+            `,
+          }}
+        />
+      </head>
       <body className="bg-lightbg text-industrial">
         <Navbar />
+        {/* Client component for route change tracking */}
+        <GoogleAnalytics measurementId="G-WYLMK5RJJH" />
         {children}
         <Footer />
       </body>
