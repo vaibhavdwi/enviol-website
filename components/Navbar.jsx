@@ -4,10 +4,12 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,7 +25,7 @@ export default function Navbar() {
     { name: "About Us", path: "/about" },
     { name: "Technology", path: "/technology" },
     { name: "Sustainability", path: "/sustainability" },
-	{ name: "Industries", path: "/industries" },
+    { name: "Industries", path: "/industries" },
     { name: "Products", path: "/products" },
     { name: "Contact", path: "/contact" },
   ];
@@ -36,35 +38,31 @@ export default function Navbar() {
           : "bg-[#42b3a5]"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+        
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-4 group">
+        <Link href="/" className="flex items-center gap-3">
           <Image
             src="/images/logo.png"
             alt="Enviol Polytech Solutions"
-            width={80}
-            height={80}
+            width={60}
+            height={60}
             priority
-            className="transition duration-300 group-hover:scale-105"
           />
-
           <div>
-            <h1 className="text-2xl font-bold text-white leading-tight">
+            <h1 className="text-lg md:text-2xl font-bold text-white leading-tight">
               Enviol Polytech Solutions
             </h1>
-            <p className="text-sm font-semibold text-white tracking-wide uppercase">
+            <p className="text-xs md:text-sm font-semibold text-white uppercase">
               Reuse What You Waste
             </p>
           </div>
         </Link>
 
-        {/* Navigation */}
-        <nav className="flex gap-8 text-base font-medium text-white">
-
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex gap-8 text-base font-medium text-white">
           {navLinks.map((link) => {
             const isActive = pathname === link.path;
-
             return (
               <Link
                 key={link.path}
@@ -74,19 +72,44 @@ export default function Navbar() {
                 }`}
               >
                 {link.name}
-
-                {/* Animated Bottom Bar */}
                 <span
                   className={`absolute left-0 -bottom-2 h-[3px] w-full bg-white transform transition-transform duration-300 origin-left ${
-                    isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    isActive
+                      ? "scale-x-100"
+                      : "scale-x-0 group-hover:scale-x-100"
                   }`}
-                ></span>
+                />
               </Link>
             );
           })}
-
         </nav>
+
+        {/* Mobile Hamburger */}
+        <button
+          className="md:hidden text-white"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-[#42b3a5] px-6 pb-6">
+          <nav className="flex flex-col gap-4 text-white text-lg font-medium">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                href={link.path}
+                onClick={() => setMenuOpen(false)}
+                className="hover:text-gray-200"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
