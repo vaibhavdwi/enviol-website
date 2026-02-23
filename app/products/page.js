@@ -16,6 +16,19 @@ export default function ProductsPage() {
           </div>
         ))}
       </div>
+	  
+	  {/* R&D NOTICE */}
+<div className="mt-16 bg-yellow-50 border border-yellow-200 p-6 rounded-lg">
+  <h3 className="text-lg font-semibold text-yellow-800 mb-2">
+    Note: Currently Under R&D Phase
+  </h3>
+  <p className="text-gray-700">
+    Our products are currently in the Research & Development phase. 
+    We are not accepting or processing commercial orders at this time. 
+    However, we welcome your technical queries and partnership discussions.
+  </p>
+</div>
     </section>
+	
   );
 }
