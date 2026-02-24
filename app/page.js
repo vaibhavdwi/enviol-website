@@ -181,6 +181,7 @@ export default function Home() {
         { name: "Foam Production", path: "/industries/foam-production" },
         { name: "Paint & Coatings", path: "/industries/paint-coatings" },
         { name: "Adhesives", path: "/industries/adhesives" },
+		{ name: "Sealents", path: "/industries/pu-sealents" },
         { name: "Powder Coating", path: "/industries/powder-coating" },
         { name: "Elastomers", path: "/industries/elastomers" },
         { name: "Artificial Leather", path: "/industries/artificial-leather" },

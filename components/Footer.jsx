@@ -141,7 +141,7 @@ export default function Footer() {
           </p>
 
           <p className="text-sm">
-            Email: info@enviol.com
+            <a href="mailto:info@enviol.com" className="text-primary underline">Email: info@enviol.com</a>
           </p>
         </div>
 
