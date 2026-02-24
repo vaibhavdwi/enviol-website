@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -19,26 +20,92 @@ export default function Footer() {
           </p>
 
           <p className="mt-4 text-sm">
-            Supporting <span className="font-semibold text-white">Make in India</span>  
+            Supporting <span className="font-semibold text-white">Make in India </span>  
             and promoting industrial self-reliance.
           </p>
+		  {/* ✅ Make in India Logo Added Here */}
+            <div className="mt-3">
+              <Image
+                src="/images/make-in-india.jpg"
+                alt="Make in India Initiative"
+                width={130}
+                height={65}
+                className="object-contain w-28 sm:w-32 md:w-36"
+              />
+            </div>
         </div>
 
-        {/* QUICK LINKS */}
-        <div>
-          <h4 className="text-white font-semibold mb-4">
-            Quick Links
-          </h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link href="/" className="hover:text-white">Home</Link></li>
-            <li><Link href="/about" className="hover:text-white">About Us</Link></li>
-            <li><Link href="/technology" className="hover:text-white">Technology</Link></li>
-            <li><Link href="/sustainability" className="hover:text-white">Sustainability</Link></li>
-			<li><Link href="/industries" className="hover:text-white">Industries</Link></li>
-            <li><Link href="/products" className="hover:text-white">Products</Link></li>
-            <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
-          </ul>
-        </div>
+      {/* QUICK LINKS */}
+<div>
+  <h4 className="text-white font-semibold mb-4">
+    Quick Links
+  </h4>
+
+  <ul className="space-y-2 text-sm">
+    <li>
+      <Link
+        href="/"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        Home
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/about"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        About Us
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/technology"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        Technology
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/sustainability"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        Sustainability
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/industries"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        Industries
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/products"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        Products
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/contact"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        Contact
+      </Link>
+    </li>
+  </ul>
+</div>
 
         {/* TECHNOLOGY FOCUS */}
         <div>
