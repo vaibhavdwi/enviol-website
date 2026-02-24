@@ -1,4 +1,7 @@
-export default function Industries() {
+import Link from "next/link";
+import ApplicationsTable from "../../components/ApplicationsTable";
+
+export default function IndustriesPage() {
   return (
     <div className="bg-white text-gray-800">
 
@@ -6,7 +9,7 @@ export default function Industries() {
       <section className="py-20 border-b">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Industries We Serve
+            Industries & Applications We Support
           </h1>
           <p className="text-lg max-w-3xl mx-auto">
             Enviol Polytech Solutions provides regenerated polyols
@@ -17,63 +20,107 @@ export default function Industries() {
       </section>
 
       {/* INDUSTRIES GRID */}
-      <section className="py-20">
+      <section className="py-20 border-b">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
 
-          <div className="border p-8">
-            <h3 className="text-xl font-semibold mb-4">
-              Coatings Industry
-            </h3>
-            <p>
-              Sustainable polyol inputs for industrial and protective coatings.
-            </p>
-          </div>
+          <Link href="/industries/polyurethane">
+            <div className="border p-8 rounded-lg transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-lg cursor-pointer">
+              <h3 className="text-xl font-semibold mb-3">
+                Polyurethane Manufacturing
+              </h3>
+              <p className="text-sm leading-relaxed">
+                High-quality regenerated polyols tailored for PU system manufacturers.
+              </p>
+            </div>
+          </Link>
 
-          <div className="border p-8">
-            <h3 className="text-xl font-semibold mb-4">
-              Adhesives Manufacturers
-            </h3>
-            <p>
-              High-performance regenerated polyols for bonding applications.
-            </p>
-          </div>
+          <Link href="/industries/foam-production">
+            <div className="border p-8 rounded-lg transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-lg cursor-pointer">
+              <h3 className="text-xl font-semibold mb-3">
+                Foam Production
+              </h3>
+              <p className="text-sm leading-relaxed">
+                Sustainable raw materials supporting rigid and flexible foam production.
+              </p>
+            </div>
+          </Link>
 
-          <div className="border p-8">
-            <h3 className="text-xl font-semibold mb-4">
-              Sealant Producers
-            </h3>
-            <p>
-              Reliable and cost-efficient raw material alternatives.
-            </p>
-          </div>
+          <Link href="/industries/paint-coatings">
+            <div className="border p-8 rounded-lg transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-lg cursor-pointer">
+              <h3 className="text-xl font-semibold mb-3">
+                Paint & Coatings
+              </h3>
+              <p className="text-sm leading-relaxed">
+                Reliable polyol inputs for industrial and protective coating systems.
+              </p>
+            </div>
+          </Link>
 
-          <div className="border p-8">
-            <h3 className="text-xl font-semibold mb-4">
-              Elastomer Applications
-            </h3>
-            <p>
-              Structured polyol solutions for durable elastomer systems.
-            </p>
-          </div>
+          <Link href="/industries/adhesives">
+            <div className="border p-8 rounded-lg transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-lg cursor-pointer">
+              <h3 className="text-xl font-semibold mb-3">
+                Adhesives
+              </h3>
+              <p className="text-sm leading-relaxed">
+                Performance-driven solutions for advanced bonding applications.
+              </p>
+            </div>
+          </Link>
 
-          <div className="border p-8">
-            <h3 className="text-xl font-semibold mb-4">
-              Footwear Industry
-            </h3>
-            <p>
-              Future integration of PU sole and rubber scrap regeneration.
-            </p>
-          </div>
+          <Link href="/industries/pu-sealents">
+            <div className="border p-8 rounded-lg transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-lg cursor-pointer">
+              <h3 className="text-xl font-semibold mb-3">
+                Sealants
+              </h3>
+              <p className="text-sm leading-relaxed">
+                Cost-efficient regenerated inputs for durable sealing systems.
+              </p>
+            </div>
+          </Link>
 
-          <div className="border p-8">
-            <h3 className="text-xl font-semibold mb-4">
-              Packaging & PET Recycling
-            </h3>
-            <p>
-              Circular material solutions supporting polymer reuse initiatives.
-            </p>
-          </div>
+          <Link href="/industries/powder-coating">
+            <div className="border p-8 rounded-lg transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-lg cursor-pointer">
+              <h3 className="text-xl font-semibold mb-3">
+                Powder Coating
+              </h3>
+              <p className="text-sm leading-relaxed">
+                Supporting circular material innovation in powder coating technologies.
+              </p>
+            </div>
+          </Link>
 
+          <Link href="/industries/elastomers">
+            <div className="border p-8 rounded-lg transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-lg cursor-pointer">
+              <h3 className="text-xl font-semibold mb-3">
+                Elastomers
+              </h3>
+              <p className="text-sm leading-relaxed">
+                Structured polyol systems for resilient and durable elastomer products.
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/industries/artificial-leather">
+            <div className="border p-8 rounded-lg transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-lg cursor-pointer">
+              <h3 className="text-xl font-semibold mb-3">
+                Artificial Leather
+              </h3>
+              <p className="text-sm leading-relaxed">
+                Sustainable material solutions for synthetic leather manufacturing.
+              </p>
+            </div>
+          </Link>
+
+        </div>
+      </section>
+
+      {/* APPLICATIONS TABLE */}
+      <section className="py-20 border-b">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-3xl font-bold mb-8 text-center">
+            Explore Applications
+          </h2>
+          <ApplicationsTable />
         </div>
       </section>
 
@@ -87,12 +134,12 @@ export default function Industries() {
             Join us in building a circular polymer economy and
             strengthening India’s industrial self-reliance.
           </p>
-          <a
+          <Link
             href="/contact"
-            className="bg-[#42b3a5] text-white px-8 py-3 rounded font-semibold"
+            className="bg-[#55BAAE] text-white px-8 py-3 rounded font-semibold"
           >
             Request Technical Consultation
-          </a>
+          </Link>
         </div>
       </section>
 
