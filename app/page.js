@@ -75,7 +75,7 @@ export default function Home() {
       </section>
 	  
 	  {/* WHAT WE DO */}
-      <section className="py-20 bg-lightbg">
+      <section className="py-20 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-primary mb-12">
             What We Do
@@ -117,7 +117,7 @@ export default function Home() {
       </section>
 
       {/* WHY ENVIOL */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-primary mb-12">
             Why Enviol Polytech Solutions
@@ -145,7 +145,7 @@ export default function Home() {
       </section>
 
       {/* OUR COMMITMENT */}
-      <section className="py-20 bg-lightbg text-center">
+      <section className="py-20 bg-yellow-50 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-primary mb-6">
             Our Commitment to Sustainability
@@ -160,7 +160,7 @@ export default function Home() {
       </section>
 
      {/* INDUSTRIES */}
-<section className="py-20 bg-white text-center">
+<section className="py-20 bg-yellow-50 text-center">
   <div className="max-w-6xl mx-auto px-6">
 
     {/* Clickable Heading */}
@@ -199,7 +199,7 @@ export default function Home() {
 </section>
 
 {/* IMPACT METRICS SECTION */}
-<section className="py-20 bg-gray-50 border-t">
+<section className="py-20 bg-yellow-50 border-t">
   <div className="max-w-6xl mx-auto px-6 text-center">
 
     <h2 className="text-3xl font-bold mb-12">

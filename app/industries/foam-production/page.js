@@ -19,7 +19,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="container mx-auto px-6 py-12">
+    <main className="container mx-auto px-6 py-12 bg-yellow-50">
 
       <h1 className="text-3xl font-bold mb-6">
         Advanced Polyol Solutions for Flexible & Rigid Polyurethane Foam

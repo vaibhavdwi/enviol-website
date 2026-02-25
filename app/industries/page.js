@@ -3,7 +3,7 @@ import ApplicationsTable from "../../components/ApplicationsTable";
 
 export default function IndustriesPage() {
   return (
-    <div className="bg-white text-gray-800">
+    <div className="bg-yellow-50">
 
       {/* HERO */}
       <section className="py-20 border-b">

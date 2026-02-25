@@ -3,7 +3,7 @@ import { products } from "../../data/products";
 
 export default function ProductsPage() {
   return (
-    <section className="py-20 max-w-6xl mx-auto px-6">
+    <section className="bg-yellow-50">
       <h1 className="text-4xl font-bold mb-10">Our Products</h1>
       <div className="grid md:grid-cols-2 gap-8">
         {products.map(product => (

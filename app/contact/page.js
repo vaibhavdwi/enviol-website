@@ -42,7 +42,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="py-20 bg-white">
+    <div className="bg-yellow-50">
       <div className="max-w-6xl mx-auto px-6">
 
         <h1 className="text-4xl font-bold text-primary mb-10 text-center">

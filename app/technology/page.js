@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Technology() {
   return (
-    <div className="bg-white text-gray-800">
+    <div className="bg-yellow-50">
 
       {/* HERO SECTION */}
       <section className="py-20 border-b">

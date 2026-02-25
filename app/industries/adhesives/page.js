@@ -20,7 +20,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="container mx-auto px-6 py-12">
+    <main className="container mx-auto px-6 py-12 bg-yellow-50">
 	<p className="mb-6 text-lg">
   <strong>Enviol Polytech Solutions</strong> provides advanced polyester and 
   polyether polyols tailored for industrial polyurethane adhesive manufacturing. 

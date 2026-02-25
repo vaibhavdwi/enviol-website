@@ -9,14 +9,14 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="container mx-auto px-6 py-12">
+    <main className="container mx-auto px-6 py-12 bg-yellow-50">
       <h1 className="text-4xl font-bold text-center mb-8">About Us</h1>
 
       {/* Existing Sections */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Who We Are</h2>
         <p className="text-gray-700">
-          EnvioL is a forward-thinking enterprise committed to building sustainable solutions for a better tomorrow. Our team is driven by innovation, integrity, and a passion for creating impact in our communities.
+          Enviol is a forward-thinking enterprise committed to building sustainable solutions for a better tomorrow. Our team is driven by innovation, integrity, and a passion for creating impact in our communities.
         </p>
       </section>
 
