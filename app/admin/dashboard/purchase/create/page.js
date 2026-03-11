@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CreatePurchase() {
 
@@ -16,15 +16,60 @@ export default function CreatePurchase() {
     pincode: ""
   });
 
+  const [suppliers, setSuppliers] = useState([]);
+
   const [items, setItems] = useState([
     { product_name: "", quantity: 1, price: 0, discount: 0 }
   ]);
 
+  useEffect(() => {
+
+    const loadSuppliers = async () => {
+
+      const res = await fetch("/api/admin/purchase/suppliers");
+      const data = await res.json();
+
+      setSuppliers(data);
+
+    };
+
+    loadSuppliers();
+
+  }, []);
+
   const handleSupplierChange = (e) => {
+
+    const { name, value } = e.target;
+
+    if (name === "supplier_name") {
+
+      const found = suppliers.find(
+        (s) => s.supplier_name === value
+      );
+
+      if (found) {
+
+        setSupplier({
+          supplier_name: found.supplier_name,
+          contact_person: found.contact_person || "",
+          email: found.email || "",
+          phone: found.phone || "",
+          gst_number: found.gst_number || "",
+          address: found.address || "",
+          city: found.city || "",
+          state: found.state || "",
+          pincode: found.pincode || ""
+        });
+
+        return;
+      }
+    }
+
     setSupplier({
       ...supplier,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+
   };
 
   const handleItemChange = (index, e) => {
@@ -34,6 +79,7 @@ export default function CreatePurchase() {
     updated[index][e.target.name] = e.target.value;
 
     setItems(updated);
+
   };
 
   const addItem = () => {
@@ -47,10 +93,13 @@ export default function CreatePurchase() {
       ...items,
       { product_name: "", quantity: 1, price: 0, discount: 0 }
     ]);
+
   };
 
   const removeItem = (index) => {
+
     setItems(items.filter((_, i) => i !== index));
+
   };
 
   const calculateLineTotal = (item) => {
@@ -63,6 +112,7 @@ export default function CreatePurchase() {
     const discountAmount = (total * discount) / 100;
 
     return total - discountAmount;
+
   };
 
   const calculateGrandTotal = () => {
@@ -123,15 +173,24 @@ export default function CreatePurchase() {
         <div className="space-y-3">
 
           <input
+            list="supplierList"
             name="supplier_name"
             placeholder="Supplier Name"
+            value={supplier.supplier_name}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
 
+          <datalist id="supplierList">
+            {suppliers.map((s, i) => (
+              <option key={i} value={s.supplier_name} />
+            ))}
+          </datalist>
+
           <input
             name="contact_person"
             placeholder="Contact Person"
+            value={supplier.contact_person}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
@@ -139,6 +198,7 @@ export default function CreatePurchase() {
           <input
             name="email"
             placeholder="Email"
+            value={supplier.email}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
@@ -146,6 +206,7 @@ export default function CreatePurchase() {
           <input
             name="phone"
             placeholder="Phone"
+            value={supplier.phone}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
@@ -153,6 +214,7 @@ export default function CreatePurchase() {
           <input
             name="gst_number"
             placeholder="GST Number"
+            value={supplier.gst_number}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
@@ -160,13 +222,15 @@ export default function CreatePurchase() {
           <textarea
             name="address"
             placeholder="Address"
+            value={supplier.address}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
-		  
-   <input
+
+          <input
             name="city"
             placeholder="City"
+            value={supplier.city}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
@@ -174,6 +238,7 @@ export default function CreatePurchase() {
           <input
             name="state"
             placeholder="State"
+            value={supplier.state}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
@@ -181,10 +246,10 @@ export default function CreatePurchase() {
           <input
             name="pincode"
             placeholder="Pin Code"
+            value={supplier.pincode}
             onChange={handleSupplierChange}
             className="w-full border p-3 rounded"
           />
-
 
         </div>
 
@@ -240,20 +305,16 @@ export default function CreatePurchase() {
               </div>
 
               <div className="text-right font-semibold">
-
                 Line Total: ₹ {calculateLineTotal(item).toFixed(2)}
-
               </div>
 
               {items.length > 1 && (
-
                 <button
                   onClick={()=>removeItem(index)}
                   className="text-red-600 text-sm"
                 >
                   Remove
                 </button>
-
               )}
 
             </div>
@@ -261,14 +322,12 @@ export default function CreatePurchase() {
           ))}
 
           {items.length < 5 && (
-
             <button
               onClick={addItem}
               className="bg-gray-200 px-4 py-2 rounded"
             >
               + Add Product
             </button>
-
           )}
 
         </div>
@@ -276,9 +335,7 @@ export default function CreatePurchase() {
         {/* Grand Total */}
 
         <div className="text-right text-xl font-bold">
-
           Grand Total: ₹ {calculateGrandTotal().toFixed(2)}
-
         </div>
 
         <div className="text-right">

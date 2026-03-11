@@ -9,9 +9,24 @@ export async function POST(req) {
 
   const { id, amount } = await req.json();
 
+  const finalAmount = Number(amount);
+
+  // GST inclusive calculation
+  const baseAmount = finalAmount / 1.18;
+  const gstAmount = finalAmount - baseAmount;
+
   await pool.query(
-    "UPDATE purchases SET final_amount=$1 WHERE id=$2",
-    [amount, id]
+    `UPDATE purchases
+     SET final_amount = $1,
+         base_amount = $2,
+         gst_paid = $3
+     WHERE id = $4`,
+    [
+      finalAmount,
+      baseAmount,
+      gstAmount,
+      id
+    ]
   );
 
   return NextResponse.json({ success: true });
