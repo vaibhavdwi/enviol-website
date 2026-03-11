@@ -79,6 +79,12 @@ export default function DashboardLayout({ children }) {
             >
               Sales
             </li>
+			<li
+              className="cursor-pointer hover:opacity-100"
+              onClick={() => router.push("/admin/dashboard/accounting")}
+            >
+              Accounting
+            </li>
           </ul>
         </div>
 

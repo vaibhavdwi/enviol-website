@@ -57,8 +57,8 @@ export default function AdminLogin() {
 
         {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[#42B3A5]">Enviol</h1>
-          <p className="text-sm text-gray-600 mt-2">Enviol Polytech Solutions</p>
+          <h1 className="text-3xl font-bold text-[#42B3A5]">Enviol Polytech Solutions</h1>
+          <p className="text-base font-semibold text-gray-600 mt-2">ERP</p>
         </div>
 
         {/* Login Form */}
