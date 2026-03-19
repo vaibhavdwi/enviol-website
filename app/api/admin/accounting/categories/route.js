@@ -1,4 +1,3 @@
-// D:\enviol-enterprise-nextjs\app\api\admin\accounting\categories\route.js
 import { NextResponse } from "next/server";
 import { Pool } from "pg";
 
@@ -8,11 +7,23 @@ const pool = new Pool({
 
 export async function GET() {
   try {
-    const result = await pool.query(`SELECT id, name, group_name FROM expense_categories ORDER BY name`);
-    return NextResponse.json(result.rows);
+    // Fetch all categories with their group
+    const result = await pool.query(`
+      SELECT id, name, group_name
+      FROM expense_categories
+      ORDER BY group_name, name
+    `);
+
+    // Extract unique groups for filters
+    const groups = [...new Set(result.rows.map(r => r.group_name).filter(Boolean))];
+
+    // Categories as objects: id, name, group_name
+    const categories = result.rows;
+
+    return NextResponse.json({ groups, categories });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json([], { status: 500 });
+    console.error("Error fetching categories:", error);
+    return NextResponse.json({ groups: [], categories: [] }, { status: 500 });
   }
 }
 
@@ -21,7 +32,10 @@ export async function POST(req) {
     const { name, group } = await req.json();
 
     if (!name) {
-      return NextResponse.json({ success: false, message: "Category name is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "Category name is required" },
+        { status: 400 }
+      );
     }
 
     const result = await pool.query(
@@ -33,7 +47,10 @@ export async function POST(req) {
 
     return NextResponse.json(result.rows[0]);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ success: false, message: "Error creating category" }, { status: 500 });
+    console.error("Error creating category:", error);
+    return NextResponse.json(
+      { success: false, message: "Error creating category" },
+      { status: 500 }
+    );
   }
 }

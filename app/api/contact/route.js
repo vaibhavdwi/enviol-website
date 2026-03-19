@@ -1,4 +1,4 @@
-const pool = require("../../../lib/db");
+import pool from "../../../lib/db";
 
 export async function POST(req) {
   try {
@@ -6,8 +6,8 @@ export async function POST(req) {
     const { company, person, email, phone, message } = body;
 
     if (!company || !person || !email || !message) {
-      return new Response(
-        JSON.stringify({ error: "Required fields missing" }),
+      return Response.json(
+        { error: "Required fields missing" },
         { status: 400 }
       );
     }
@@ -17,15 +17,16 @@ export async function POST(req) {
       [company, person, email, phone, message]
     );
 
-    return new Response(
-      JSON.stringify({ message: "Enquiry submitted successfully" }),
+    return Response.json(
+      { message: "Enquiry submitted successfully" },
       { status: 200 }
     );
 
   } catch (error) {
-    console.error(error);
-    return new Response(
-      JSON.stringify({ error: "Server error" }),
+    console.error("❌ ERROR:", error);
+
+    return Response.json(
+      { error: error.message },
       { status: 500 }
     );
   }

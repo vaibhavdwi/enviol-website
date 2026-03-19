@@ -6,14 +6,20 @@ export default function ViewExpenses() {
   const [expenses, setExpenses] = useState([]);
   const [years, setYears] = useState([]);
   const [months, setMonths] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [groups, setGroups] = useState([]);
+
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("");
 
+  // Fetch years
   const fetchYears = async () => {
     try {
       const res = await fetch("/api/admin/accounting/years");
       const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
+      if (Array.isArray(data) && data.length) {
         setYears(data);
         setSelectedYear(data[0]);
       }
@@ -23,6 +29,7 @@ export default function ViewExpenses() {
     }
   };
 
+  // Fetch months for selected year
   const fetchMonths = async () => {
     if (!selectedYear) return;
     try {
@@ -42,13 +49,35 @@ export default function ViewExpenses() {
     }
   };
 
+  // Fetch categories and groups
+  const fetchCategoriesGroups = async () => {
+    try {
+      const res = await fetch("/api/admin/accounting/categories");
+      const data = await res.json();
+      setCategories(Array.isArray(data.categories) ? data.categories : []);
+      setGroups(Array.isArray(data.groups) ? data.groups : []);
+    } catch (err) {
+      console.error(err);
+      setCategories([]);
+      setGroups([]);
+    }
+  };
+
+  // Fetch expenses based on filters
   const fetchExpenses = async () => {
     if (!selectedYear || selectedMonths.length === 0) {
       setExpenses([]);
       return;
     }
+
+    const query = new URLSearchParams();
+    query.append("year", selectedYear);
+    query.append("months", selectedMonths.join(","));
+    if (selectedCategory) query.append("category", selectedCategory);
+    if (selectedGroup) query.append("group", selectedGroup);
+
     try {
-      const res = await fetch(`/api/admin/accounting/view?year=${selectedYear}&months=${selectedMonths.join(",")}`);
+      const res = await fetch(`/api/admin/accounting/view?${query.toString()}`);
       const data = await res.json();
       setExpenses(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -57,9 +86,9 @@ export default function ViewExpenses() {
     }
   };
 
-  useEffect(() => { fetchYears(); }, []);
+  useEffect(() => { fetchYears(); fetchCategoriesGroups(); }, []);
   useEffect(() => { fetchMonths(); }, [selectedYear]);
-  useEffect(() => { fetchExpenses(); }, [selectedYear, selectedMonths]);
+  useEffect(() => { fetchExpenses(); }, [selectedYear, selectedMonths, selectedCategory, selectedGroup]);
 
   const handleMonthChange = (month) => {
     if (selectedMonths.includes(month)) {
@@ -69,6 +98,7 @@ export default function ViewExpenses() {
     }
   };
 
+  // Totals
   const groupTotals = expenses.reduce((acc, e) => {
     if (!acc[e.group]) acc[e.group] = 0;
     acc[e.group] += Number(e.amount);
@@ -77,6 +107,7 @@ export default function ViewExpenses() {
 
   const grandTotal = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
 
+  // Export CSV
   const exportCSV = () => {
     if (!expenses.length) return;
     let csvContent = "data:text/csv;charset=utf-8,";
@@ -98,49 +129,48 @@ export default function ViewExpenses() {
     link.click();
   };
 
+  // Print report
   const printReport = () => {
-  if (!expenses.length) return;
-  const printWindow = window.open("", "_blank");
-  printWindow.document.write("<html><head><title>Expenses Report</title></head><body>");
+    if (!expenses.length) return;
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write("<html><head><title>Expenses Report</title></head><body>");
 
-  // Header with logo and company name
-  printWindow.document.write(`
-    <div style="display:flex; align-items:center; margin-bottom:20px;">
-      <img src="/images/logo.png" style="height:60px; margin-right:20px;" />
-      <h2 style="margin:0;">Enviol Polytech Solutions</h2>
-    </div>
-  `);
+    // Header
+    printWindow.document.write(`
+      <div style="display:flex; align-items:center; margin-bottom:20px;">
+        <img src="/images/logo.png" style="height:60px; margin-right:20px;" />
+        <h2 style="margin:0;">Enviol Polytech Solutions</h2>
+      </div>
+    `);
 
-  // Include table as rendered on page
-  const tableHtml = document.getElementById("expensesTable").outerHTML;
-  printWindow.document.write(`
-    <style>
-      table { border-collapse: collapse; width: 100%; }
-      th, td { border: 1px solid #000; padding: 6px; }
-      th { background-color: #f0f0f0; }
-    </style>
-  `);
-  printWindow.document.write(tableHtml);
+    // Table
+    const tableHtml = document.getElementById("expensesTable").outerHTML;
+    printWindow.document.write(`
+      <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #000; padding: 6px; }
+        th { background-color: #f0f0f0; }
+      </style>
+    `);
+    printWindow.document.write(tableHtml);
 
-  // Remove extra totals here — already in table
+    // Signatures
+    printWindow.document.write(`
+      <div style="margin-top:50px; display:flex; justify-content:flex-end; flex-direction:column; align-items:flex-end;">
+        <p>Accountant Signature: ___________________</p>
+        <p>Chartered Accountant Signature: ___________________</p>
+        <p>Authorised Stamp/Seal: ___________________</p>
+        <p>Date: __/__/____</p>
+        <p>Place: Lucknow</p>
+      </div>
+    `);
 
-  // Signatures on right
-  printWindow.document.write(`
-    <div style="margin-top:50px; display:flex; justify-content:flex-end; flex-direction:column; align-items:flex-end;">
-      <p>Accountant Signature: ___________________</p>
-      <p>Chartered Accountant Signature: ___________________</p>
-      <p>Authorised Stamp/Seal: ___________________</p>
-      <p>Date: __/__/____</p>
-      <p>Place: Lucknow</p>
-    </div>
-  `);
+    printWindow.document.write("</body></html>");
+    printWindow.document.close();
+    printWindow.print();
+  };
 
-  printWindow.document.write("</body></html>");
-  printWindow.document.close();
-  printWindow.print();
-};
-
-  // Sort expenses alphabetically by group name
+  // Sort expenses by group
   const sortedExpenses = [...expenses].sort((a, b) => a.group.localeCompare(b.group));
 
   return (
@@ -148,6 +178,7 @@ export default function ViewExpenses() {
       <h2 className="text-2xl font-bold mb-4 text-[#42B3A5]">View Expenses</h2>
 
       <div className="flex flex-col md:flex-row gap-4 mb-4 items-start md:items-center">
+        {/* Year */}
         <div>
           <label className="font-semibold mr-2">Year:</label>
           <select
@@ -159,6 +190,7 @@ export default function ViewExpenses() {
           </select>
         </div>
 
+        {/* Months */}
         <div className="flex gap-2 flex-wrap">
           {months
             .filter(m => m.year === selectedYear)
@@ -175,12 +207,40 @@ export default function ViewExpenses() {
             ))}
         </div>
 
+        {/* Group filter */}
+        <div>
+          <label className="font-semibold mr-2">Group:</label>
+          <select
+            value={selectedGroup}
+            onChange={(e) => setSelectedGroup(e.target.value)}
+          >
+            <option value="">All</option>
+            {groups.map(g => <option key={g} value={g}>{g}</option>)}
+          </select>
+        </div>
+
+        {/* Category filter */}
+        <div>
+          <label className="font-semibold mr-2">Category:</label>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">All</option>
+            {categories.map(c => (
+              <option key={c.id} value={c.name}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Export / Print */}
         <div className="flex gap-2">
           <button onClick={exportCSV} className="bg-blue-500 text-white px-4 py-2 rounded">Export CSV</button>
           <button onClick={printReport} className="bg-green-500 text-white px-4 py-2 rounded">Print</button>
         </div>
       </div>
 
+      {/* Expenses Table */}
       <div className="overflow-x-auto">
         <table id="expensesTable" className="min-w-full bg-white border border-gray-300">
           <thead>
@@ -213,6 +273,7 @@ export default function ViewExpenses() {
               </tr>
             )}
 
+            {/* Group totals */}
             {Object.keys(groupTotals).map((group, idx) => (
               <tr key={`total-${idx}`} className="bg-gray-200 font-bold">
                 <td className="border p-2">{group} Total</td>

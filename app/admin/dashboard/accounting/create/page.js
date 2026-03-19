@@ -19,20 +19,21 @@ export default function CreateExpense() {
 
   // Fetch categories and groups
   const fetchCategories = async () => {
-    const res = await fetch("/api/admin/accounting/categories");
-    const data = await res.json();
-    setCategories(data);
-  };
-
-  const fetchGroups = async () => {
-    const res = await fetch("/api/admin/accounting/groups");
-    const data = await res.json();
-    setGroups(data);
+    try {
+      const res = await fetch("/api/admin/accounting/categories");
+      const data = await res.json();
+      // Correctly assign categories and groups from object
+      setCategories(Array.isArray(data.categories) ? data.categories : []);
+      setGroups(Array.isArray(data.groups) ? data.groups : []);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+      setCategories([]);
+      setGroups([]);
+    }
   };
 
   useEffect(() => {
     fetchCategories();
-    fetchGroups();
   }, []);
 
   const handleChange = (e) => setExpense({ ...expense, [e.target.name]: e.target.value });
@@ -71,7 +72,7 @@ export default function CreateExpense() {
         groupNameToUse = newCategory.groupText;
       }
 
-      // Insert new category with optional new group
+      // Insert new category
       const resCat = await fetch("/api/admin/accounting/categories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -89,7 +90,6 @@ export default function CreateExpense() {
 
       // Refresh categories and groups
       await fetchCategories();
-      await fetchGroups();
 
       // Reset new category form
       setShowNewCategory(false);
@@ -114,7 +114,14 @@ export default function CreateExpense() {
 
     if (res.ok) {
       alert("Expense Added Successfully");
-      setExpense({ category_id: "", amount: "", expense_date: "", incurred_for: "", reason: "", notes: "" });
+      setExpense({
+        category_id: "",
+        amount: "",
+        expense_date: "",
+        incurred_for: "",
+        reason: "",
+        notes: ""
+      });
     } else {
       alert(data.message);
     }
@@ -125,7 +132,6 @@ export default function CreateExpense() {
       <h2 className="text-2xl font-bold mb-4 text-[#42B3A5]">Add Expense</h2>
 
       <div className="space-y-4 max-w-md">
-
         {/* Category dropdown */}
         <select
           name="category_id"
@@ -177,13 +183,47 @@ export default function CreateExpense() {
         )}
 
         {/* Expense details */}
-        <input type="number" name="amount" placeholder="Amount" value={expense.amount} onChange={handleChange} className="border p-2 rounded w-full" />
-        <input type="date" name="expense_date" value={expense.expense_date} onChange={handleChange} className="border p-2 rounded w-full" />
-        <input name="incurred_for" placeholder="Incurred For" value={expense.incurred_for} onChange={handleChange} className="border p-2 rounded w-full" />
-        <input name="reason" placeholder="Reason" value={expense.reason} onChange={handleChange} className="border p-2 rounded w-full" />
-        <textarea name="notes" placeholder="Notes" value={expense.notes} onChange={handleChange} className="border p-2 rounded w-full" />
+        <input
+          type="number"
+          name="amount"
+          placeholder="Amount"
+          value={expense.amount}
+          onChange={handleChange}
+          className="border p-2 rounded w-full"
+        />
+        <input
+          type="date"
+          name="expense_date"
+          value={expense.expense_date}
+          onChange={handleChange}
+          className="border p-2 rounded w-full"
+        />
+        <input
+          name="incurred_for"
+          placeholder="Incurred For"
+          value={expense.incurred_for}
+          onChange={handleChange}
+          className="border p-2 rounded w-full"
+        />
+        <input
+          name="reason"
+          placeholder="Reason"
+          value={expense.reason}
+          onChange={handleChange}
+          className="border p-2 rounded w-full"
+        />
+        <textarea
+          name="notes"
+          placeholder="Notes"
+          value={expense.notes}
+          onChange={handleChange}
+          className="border p-2 rounded w-full"
+        />
 
-        <button onClick={handleSubmit} className="bg-green-500 text-white px-4 py-2 rounded w-full">
+        <button
+          onClick={handleSubmit}
+          className="bg-green-500 text-white px-4 py-2 rounded w-full"
+        >
           Save Expense
         </button>
       </div>
