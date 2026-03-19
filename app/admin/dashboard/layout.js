@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }) {
   const sidebarLinks = [
     { name: "Enquiries", path: "/admin/dashboard" },
     { name: "Orders", path: "/admin/dashboard/orders" },
-    { name: "Invoices", path: "/admin/dashboard/orders" },
+    { name: "Invoices", path: "/admin/dashboard/invoices" },
     { name: "Quotation", path: "/admin/dashboard/quotation" },
     { name: "Purchase", path: "/admin/dashboard/purchase" },
     { name: "Stock", path: "/admin/dashboard/stock" },
