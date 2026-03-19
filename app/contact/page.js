@@ -1,20 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Contact() {
   const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [captcha, setCaptcha] = useState("");
+  const [num1, setNum1] = useState(0);
+  const [num2, setNum2] = useState(0);
+
+  // ✅ Generate captcha
+  const generateCaptcha = () => {
+    const n1 = Math.floor(Math.random() * 9) + 1;
+    const n2 = Math.floor(Math.random() * 9) + 1;
+    setNum1(n1);
+    setNum2(n2);
+    setCaptcha("");
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  // ✅ Email validation regex
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  // ✅ Disposable email domains (basic block)
+  const blockedDomains = ["tempmail.com", "mailinator.com", "10minutemail.com"];
+
+  // ✅ Domain suggestions
+  const domainSuggestions = ["gmail.com", "outlook.com", "hotmail.com", "yahoo.com"];
+
+  const handleEmailChange = (e) => {
+    let value = e.target.value;
+
+    // autocorrect common typos
+    if (value.includes("@gmal.com")) value = value.replace("gmal.com", "gmail.com");
+    if (value.includes("@gmial.com")) value = value.replace("gmial.com", "gmail.com");
+    if (value.includes("@hotnail.com")) value = value.replace("hotnail.com", "hotmail.com");
+
+    e.target.value = value;
+
+    if (!validateEmail(value)) {
+      setEmailError("Invalid email format");
+      return;
+    }
+
+    const domain = value.split("@")[1];
+
+    if (blockedDomains.includes(domain)) {
+      setEmailError("Temporary emails are not allowed");
+      return;
+    }
+
+    setEmailError("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const email = e.target.email.value;
+
+    // ✅ Email validation
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email");
+      return;
+    }
+
+    // ✅ Captcha validation
+    if (parseInt(captcha) !== num1 + num2) {
+      alert("Invalid captcha");
+      generateCaptcha();
+      return;
+    }
+
     setLoading(true);
 
     const formData = {
       company: e.target.company.value,
       person: e.target.person.value,
-      email: e.target.email.value,
+      email,
       phone: e.target.phone.value,
+      category: e.target.category.value,
       message: e.target.message.value,
+	  
+	  // ✅ IMPORTANT FIX
+  captchaAnswer: captcha,
+  num1,
+  num2,
     };
 
     try {
@@ -31,6 +107,7 @@ export default function Contact() {
       if (res.ok) {
         alert("Enquiry submitted successfully!");
         e.target.reset();
+        generateCaptcha();
       } else {
         alert(data.error || "Something went wrong");
       }
@@ -61,8 +138,7 @@ export default function Contact() {
               Our technical team is ready to support your requirements
               for sustainable polyester and polyether polyols.
             </p>
-          
-		  {/* ADDRESS SECTION */}
+
             <div className="mb-6 text-lg space-y-1">
               <h3 className="font-semibold mb-2">Our Office:</h3>
               <p>Khasra No.164, Prasiddhpur Bhant,</p>
@@ -76,10 +152,10 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* RIGHT SIDE - FORM */}
+          {/* RIGHT SIDE */}
           <div className="bg-lightbg p-8 rounded shadow">
             <h2 className="text-2xl font-semibold mb-6">
-              Request Technical Consultation
+              Reach Us
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -100,13 +176,20 @@ export default function Contact() {
                 className="w-full p-3 border rounded"
               />
 
-              <input
-                name="email"
-                type="email"
-                placeholder="Email Address"
-                required
-                className="w-full p-3 border rounded"
-              />
+              {/* EMAIL */}
+              <div>
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Email Address"
+                  required
+                  onChange={handleEmailChange}
+                  className={`w-full p-3 border rounded ${emailError ? "border-red-500" : ""}`}
+                />
+                {emailError && (
+                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                )}
+              </div>
 
               <input
                 name="phone"
@@ -115,13 +198,42 @@ export default function Contact() {
                 className="w-full p-3 border rounded"
               />
 
+              {/* CATEGORY */}
+              <select
+                name="category"
+                required
+                className="w-full p-3 border rounded"
+              >
+                <option value="">Select Enquiry Type</option>
+                <option value="General Enquiry">General Enquiry</option>
+                <option value="Price Enquiry">Price Enquiry</option>
+                <option value="Technical Support">Technical Support</option>
+                <option value="Ordering">Ordering</option>
+                <option value="Delivery">Delivery</option>
+                <option value="Payments">Payments</option>
+              </select>
+
               <textarea
                 name="message"
-                placeholder="Describe your polyol requirement..."
+                placeholder="Describe your requirement..."
                 rows="4"
                 required
                 className="w-full p-3 border rounded"
               ></textarea>
+
+              {/* CAPTCHA */}
+              <div className="flex items-center gap-3">
+                <span className="font-semibold">
+                  {num1} + {num2} =
+                </span>
+                <input
+                  type="number"
+                  value={captcha}
+                  onChange={(e) => setCaptcha(e.target.value)}
+                  required
+                  className="w-24 p-2 border rounded"
+                />
+              </div>
 
               <button
                 type="submit"
