@@ -28,6 +28,7 @@ export default function DashboardLayout({ children }) {
     { name: "BOM", path: "/admin/dashboard/bom" },
     { name: "Sales", path: "/admin/dashboard/sales" },
     { name: "Accounting", path: "/admin/dashboard/accounting" },
+	{ name: "Production", path: "/admin/dashboard/production" },
   ];
 
   return (

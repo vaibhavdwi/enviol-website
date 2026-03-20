@@ -34,6 +34,13 @@ export async function GET(request) {
 
     const order = orderResult.rows[0];
 
+    // ✅ STATUS FIX
+    const normalizedStatus = (order.order_status || "").trim().toLowerCase();
+    const isCompleted = normalizedStatus === "completed";
+
+    console.log("STATUS:", order.order_status);
+    console.log("IS COMPLETED:", isCompleted);
+
     // ---------- 3️⃣ Fetch Order Items ----------
     const itemsResult = await pool.query(
       "SELECT * FROM order_items WHERE order_id = $1 ORDER BY id",
@@ -71,6 +78,56 @@ export async function GET(request) {
       String(today.getDate()).padStart(2, "0");
 
     const invoiceNumber = `INV-${formattedDate}-${order.order_number}`;
+	
+	// ---------- 5.1️⃣ Save Invoice in DB ----------
+
+    let invoiceId = null;
+
+    const existingInvoice = await pool.query(
+      "SELECT id FROM invoices WHERE order_id=$1",
+      [orderId]
+    );
+
+    // ✅ ONLY INSERT IF COMPLETED
+    if (isCompleted && existingInvoice.rows.length === 0) {
+
+      const invoiceInsert = await pool.query(
+        `INSERT INTO invoices
+        (order_id, invoice_number, invoice_date, subtotal, cgst, sgst, total_amount)
+        VALUES ($1,$2,$3,$4,$5,$6,$7)
+        RETURNING id`,
+        [
+          orderId,
+          invoiceNumber,
+          today,
+          subtotal,
+          cgst,
+          sgst,
+          grandTotal
+        ]
+      );
+
+      invoiceId = invoiceInsert.rows[0].id;
+
+      // ---------- Create Sales Entry ----------
+      const margin = 30;
+      const profit = subtotal * (margin / 100);
+
+      await pool.query(
+        `INSERT INTO sales
+        (order_id, invoice_id, revenue, gst_collected, assumed_margin_percent, net_profit, sale_date)
+        VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+        [
+          orderId,
+          invoiceId,
+          subtotal,
+          cgst + sgst,
+          margin,
+          profit,
+          today
+        ]
+      );
+    }
 
     // ---------- 6️⃣ Create PDF ----------
     const pdfDoc = await PDFDocument.create();
@@ -127,12 +184,16 @@ export async function GET(request) {
     drawText("Kanpur Dehat, Uttar Pradesh - 209304", 10, 130);
     drawText("Phone: +91 96250 93722 | Email: info@enviol.com", 10, 130);
 
-    page.drawText("INVOICE", {
-      x: 450,
-      y: 800,
-      size: 18,
-      font: boldFont,
-    });
+    // ✅ TITLE FIX
+    page.drawText(
+      isCompleted ? "INVOICE" : "PROFORMA INVOICE",
+      {
+        x: 380,
+        y: 800,
+        size: 18,
+        font: boldFont,
+      }
+    );
 
     page.drawText(`Invoice No: ${invoiceNumber}`, {
       x: 350,
@@ -153,12 +214,12 @@ export async function GET(request) {
 
     drawText("Bill To:", 12, 40, true);
     drawText(`Company: ${order.company_name}`);
-    drawText(`Contact: ${order.contact_person || "-"}`);
+    //drawText(`Contact: ${order.contact_person || "-"}`);
     drawText(`Address: ${order.address || "-"}`);
     drawText(`City: ${order.city || "-"}, ${order.state || "-"} ${order.pincode || ""}`);
-    drawText(`GST: ${order.gst_number || "-"}`);
-    drawText(`Phone: ${order.phone || "-"}`);
-    drawText(`Email: ${order.email || "-"}`);
+    drawText(`GSTIN: ${order.gst_number || "-"}`);
+    //drawText(`Phone: ${order.phone || "-"}`);
+    //drawText(`Email: ${order.email || "-"}`);
 
     // ---------- Table Header ----------
     y -= 10;
