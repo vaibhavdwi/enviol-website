@@ -155,13 +155,13 @@ export async function GET(request) {
 
     page.drawImage(logoImage, {
       x: 40,
-      y: 760,
+      y: 710,
       width: 80,
       height: 50,
     });
 
     // ---------- Helper ----------
-    let y = 800;
+    let y = 750;
 
     const drawText = (text, size = 11, x = 40, bold = false) => {
       page.drawText(text, {
@@ -175,7 +175,7 @@ export async function GET(request) {
     };
 
     // ---------- Company Header ----------
-    y = 810;
+    y = 760;
 
     drawText("Enviol Polytech Solutions Pvt. Ltd.", 14, 130, true);
     drawText("GSTIN: 2349823472374", 11, 130);
@@ -189,7 +189,7 @@ export async function GET(request) {
       isCompleted ? "INVOICE" : "PROFORMA INVOICE",
       {
         x: 380,
-        y: 800,
+        y: 750,
         size: 18,
         font: boldFont,
       }
@@ -197,14 +197,14 @@ export async function GET(request) {
 
     page.drawText(`Invoice No: ${invoiceNumber}`, {
       x: 350,
-      y: 770,
+      y: 730,
       size: 10,
       font,
     });
 
     page.drawText(`Date: ${today.toLocaleDateString()}`, {
       x: 350,
-      y: 755,
+      y: 715,
       size: 10,
       font,
     });
@@ -215,7 +215,7 @@ page.drawLine({
       color: rgb(0, 0, 0),
     });
     // ---------- Customer ----------
-    y = 700;
+    y = 650;
 
     drawText("Bill To:", 12, 40, true);
     drawText(`Company: ${order.company_name}`);
@@ -405,7 +405,7 @@ y -= 30;
 
 y = drawPaymentBlock(page, y, grandTotal, font, boldFont);
     // ---------- Signature ----------
-    y -= 30;
+    y -= 5;
 
     page.drawText("Authorized Signatory", {
       x: 420,

@@ -208,9 +208,14 @@ export async function GET(request) {
       size: 10,
       font,
     });
-
+page.drawLine({
+      start: { x: 40, y: y + 5 },
+      end: { x: 555, y: y + 5 },
+      thickness: 1,
+      color: rgb(0, 0, 0),
+    });
     // ---------- Customer ----------
-    y = 720;
+    y = 700;
 
     drawText("Bill To:", 12, 40, true);
     drawText(`Company: ${order.company_name}`);
@@ -220,7 +225,12 @@ export async function GET(request) {
     drawText(`GSTIN: ${order.gst_number || "-"}`);
     //drawText(`Phone: ${order.phone || "-"}`);
     //drawText(`Email: ${order.email || "-"}`);
-
+page.drawLine({
+      start: { x: 40, y: y + 5 },
+      end: { x: 555, y: y + 5 },
+      thickness: 1,
+      color: rgb(0, 0, 0),
+    });
     // ---------- Table Header ----------
     y -= 10;
 
@@ -307,9 +317,16 @@ export async function GET(request) {
       y -= 15;
     };
 
-    drawTotalLine("Subtotal:", `₹${subtotal.toFixed(2)}`);
-    drawTotalLine("CGST (9%):", `₹${cgst.toFixed(2)}`);
-    drawTotalLine("SGST (9%):", `₹${sgst.toFixed(2)}`);
+    // Dynamic spacing before totals
+const MIN_TOTAL_Y = 300;
+
+if (y > MIN_TOTAL_Y) {
+  y = MIN_TOTAL_Y;
+}
+
+drawTotalLine("Subtotal:", `₹${subtotal.toFixed(2)}`);
+drawTotalLine("CGST (9%):", `₹${cgst.toFixed(2)}`);
+drawTotalLine("SGST (9%):", `₹${sgst.toFixed(2)}`);
 
     page.drawLine({
       start: { x: 40, y: y + 5 },
@@ -321,9 +338,74 @@ export async function GET(request) {
     y -= 15;
 
     drawTotalLine("Grand Total:", `₹${grandTotal.toFixed(2)}`, true);
+	page.drawLine({
+      start: { x: 40, y: y + 5 },
+      end: { x: 555, y: y + 5 },
+      thickness: 1,
+      color: rgb(0, 0, 0),
+    });
+	// ---------- Amount in words-----------
+	function numberToWords(num) {
+  const a = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+    "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
+    "Eighteen", "Nineteen"];
 
+  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+  const inWords = (n) => {
+    if (n < 20) return a[n];
+    if (n < 100) return b[Math.floor(n / 10)] + " " + a[n % 10];
+    if (n < 1000) return a[Math.floor(n / 100)] + " Hundred " + inWords(n % 100);
+    if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand " + inWords(n % 1000);
+    if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh " + inWords(n % 100000);
+    return inWords(Math.floor(n / 10000000)) + " Crore " + inWords(n % 10000000);
+  };
+
+  return inWords(Math.floor(num)) + "Rupees Only";
+}
+function drawPaymentBlock(page, y, grandTotal, font, boldFont) {
+
+  const drawLine = (text, x = 40, size = 10, isBold = false) => {
+    page.drawText(text, {
+      x,
+      y,
+      size,
+      font: isBold ? boldFont : font,
+    });
+    y -= size + 4;
+  };
+
+  // Amount in Words
+  drawLine(`Amount in Words: ${numberToWords(grandTotal)}`, 40, 10, true);
+
+  y -= 10;
+
+  // Payment Terms
+  drawLine("Payment Terms:", 40, 11, true);
+  drawLine("75% advance. Remaining 25% within 15 days.", 40);
+
+  y -= 10;
+
+  // Bank Details
+  drawLine("Bank Details:", 40, 11, true);
+
+  const bankLines = [
+    "Account Name: Enviol Polytech Solutions Pvt Ltd",
+    "A/C Number: 1239817231236198237",
+    "Bank: State Bank of India, Koyla Nagar Kanpur",
+    "IFSC: SBIN001236",
+    "Mode: Cheque / RTGS Only"
+  ];
+
+  bankLines.forEach(line => drawLine(line));
+
+  return y;
+}
+y -= 30;
+
+y = drawPaymentBlock(page, y, grandTotal, font, boldFont);
     // ---------- Signature ----------
-    y -= 140;
+    y -= 5;
 
     page.drawText("Authorized Signatory", {
       x: 420,
