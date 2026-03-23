@@ -104,6 +104,8 @@ const nextOrderNumber = seqRes.rows[0].order_number;
     {
       message: "Error creating order",
       error: err.message, // 👈 ADD THIS
+	  detail: err.detail,
+        code: err.code,
     },
     { status: 500 }
   );
