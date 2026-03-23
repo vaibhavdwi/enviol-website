@@ -44,14 +44,18 @@ export async function POST(req) {
     });
 
   } catch (error) {
+  console.error("RM STOCK ERROR FULL:", error);
 
-    console.error(error);
-
-    return NextResponse.json(
-      { message: "Error saving stock" },
-      { status: 500 }
-    );
-
-  }
+  return NextResponse.json(
+    {
+      message: "Error saving stock",
+      error: error.message,
+      detail: error.detail,
+      hint: error.hint,
+      code: error.code,
+    },
+    { status: 500 }
+  );
+}
 
 }
