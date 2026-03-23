@@ -53,6 +53,7 @@ export async function POST(req) {
       detail: error.detail,
       hint: error.hint,
       code: error.code,
+	  stack:error.stack,
     },
     { status: 500 }
   );
