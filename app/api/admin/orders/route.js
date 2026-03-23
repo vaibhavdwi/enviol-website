@@ -3,9 +3,6 @@ import { Pool } from "pg";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
 });
 
 export async function POST(req) {
@@ -32,11 +29,15 @@ export async function POST(req) {
 
     await client.query("BEGIN");
 
-    const seqRes = await client.query(
-  "SELECT nextval('order_number_seq') as order_number"
-);
+    // Get next order number
+    const maxRes = await client.query(
+      "SELECT MAX(order_number) FROM orders"
+    );
 
-const nextOrderNumber = seqRes.rows[0].order_number;
+    const nextOrderNumber =
+      maxRes.rows[0].max
+        ? parseInt(maxRes.rows[0].max) + 1
+        : 1001;
 
     // Insert Order (header)
     const orderResult = await client.query(
@@ -96,20 +97,17 @@ const nextOrderNumber = seqRes.rows[0].order_number;
     });
 
   } catch (err) {
-  await client.query("ROLLBACK");
 
-  console.error("ORDER ERROR:", err);
+    await client.query("ROLLBACK");
 
-  return NextResponse.json(
-    {
-      message: "Error creating order",
-      error: err.message, // 👈 ADD THIS
-	  detail: err.detail,
-        code: err.code,
-    },
-    { status: 500 }
-  );
-} finally {
+    console.error(err);
+
+    return NextResponse.json(
+      { message: "Error creating order" },
+      { status: 500 }
+    );
+
+  } finally {
     client.release();
   }
 }
