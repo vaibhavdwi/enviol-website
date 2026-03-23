@@ -96,17 +96,18 @@ const nextOrderNumber = seqRes.rows[0].order_number;
     });
 
   } catch (err) {
+  await client.query("ROLLBACK");
 
-    await client.query("ROLLBACK");
+  console.error("ORDER ERROR:", err);
 
-    console.error(err);
-
-    return NextResponse.json(
-      { message: "Error creating order" },
-      { status: 500 }
-    );
-
-  } finally {
+  return NextResponse.json(
+    {
+      message: "Error creating order",
+      error: err.message, // 👈 ADD THIS
+    },
+    { status: 500 }
+  );
+} finally {
     client.release();
   }
 }
