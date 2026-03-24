@@ -104,6 +104,14 @@ export default function Footer() {
         Contact
       </Link>
     </li>
+	<li>
+      <Link
+        href="/admin"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        Enviol ERP
+      </Link>
+    </li>
   </ul>
 </div>
 
@@ -143,7 +151,7 @@ export default function Footer() {
           <p className="text-sm">
             <a href="mailto:info@enviol.com" className="text-primary underline">Email: info@enviol.com</a>
           </p>
-        </div>
+		  </div>
 
       </div>
 
