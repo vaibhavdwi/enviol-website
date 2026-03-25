@@ -83,12 +83,13 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="bg-lightbg text-industrial">
-        <Navbar />
-        {/* Client component for route change tracking */}
-        <GoogleAnalytics measurementId="G-WYLMK5RJJH" />
-        {children}
-        <Footer />
-      </body>
+  <Navbar />
+  <GoogleAnalytics measurementId="G-WYLMK5RJJH" />
+  <main className="pt-20">
+    {children}
+  </main>
+  <Footer />
+</body>
     </html>
   );
 }

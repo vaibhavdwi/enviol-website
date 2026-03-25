@@ -5,3 +5,16 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+
+@keyframes pulseSlow {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.animate-pulseSlow {
+  animation: pulseSlow 3s ease-in-out infinite;
+}

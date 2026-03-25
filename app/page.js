@@ -5,7 +5,6 @@ import Image from "next/image";
 
 export default function Home() {
 
-  // ✅ images must be INSIDE the function
   const images = [
     "/hero/hero1.jpg",
     "/hero/hero2.jpg",
@@ -15,6 +14,7 @@ export default function Home() {
   ];
 
   const [current, setCurrent] = useState(0);
+  const [activeBtn, setActiveBtn] = useState("contact");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,9 +26,8 @@ export default function Home() {
 
   return (
     <>
-      <section className="relative h-[600px] flex items-center justify-center text-center text-white overflow-hidden">
+      <section className="relative h-[600px] flex items-center justify-center text-center text-white overflow-hidden -mt-24">
 
-        {/* Background Images */}
         {images.map((src, index) => (
           <div
             key={index}
@@ -41,85 +40,115 @@ export default function Home() {
               alt="Enviol Manufacturing"
               fill
               className="object-cover"
-              priority
+              priority={index === 0}
             />
           </div>
         ))}
 
-        {/* Overlay */}
         <div className="absolute inset-0 bg-black/60"></div>
 
-        {/* Content */}
         <div className="relative z-20 max-w-4xl px-6">
-          <h1 className="text-5xl font-bold mb-6">
+          <h1 className="text-5xl font-bold mb-4">
             Transforming Waste into High-Performance Polyols
           </h1>
 
+          <p className="text-lg text-gray-200 mb-6">
+            Upcycling PET & PU waste into industrial-grade polyester & polyether polyols for CASE applications.
+          </p>
+
           <div className="flex gap-6 justify-center">
+
             <a
               href="/contact"
-              className="bg-green-600 px-8 py-4 rounded font-semibold"
+              onMouseEnter={() => setActiveBtn("contact")}
+              onMouseLeave={() => setActiveBtn("contact")}
+              className={`px-8 py-4 rounded font-semibold transition-all duration-300 ${
+                activeBtn === "contact"
+                  ? "bg-green-600 text-white scale-105 shadow-lg"
+                  : "border border-white text-white opacity-70"
+              }`}
             >
               Request Technical Consultation
             </a>
 
             <a
               href="/products"
-              className="border border-white px-8 py-4 rounded font-semibold"
+              onMouseEnter={() => setActiveBtn("products")}
+              onMouseLeave={() => setActiveBtn("contact")}
+              className={`px-8 py-4 rounded font-semibold transition-all duration-300 ${
+                activeBtn === "products"
+                  ? "bg-green-600 text-white scale-105 shadow-lg"
+                  : "border border-white text-white opacity-70"
+              }`}
             >
               Explore Our Products
             </a>
+
           </div>
         </div>
 
       </section>
 	  
-	  {/* WHAT WE DO */}
-      <section className="py-20 bg-yellow-50">
+      {/* WHAT WE DO */}
+      <section className="py-16 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-primary mb-12">
+          <h2 className="text-3xl font-bold text-center text-primary mb-10">
             What We Do
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded shadow">
-              <h3 className="text-xl font-semibold mb-4">
-                Sustainable Polyol Recovery
-              </h3>
-              <p>
-                We recover valuable polyols from industrial waste streams and
-                reprocess them into premium-grade polyester and polyether polyols
-                for CASE applications.
-              </p>
-            </div>
+          <p className="text-center max-w-3xl mx-auto text-gray-700 mb-10">
+            We specialize in chemical recycling of PET and polyurethane waste streams through controlled depolymerization and regeneration processes to produce high-performance polyols with consistent hydroxyl value and viscosity.
+          </p>
 
-            <div className="bg-white p-6 rounded shadow">
-              <h3 className="text-xl font-semibold mb-4">
-                Advanced Research & Development
-              </h3>
-              <p>
-                Our R&D-driven processes ensure consistent hydroxyl value,
-                stable viscosity, and reliable industrial performance.
-              </p>
-            </div>
+          <div className="grid md:grid-cols-3 gap-8 text-center">
 
-            <div className="bg-white p-6 rounded shadow">
-              <h3 className="text-xl font-semibold mb-4">
-                Circular Chemical Manufacturing
-              </h3>
-              <p>
-                We help manufacturers reduce raw material dependency and carbon
-                footprint through sustainable circular sourcing.
-              </p>
-            </div>
+            {[
+              {
+                title: "Sustainable Polyol Recovery",
+                desc: "We recover valuable polyols from industrial waste streams and reprocess them into premium-grade polyester and polyether polyols for CASE applications.",
+                icon: "♻️",
+              },
+              {
+                title: "Advanced Research & Development",
+                desc: "Our R&D-driven processes ensure consistent hydroxyl value, stable viscosity, and reliable industrial performance.",
+                icon: "🧪",
+              },
+              {
+                title: "Circular Chemical Manufacturing",
+                desc: "We help manufacturers reduce raw material dependency and carbon footprint through sustainable circular sourcing.",
+                icon: "🔄",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="relative group rounded-xl p-[1px] bg-gradient-to-r from-[#42b3a5] to-green-400 hover:scale-105 transition-transform duration-300"
+              >
+                <div className="bg-white h-full rounded-xl p-6 shadow-md group-hover:shadow-xl transition">
+
+                  <div className="text-4xl mb-4">
+                    {item.icon}
+                  </div>
+
+                  <h3 className="text-xl font-semibold mb-3 group-hover:text-[#42b3a5] transition">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+
+                </div>
+              </div>
+            ))}
+
           </div>
         </div>
       </section>
 
       {/* WHY ENVIOL */}
-      <section className="py-20 bg-yellow-50">
+      <section className="py-16 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-primary mb-12">
+          <h2 className="text-3xl font-bold text-center text-primary mb-10">
             Why Enviol Polytech Solutions
           </h2>
 
@@ -130,138 +159,129 @@ export default function Home() {
               <li>✔ Reliable Industrial Supply</li>
               <li>✔ Technical Documentation & Batch Traceability</li>
               <li>✔ Research-Driven Manufacturing</li>
+              <li>✔ Controlled Hydroxyl Value (OH) & Viscosity</li>
+              <li>✔ Compatible with Standard PU Formulations</li>
             </ul>
 
             <div className="relative w-full h-80 rounded overflow-hidden shadow-lg">
-    <Image
-  src="/images/banner.jpg"
-  alt="Enviol Polytech Manufacturing Facility"
-  fill
-  className="object-cover"
-/>
-  </div>
+              <Image
+                src="/images/banner.jpg"
+                alt="Enviol Polytech Manufacturing Facility"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>
 
       {/* OUR COMMITMENT */}
-      <section className="py-20 bg-yellow-50 text-center">
+      <section className="py-16 bg-yellow-50 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-primary mb-6">
             Our Commitment to Sustainability
           </h2>
-          <p className="text-lg">
+
+          <p className="text-lg mb-6">
             We believe chemical manufacturing must evolve responsibly.
             By recovering polyols from waste streams, we reduce landfill
             impact, conserve resources, and support global sustainability goals
             while maintaining industrial-grade performance standards.
           </p>
+
+          <p className="text-gray-700">
+            Our polyols are widely used in coatings, adhesives, sealants, elastomers,
+            polyurethane foams, and synthetic leather applications across multiple industries.
+          </p>
         </div>
       </section>
 
-     {/* INDUSTRIES */}
-<section className="py-20 bg-yellow-50 text-center">
-  <div className="max-w-6xl mx-auto px-6">
+      {/* INDUSTRIES */}
+      <section className="py-16 bg-yellow-50 text-center">
+        <div className="max-w-6xl mx-auto px-6">
 
-    {/* Clickable Heading */}
-    <div className="mb-12">
-      <Link href="/industries" className="group inline-block">
-        <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
-          Industries We Serve
-          <span className="absolute left-0 -bottom-2 h-[3px] w-full bg-[#42b3a5] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-        </h2>
-      </Link>
-    </div>
-
-    {/* Industry Cards */}
-    <div className="grid md:grid-cols-3 gap-8">
-
-      {[
-        { name: "Polyurethane Manufacturing", path: "/industries/polyurethane" },
-        { name: "Foam Production", path: "/industries/foam-production" },
-        { name: "Paint & Coatings", path: "/industries/paint-coatings" },
-        { name: "Adhesives", path: "/industries/adhesives" },
-		{ name: "Sealents", path: "/industries/pu-sealents" },
-        { name: "Powder Coating", path: "/industries/powder-coating" },
-        { name: "Elastomers", path: "/industries/elastomers" },
-        { name: "Artificial Leather", path: "/industries/artificial-leather" },
-      ].map((industry, index) => (
-        <Link key={index} href={industry.path} className="group">
-          <div className="bg-gray-100 p-6 rounded shadow transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-lg group-hover:bg-[#42b3a5] group-hover:text-white">
-            {industry.name}
+          <div className="mb-10">
+            <Link href="/industries" className="group inline-block">
+              <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
+                Industries We Serve
+                <span className="absolute left-0 -bottom-2 h-[3px] w-full bg-[#42b3a5] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+              </h2>
+            </Link>
           </div>
-        </Link>
-      ))}
 
-    </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { name: "Polyurethane Manufacturing", path: "/industries/polyurethane" },
+              { name: "Foam Production", path: "/industries/foam-production" },
+              { name: "Paint & Coatings", path: "/industries/paint-coatings" },
+              { name: "Adhesives", path: "/industries/adhesives" },
+              { name: "Sealents", path: "/industries/pu-sealents" },
+              { name: "Powder Coating", path: "/industries/powder-coating" },
+              { name: "Elastomers", path: "/industries/elastomers" },
+              { name: "Artificial Leather", path: "/industries/artificial-leather" },
+            ].map((industry, index) => (
+              <Link key={index} href={industry.path} className="group">
+                <div className="bg-gray-100 p-6 rounded shadow transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-lg group-hover:bg-[#42b3a5] group-hover:text-white">
+                  {industry.name}
+                </div>
+              </Link>
+            ))}
+          </div>
 
-  </div>
-</section>
+        </div>
+      </section>
 
-{/* IMPACT METRICS SECTION */}
-<section className="py-20 bg-yellow-50 border-t">
-  <div className="max-w-6xl mx-auto px-6 text-center">
+      {/* IMPACT */}
+      <section className="py-16 bg-yellow-50 border-t">
+        <div className="max-w-6xl mx-auto px-6 text-center">
 
-    <h2 className="text-3xl font-bold mb-12">
-      Our Industrial Impact Commitment
-    </h2>
+          <h2 className="text-3xl font-bold mb-10">
+            Our Industrial Impact Commitment
+          </h2>
 
-    <div className="grid md:grid-cols-4 gap-10">
+          <p className="max-w-3xl mx-auto text-gray-700 mb-10">
+            Our operations focus on scaling sustainable chemical recycling to reduce dependence on virgin petrochemical feedstock while delivering consistent industrial-grade performance.
+          </p>
 
-      {/* Metric 1 */}
-      <div>
-        <h3 className="text-4xl font-bold text-[#42b3a5] mb-2">
-          30 TPD
-        </h3>
-        <p className="text-sm uppercase tracking-wide text-gray-600">
-          Target Recycling Capacity
-        </p>
-      </div>
+          {/* ✅ UPDATED METRICS */}
+          <div className="grid md:grid-cols-4 gap-10 justify-items-center">
 
-      {/* Metric 2 */}
-      <div>
-        <h3 className="text-4xl font-bold text-[#42b3a5] mb-2">
-          PET & PU
-        </h3>
-        <p className="text-sm uppercase tracking-wide text-gray-600">
-          Polymer Waste Streams Processed
-        </p>
-      </div>
+            {[
+              { value: "1000 TPA", label: "Target Recycling Capacity" },
+              { value: "PET & PU", label: "Polymer Waste Streams Processed" },
+              { value: "Low Carbon", label: "Regeneration Model" },
+              { value: "Make in India", label: "Import Substitution Focus" },
+            ].map((item, index) => (
+              <div key={index} className="flex flex-col items-center text-center">
 
-      {/* Metric 3 */}
-      <div>
-        <h3 className="text-4xl font-bold text-[#42b3a5] mb-2">
-          Low Carbon
-        </h3>
-        <p className="text-sm uppercase tracking-wide text-gray-600">
-          Regeneration Model
-        </p>
-      </div>
+                <div
+                  className="w-40 h-40 flex items-center justify-center rounded-full bg-white shadow-lg border-4 border-[#42b3a5] animate-pulseSlow hover:scale-110 transition-transform duration-300"
+                  style={{ animationDelay: `${index * 0.4}s` }}
+                >
+                  <h3 className="text-xl font-bold text-[#42b3a5] px-4 text-center">
+                    {item.value}
+                  </h3>
+                </div>
 
-      {/* Metric 4 */}
-      <div>
-        <h3 className="text-4xl font-bold text-[#42b3a5] mb-2">
-          Make in India
-        </h3>
-        <p className="text-sm uppercase tracking-wide text-gray-600">
-          Import Substitution Focus
-        </p>
-      </div>
+                <p className="mt-4 text-sm uppercase tracking-wide text-gray-600 max-w-[150px]">
+                  {item.label}
+                </p>
 
-    </div>
-  </div>
-</section>
+              </div>
+            ))}
 
+          </div>
+        </div>
+      </section>
 
       {/* FINAL CTA */}
-      <section className="py-20 bg-primary text-white text-center">
+      <section className="py-16 bg-primary text-white text-center">
         <h2 className="text-3xl font-bold mb-6">
           Ready to Integrate Sustainable Polyols Into Your Production Line?
         </h2>
 
         <p className="mb-6">
-          Connect with our technical team for product consultation and
-          enquiry-based pricing.
+          Connect with our technical team for product consultation, application support, and enquiry-based pricing.
         </p>
 
         <a
@@ -274,4 +294,3 @@ export default function Home() {
     </>
   );
 }
-
