@@ -28,14 +28,36 @@ export default async function ProductDetail({ params }) {
         </div>
 
         {product.image && (
-          <Image
-            src={product.image}
-            alt={product.name}
-            width={500}
-            height={400}
-            className="rounded-lg shadow"
-          />
-        )}
+  <div className="flex flex-col items-center">
+
+    <Image
+      src={product.image}
+      alt={product.name}
+      width={500}
+      height={400}
+      className="rounded-lg shadow"
+    />
+
+    {/* ACTION BUTTONS */}
+    <div className="flex gap-4 mt-6">
+
+      <a
+        href={`/admin/guest/enquire?product=${product.slug}`}
+        className="bg-[#42b3a5] text-white px-6 py-3 rounded-full font-semibold shadow-md hover:scale-105 transition"
+      >
+        Enquire
+      </a>
+
+      <a
+        href={`/admin/guest/quick-order?product=${product.slug}`}
+        className="border border-[#42b3a5] text-[#42b3a5] px-6 py-3 rounded-full font-semibold hover:bg-[#42b3a5] hover:text-white transition"
+      >
+        Quick Order
+      </a>
+
+    </div>
+  </div>
+)}
       </div>
 
       {/* APPLICATIONS */}

@@ -20,14 +20,13 @@ export default function Home() {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 4000);
-
     return () => clearInterval(interval);
   }, []);
 
   return (
     <>
+      {/* HERO */}
       <section className="relative h-[600px] flex items-center justify-center text-center text-white overflow-hidden -mt-24">
-
         {images.map((src, index) => (
           <div
             key={index}
@@ -57,7 +56,6 @@ export default function Home() {
           </p>
 
           <div className="flex gap-6 justify-center">
-
             <a
               href="/contact"
               onMouseEnter={() => setActiveBtn("contact")}
@@ -83,25 +81,22 @@ export default function Home() {
             >
               Explore Our Products
             </a>
-
           </div>
         </div>
-
       </section>
-	  
+
       {/* WHAT WE DO */}
-      <section className="py-16 bg-yellow-50">
+      <section className="py-12 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-primary mb-10">
+          <h2 className="text-3xl font-bold text-center text-primary mb-8">
             What We Do
           </h2>
 
-          <p className="text-center max-w-3xl mx-auto text-gray-700 mb-10">
+          <p className="text-center max-w-3xl mx-auto text-gray-700 mb-6">
             We specialize in chemical recycling of PET and polyurethane waste streams through controlled depolymerization and regeneration processes to produce high-performance polyols with consistent hydroxyl value and viscosity.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 text-center">
-
             {[
               {
                 title: "Sustainable Polyol Recovery",
@@ -124,10 +119,7 @@ export default function Home() {
                 className="relative group rounded-xl p-[1px] bg-gradient-to-r from-[#42b3a5] to-green-400 hover:scale-105 transition-transform duration-300"
               >
                 <div className="bg-white h-full rounded-xl p-6 shadow-md group-hover:shadow-xl transition">
-
-                  <div className="text-4xl mb-4">
-                    {item.icon}
-                  </div>
+                  <div className="text-4xl mb-4">{item.icon}</div>
 
                   <h3 className="text-xl font-semibold mb-3 group-hover:text-[#42b3a5] transition">
                     {item.title}
@@ -136,19 +128,17 @@ export default function Home() {
                   <p className="text-gray-600 text-sm leading-relaxed">
                     {item.desc}
                   </p>
-
                 </div>
               </div>
             ))}
-
           </div>
         </div>
       </section>
 
       {/* WHY ENVIOL */}
-      <section className="py-16 bg-yellow-50">
+      <section className="py-12 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-primary mb-10">
+          <h2 className="text-3xl font-bold text-center text-primary mb-8">
             Why Enviol Polytech Solutions
           </h2>
 
@@ -176,7 +166,7 @@ export default function Home() {
       </section>
 
       {/* OUR COMMITMENT */}
-      <section className="py-16 bg-yellow-50 text-center">
+      <section className="py-12 bg-yellow-50 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-primary mb-6">
             Our Commitment to Sustainability
@@ -184,23 +174,19 @@ export default function Home() {
 
           <p className="text-lg mb-6">
             We believe chemical manufacturing must evolve responsibly.
-            By recovering polyols from waste streams, we reduce landfill
-            impact, conserve resources, and support global sustainability goals
-            while maintaining industrial-grade performance standards.
+            By recovering polyols from waste streams, we reduce landfill impact, conserve resources, and support global sustainability goals while maintaining industrial-grade performance standards.
           </p>
 
           <p className="text-gray-700">
-            Our polyols are widely used in coatings, adhesives, sealants, elastomers,
-            polyurethane foams, and synthetic leather applications across multiple industries.
+            Our polyols are widely used in coatings, adhesives, sealants, elastomers, polyurethane foams, and synthetic leather applications across multiple industries.
           </p>
         </div>
       </section>
 
       {/* INDUSTRIES */}
-      <section className="py-16 bg-yellow-50 text-center">
+      <section className="py-12 bg-yellow-50 text-center">
         <div className="max-w-6xl mx-auto px-6">
-
-          <div className="mb-10">
+          <div className="mb-8">
             <Link href="/industries" className="group inline-block">
               <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
                 Industries We Serve
@@ -227,25 +213,21 @@ export default function Home() {
               </Link>
             ))}
           </div>
-
         </div>
       </section>
 
       {/* IMPACT */}
-      <section className="py-16 bg-yellow-50 border-t">
+      <section className="py-12 bg-yellow-50 border-t">
         <div className="max-w-6xl mx-auto px-6 text-center">
-
-          <h2 className="text-3xl font-bold mb-10">
+          <h2 className="text-3xl font-bold mb-8">
             Our Industrial Impact Commitment
           </h2>
 
-          <p className="max-w-3xl mx-auto text-gray-700 mb-10">
+          <p className="max-w-3xl mx-auto text-gray-700 mb-6">
             Our operations focus on scaling sustainable chemical recycling to reduce dependence on virgin petrochemical feedstock while delivering consistent industrial-grade performance.
           </p>
 
-          {/* ✅ UPDATED METRICS */}
           <div className="grid md:grid-cols-4 gap-10 justify-items-center">
-
             {[
               { value: "1000 TPA", label: "Target Recycling Capacity" },
               { value: "PET & PU", label: "Polymer Waste Streams Processed" },
@@ -255,10 +237,13 @@ export default function Home() {
               <div key={index} className="flex flex-col items-center text-center">
 
                 <div
-                  className="w-40 h-40 flex items-center justify-center rounded-full bg-white shadow-lg border-4 border-[#42b3a5] animate-pulseSlow hover:scale-110 transition-transform duration-300"
+                  className="w-40 h-40 flex items-center justify-center rounded-full 
+                  bg-gradient-to-br from-[#42b3a5] to-green-400 
+                  text-white shadow-xl animate-pulseSlow hover:scale-110 
+                  transition-transform duration-300"
                   style={{ animationDelay: `${index * 0.4}s` }}
                 >
-                  <h3 className="text-xl font-bold text-[#42b3a5] px-4 text-center">
+                  <h3 className="text-xl font-bold px-4 text-center">
                     {item.value}
                   </h3>
                 </div>
@@ -269,13 +254,12 @@ export default function Home() {
 
               </div>
             ))}
-
           </div>
         </div>
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-16 bg-primary text-white text-center">
+      <section className="py-12 bg-primary text-white text-center">
         <h2 className="text-3xl font-bold mb-6">
           Ready to Integrate Sustainable Polyols Into Your Production Line?
         </h2>
