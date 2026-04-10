@@ -81,10 +81,10 @@ export async function GET(request) {
     const logo = await pdfDoc.embedPng(logoBytes);
 
     page.drawImage(logo, {
-      x: 40,
-      y: 760,
-      width: 70,
-      height: 50
+      x: 50,
+      y: 750,
+      width: 50,
+      height: 60
     });
 
     // Header

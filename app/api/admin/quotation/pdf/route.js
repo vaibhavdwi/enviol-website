@@ -80,8 +80,15 @@ export async function POST(request) {
 
     // ---------------- HEADER ----------------
 
-    page.drawImage(logo, { x: 40, y: 760, width: 70, height: 50 });
+    const desiredHeight = 65;
+const scale = desiredHeight / logo.height;
 
+page.drawImage(logo, {
+  x: 50,
+  y: 740,
+  width: logo.width * scale,
+  height: desiredHeight,
+});
     page.drawText("Enviol Polytech Solutions Pvt. Ltd.", {
       x: 120,
       y: 805,

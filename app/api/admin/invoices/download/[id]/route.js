@@ -154,10 +154,10 @@ export async function GET(request) {
     const logoImage = await pdfDoc.embedPng(logoImageBytes);
 
     page.drawImage(logoImage, {
-      x: 40,
-      y: 710,
-      width: 80,
-      height: 50,
+      x: 50,
+      y: 700,
+      width: 50,
+      height: 70,
     });
 
     // ---------- Helper ----------

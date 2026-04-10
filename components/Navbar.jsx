@@ -44,7 +44,7 @@ export default function Navbar() {
         {/* Logo + Name */}
         <Link href="/" className="flex items-center gap-3">
           <Image
-            src="/images/logo.png"
+            src="/images/logo-n.png"
             alt="Enviol"
             width={50}
             height={50}
