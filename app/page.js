@@ -36,7 +36,7 @@ export default function Home() {
           >
             <Image
               src={src}
-              alt="Enviol Manufacturing"
+              alt="Polyester polyol manufacturing plant sustainable polyol production"
               fill
               className="object-cover"
               priority={index === 0}
@@ -46,7 +46,7 @@ export default function Home() {
 
         <div className="absolute inset-0 bg-black/60"></div>
 		{/* Watermark Logo */}
-<div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 z-20 opacity-80">
+<div className="absolute left-1/2 -bottom-10 transform -translate-x-1/2 z-20 opacity-80">
   <Image
     src="/images/logo-watermark.png"
     alt="Enviol Logo"
@@ -57,12 +57,12 @@ export default function Home() {
 </div>
 
         <div className="relative z-20 max-w-4xl px-6">
-          <h1 className="text-5xl font-bold mb-4">
-            Transforming Waste into High-Performance Polyols
-          </h1>
+              <h1 className="text-5xl font-bold mb-4">
+  Sustainable Polyester & Polyether Polyol Manufacturers for Global Industries
+  </h1>
 
           <p className="text-lg text-gray-200 mb-6">
-            Upcycling PET & PU waste into industrial-grade polyester & polyether polyols for CASE applications.
+            Leading manufacturer of polyester and polyether polyols, specializing in recycled PET & PU waste upcycling into high-performance polyols for polyurethane, coatings, adhesives, sealants, and elastomer (CASE) applications worldwide.
           </p>
 
           <div className="flex gap-6 justify-center">
@@ -81,6 +81,7 @@ export default function Home() {
 
             <a
               href="/products"
+			  title="Explore polyester and polyether polyol products for polyurethane applications"
               onMouseEnter={() => setActiveBtn("products")}
               onMouseLeave={() => setActiveBtn("contact")}
               className={`px-8 py-4 rounded font-semibold transition-all duration-300 ${
@@ -95,6 +96,24 @@ export default function Home() {
 		  
         </div>
       </section>
+	  
+{/* SEO section */}
+
+<section className="py-10 bg-white">
+  <div className="max-w-6xl mx-auto px-6 text-center">
+    <h2 className="text-2xl font-bold mb-4">
+      Global Polyester Polyol Manufacturer & Supplier
+    </h2>
+
+    <p className="text-gray-700 max-w-4xl mx-auto">
+      Enviol is a trusted polyester polyol manufacturer and polyether polyol supplier based in India, serving global industries with high-performance and sustainable polyol solutions. Our recycled polyester polyols are widely used in polyurethane foam, coatings, adhesives, sealants, elastomers, and synthetic leather applications. With advanced chemical recycling technology, we ensure consistent hydroxyl value, controlled viscosity, and reliable industrial performance.
+    </p>
+  </div>
+</section>
+
+
+
+
 
       {/* WHAT WE DO */}
       <section className="py-12 bg-yellow-50">
@@ -162,12 +181,13 @@ export default function Home() {
               <li>✔ Research-Driven Manufacturing</li>
               <li>✔ Controlled Hydroxyl Value (OH) & Viscosity</li>
               <li>✔ Compatible with Standard PU Formulations</li>
+			  <li>✔ Serving clients across India, Middle East, Europe & global markets</li>
             </ul>
 
             <div className="relative w-full h-80 rounded overflow-hidden shadow-lg">
               <Image
                 src="/images/banner.jpg"
-                alt="Enviol Polytech Manufacturing Facility"
+                alt="Polyol manufacturing facility India polyurethane raw materials plant"
                 fill
                 className="object-cover"
               />
@@ -281,6 +301,7 @@ export default function Home() {
 
         <a
           href="/products"
+		  title="Explore polyester and polyether polyol products"
           className="bg-accent text-black px-8 py-4 rounded font-semibold"
         >
           Explore Products
