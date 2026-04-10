@@ -42,14 +42,14 @@ export default async function ProductDetail({ params }) {
     <div className="flex gap-4 mt-6">
 
       <a
-        href={`/admin/guest/enquire?product=${product.slug}`}
+        href={`/guest/enquire?product=${product.slug}`}
         className="bg-[#42b3a5] text-white px-6 py-3 rounded-full font-semibold shadow-md hover:scale-105 transition"
       >
         Enquire
       </a>
 
       <a
-        href={`/admin/guest/quick-order?product=${product.slug}`}
+        href={`/guest/quick-order?product=${product.slug}`}
         className="border border-[#42b3a5] text-[#42b3a5] px-6 py-3 rounded-full font-semibold hover:bg-[#42b3a5] hover:text-white transition"
       >
         Quick Order

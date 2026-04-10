@@ -71,7 +71,7 @@ export default function GuestOrder() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/admin/guest/quick-order", {
+      const res = await fetch("/api/guest/quick-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

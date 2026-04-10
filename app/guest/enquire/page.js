@@ -27,7 +27,7 @@ export default function EnquiryPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/admin/guest/enquire", {
+      const res = await fetch("/api/guest/enquire", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
