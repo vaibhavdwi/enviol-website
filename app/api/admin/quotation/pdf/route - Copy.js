@@ -4,19 +4,6 @@ import fontkit from "@pdf-lib/fontkit";
 import fs from "fs";
 import path from "path";
 
-
-function numberToWords(num) {
-  const a = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
-  const b = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
-
-  if (num === 0) return "Zero";
-  if (num < 20) return a[num];
-  if (num < 100) return b[Math.floor(num/10)] + (num%10 ? " " + a[num%10] : "");
-  if (num < 1000) return a[Math.floor(num/100)] + " Hundred " + numberToWords(num%100);
-  if (num < 100000) return numberToWords(Math.floor(num/1000)) + " Thousand " + numberToWords(num%1000);
-  if (num < 10000000) return numberToWords(Math.floor(num/100000)) + " Lakh " + numberToWords(num%100000);
-  return "";
-}
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -40,7 +27,8 @@ export async function POST(request) {
       );
     }
 
-    // ---------------- CALCULATIONS ----------------
+    // ---------------- Calculate Items ----------------
+
     const calculatedItems = items.map((item) => {
       const qty = Number(item.quantity) || 0;
       const price = Number(item.price) || 0;
@@ -54,16 +42,12 @@ export async function POST(request) {
     });
 
     const grandTotal = calculatedItems.reduce(
-	(sum, item) => sum + item.lineTotal,
-	0
-);
+      (sum, item) => sum + item.lineTotal,
+      0
+    );
 
-// ✅ ADD THIS BELOW
-	const cgst = grandTotal * 0.09;
-	const sgst = grandTotal * 0.09;
-	const finalTotal = grandTotal + cgst + sgst;
+    // ---------------- Quotation Number ----------------
 
-    // ---------------- QUOTATION NUMBER ----------------
     const today = new Date();
     const formattedDate =
       today.getFullYear().toString() +
@@ -74,14 +58,11 @@ export async function POST(request) {
     const quotationNumber = `QO-${formattedDate}-${randomNum}`;
     const lastFiveDigits = quotationNumber.slice(-5);
 
-    // ---------------- PDF ----------------
+    // ---------------- Create PDF ----------------
+
     const pdfDoc = await PDFDocument.create();
     pdfDoc.registerFontkit(fontkit);
-    const page = pdfDoc.addPage([595, 842]);
-
-    // ✅ GLOBAL OFFSET (move everything downward)
-    const OFFSET_Y = -10;
-    const Y = (val) => val + OFFSET_Y;
+    const page = pdfDoc.addPage([595, 842]); // A4
 
     const regularFontBytes = fs.readFileSync(
       path.join(process.cwd(), "public/fonts/Roboto-Regular.ttf")
@@ -97,58 +78,59 @@ export async function POST(request) {
     const logoBytes = fs.readFileSync(logoPath);
     const logo = await pdfDoc.embedPng(logoBytes);
 
-    const desiredHeight = 65;
-    const scale = desiredHeight / logo.height;
-
     // ---------------- HEADER ----------------
-    page.drawImage(logo, {
-      x: 50,
-      y: Y(740),
-      width: logo.width * scale,
-      height: desiredHeight,
-    });
 
+    const desiredHeight = 65;
+const scale = desiredHeight / logo.height;
+
+page.drawImage(logo, {
+  x: 50,
+  y: 740,
+  width: logo.width * scale,
+  height: desiredHeight,
+});
     page.drawText("Enviol Polytech Solutions Pvt. Ltd.", {
       x: 120,
-      y: Y(805),
+      y: 805,
       size: 14,
       font: boldFont,
     });
 
     page.drawText(
       "Khasra No.164, Prasiddhpur Bhant, Rania Industrial Area,",
-      { x: 120, y: Y(785), size: 10, font }
+      { x: 120, y: 785, size: 10, font }
     );
 
     page.drawText(
       "Tehsil Akbarpur, Kanpur Dehat, Uttar Pradesh - 209304",
-      { x: 120, y: Y(770), size: 10, font }
+      { x: 120, y: 770, size: 10, font }
     );
 
     page.drawText("GSTIN: 2349823472374", {
       x: 120,
-      y: Y(755),
+      y: 755,
       size: 10,
       font,
     });
 
     page.drawText("Phone: +91 96250 93722 | Email: info@enviol.com", {
       x: 120,
-      y: Y(740),
+      y: 740,
       size: 10,
       font,
     });
 
     page.drawLine({
-      start: { x: 40, y: Y(730) },
-      end: { x: 555, y: Y(730) },
+      start: { x: 40, y: 730 },
+      end: { x: 555, y: 730 },
       thickness: 1,
     });
 
-    // ---------------- QUOTATION BOX ----------------
+    // ---------------- QUOTATION TITLE BOX ----------------
+
     page.drawRectangle({
       x: 380,
-      y: Y(760),
+      y: 760,
       width: 175,
       height: 60,
       color: rgb(0.9, 0.9, 0.9),
@@ -156,27 +138,28 @@ export async function POST(request) {
 
     page.drawText("QUOTATION", {
       x: 415,
-      y: Y(795),
+      y: 795,
       size: 16,
       font: boldFont,
     });
 
     page.drawText(`Quotation No: ${quotationNumber}`, {
       x: 390,
-      y: Y(775),
+      y: 775,
       size: 10,
       font,
     });
 
     page.drawText(`Date: ${today.toLocaleDateString()}`, {
       x: 390,
-      y: Y(760),
+      y: 760,
       size: 10,
       font,
     });
 
-    // ---------------- CUSTOMER ----------------
-    let y = Y(700);
+    // ---------------- CUSTOMER DETAILS ----------------
+
+    let y = 700;
 
     page.drawText("Bill To:", {
       x: 40,
@@ -209,10 +192,11 @@ export async function POST(request) {
 
     y -= 20;
 
-    // ---------------- TABLE ----------------
+    // ---------------- ITEMS HEADER (Grey Background) ----------------
+
     page.drawRectangle({
       x: 40,
-      y,
+      y: y,
       width: 515,
       height: 20,
       color: rgb(0.9, 0.9, 0.9),
@@ -226,12 +210,24 @@ export async function POST(request) {
 
     y -= 25;
 
+    // ---------------- ITEMS ROWS ----------------
+
     calculatedItems.forEach((item, index) => {
       page.drawText(`${index + 1}`, { x: 45, y, size: 10, font });
-      page.drawText(item.product_name || "", { x: 80, y, size: 10, font });
+      page.drawText(item.product_name, { x: 80, y, size: 10, font });
       page.drawText(`${item.qty}`, { x: 350, y, size: 10, font });
-      page.drawText(`Rs. ${item.price.toFixed(2)}`, { x: 400, y, size: 10, font });
-      page.drawText(`Rs. ${item.lineTotal.toFixed(2)}`, { x: 480, y, size: 10, font });
+      page.drawText(`Rs. ${item.price.toFixed(2)}`, {
+        x: 400,
+        y,
+        size: 10,
+        font,
+      });
+      page.drawText(`Rs. ${item.lineTotal.toFixed(2)}`, {
+        x: 480,
+        y,
+        size: 10,
+        font,
+      });
 
       y -= 20;
     });
@@ -246,93 +242,26 @@ export async function POST(request) {
 
     y -= 30;
 
-    // ---------------- TOTAL ----------------
-    // ---------------- TOTAL BREAKUP ----------------
+    // ---------------- GRAND TOTAL ----------------
 
-// Subtotal
-page.drawText("Subtotal:", {
-  x: 400,
-  y,
-  size: 11,
-  font,
-});
+    page.drawText("Grand Total:", {
+      x: 400,
+      y,
+      size: 12,
+      font: boldFont,
+    });
 
-page.drawText(`Rs. ${grandTotal.toFixed(2)}`, {
-  x: 480,
-  y,
-  size: 11,
-  font,
-});
+    page.drawText(`Rs. ${grandTotal.toFixed(2)}`, {
+      x: 480,
+      y,
+      size: 12,
+      font: boldFont,
+    });
 
-y -= 20;
+    y -= 40;
 
-// CGST
-page.drawText("CGST (9%):", {
-  x: 400,
-  y,
-  size: 11,
-  font,
-});
+    // ---------------- VALIDITY ----------------
 
-page.drawText(`Rs. ${cgst.toFixed(2)}`, {
-  x: 480,
-  y,
-  size: 11,
-  font,
-});
-
-y -= 20;
-
-// SGST
-page.drawText("SGST (9%):", {
-  x: 400,
-  y,
-  size: 11,
-  font,
-});
-
-page.drawText(`Rs. ${sgst.toFixed(2)}`, {
-  x: 480,
-  y,
-  size: 11,
-  font,
-});
-
-y -= 25;
-
-// FINAL TOTAL
-page.drawText("Final Total:", {
-  x: 400,
-  y,
-  size: 12,
-  font: boldFont,
-});
-
-page.drawText(`Rs. ${finalTotal.toFixed(2)}`, {
-  x: 480,
-  y,
-  size: 12,
-  font: boldFont,
-});
-
-y -= 40;
-
-//------Amount in words-------
-
-const amountInWords =
-  numberToWords(Math.round(finalTotal)) + " Rupees Only";
-
-page.drawText(`Amount in Words: ${amountInWords}`, {
-  x: 40,
-  y,
-  size: 10,
-  font,
-});
-
-y -= 25;
-
-
-    // ---------------- FOOTER ----------------
     page.drawText("Quotation Validity: 15 Days", {
       x: 40,
       y,
@@ -341,6 +270,8 @@ y -= 25;
     });
 
     y -= 20;
+
+    // ---------------- PAYMENT TERMS ----------------
 
     page.drawText("Payment Terms:", {
       x: 40,
@@ -358,6 +289,8 @@ y -= 25;
 
     y -= 30;
 
+    // ---------------- BANK DETAILS ----------------
+
     page.drawText("Bank Details:", {
       x: 40,
       y,
@@ -367,30 +300,24 @@ y -= 25;
 
     y -= 15;
 
-    page.drawText("Account Name: Enviol Polytech Solutions Pvt Ltd.", {
-      x: 40,
-      y,
-      size: 10,
-      font,
-    });
+    page.drawText(
+      "Account Name: Enviol Polytech Solutions Pvt Ltd.",
+      { x: 40, y, size: 10, font }
+    );
 
     y -= 15;
 
-    page.drawText("A/C Number: 1239817231236198237", {
-      x: 40,
-      y,
-      size: 10,
-      font,
-    });
+    page.drawText(
+      "A/C Number: 1239817231236198237",
+      { x: 40, y, size: 10, font }
+    );
 
     y -= 15;
 
-    page.drawText("Bank: State Bank of India, Koyla Nagar Kanpur", {
-      x: 40,
-      y,
-      size: 10,
-      font,
-    });
+    page.drawText(
+      "Bank: State Bank of India, Koyla Nagar Kanpur",
+      { x: 40, y, size: 10, font }
+    );
 
     y -= 15;
 
@@ -403,15 +330,18 @@ y -= 25;
 
     y -= 25;
 
+    // ---------------- GST NOTE ----------------
+
     page.drawText(
-      "Payment Mode : RTGS / Cheque drawn in favour of Enviol Polytech Solutions",
+      "Note: GST will be added at the time of final invoice.",
       { x: 40, y, size: 10, font }
     );
 
     // ---------------- SIGNATURE ----------------
+
     page.drawText("Authorized Signatory", {
       x: 400,
-      y: Y(120),
+      y: 120,
       size: 11,
       font: boldFont,
     });
@@ -424,7 +354,6 @@ y -= 25;
         "Content-Disposition": `attachment; filename=quote_${lastFiveDigits}.pdf`,
       },
     });
-
   } catch (error) {
     console.error("Quotation PDF error:", error);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
