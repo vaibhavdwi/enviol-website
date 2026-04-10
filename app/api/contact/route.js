@@ -1,4 +1,5 @@
 import pool from "../../../lib/db";
+import nodemailer from "nodemailer";
 
 export async function POST(req) {
   try {
@@ -48,7 +49,7 @@ export async function POST(req) {
       );
     }
 
-    // ✅ Captcha validation (VERY IMPORTANT)
+    // ✅ Captcha validation
     if (parseInt(captchaAnswer) !== parseInt(num1) + parseInt(num2)) {
       return Response.json(
         { error: "Invalid captcha" },
@@ -56,7 +57,9 @@ export async function POST(req) {
       );
     }
 
-    // ✅ Insert into DB
+    // ================================
+    // ✅ STEP 1: INSERT INTO DATABASE
+    // ================================
     await pool.query(
       `INSERT INTO contacts 
       (company, person, email, phone, category, message) 
@@ -64,6 +67,52 @@ export async function POST(req) {
       [company, person, email, phone, category, message]
     );
 
+    // ================================
+    // ✅ STEP 2: EMAIL SETUP
+    // ================================
+    const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT),
+  secure: process.env.SMTP_PORT == "465",
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false, // 🔥 FIX FOR SELF-SIGNED CERT ERROR
+  },
+});
+
+    const mailOptions = {
+      from: `"Enviol Website Enquiry" <${process.env.SMTP_USER}>`,
+      to: "info@enviol.com",
+      subject: `New Enquiry - ${category}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+
+        <p><strong>Company:</strong> ${company}</p>
+        <p><strong>Person:</strong> ${person}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || "N/A"}</p>
+        <p><strong>Category:</strong> ${category}</p>
+
+        <h3>Message:</h3>
+        <p>${message}</p>
+      `,
+    };
+
+    // ================================
+    // ✅ STEP 3: SEND EMAIL SAFELY
+    // ================================
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (err) {
+      console.error("EMAIL FAILED:", err);
+    }
+
+    // ================================
+    // ✅ FINAL RESPONSE
+    // ================================
     return Response.json(
       { message: "Enquiry submitted successfully" },
       { status: 200 }
