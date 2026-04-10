@@ -9,85 +9,60 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
 
+    // ✅ Pagination
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = 25;
     const offset = (page - 1) * limit;
 
+    // ✅ Filters (IMPORTANT: trim to avoid " " issues)
     const search = searchParams.get("search")?.trim();
     const category = searchParams.get("category")?.trim();
     const fromDate = searchParams.get("fromDate");
     const toDate = searchParams.get("toDate");
 
+    // 🔍 DEBUG (remove later)
+    console.log({ search, category, fromDate, toDate });
+
+    // ✅ Dynamic conditions
     let conditions = [];
     let values = [];
     let index = 1;
 
-    // 🔎 Search
+    // 🔎 Search by company (case-insensitive)
     if (search) {
       conditions.push(`company ILIKE $${index}`);
       values.push(`%${search}%`);
       index++;
     }
 
-    // 🧩 Category
+    // 🧩 Category filter (case-insensitive FIX)
     if (category) {
       conditions.push(`LOWER(category) = LOWER($${index})`);
       values.push(category);
       index++;
     }
 
-    // 📅 From
+    // 📅 FROM DATE
     if (fromDate) {
       conditions.push(`created_at >= $${index}`);
       values.push(fromDate);
       index++;
     }
 
-    // 📅 To
+    // 📅 TO DATE (FULL DAY FIX)
     if (toDate) {
       conditions.push(`created_at < ($${index}::date + interval '1 day')`);
       values.push(toDate);
       index++;
     }
 
+    // 🧱 WHERE clause
     const whereClause =
       conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
-    // ✅ UNION QUERY
+    // ✅ Data Query
     const dataQuery = `
-      SELECT * FROM (
-        
-        SELECT 
-          id,
-          company,
-          person,
-          email,
-          phone,
-          message,
-          category,
-          created_at,
-          NULL as product_slug,
-          NULL as source_page,
-          'contact' as source_type
-        FROM contacts
-
-        UNION ALL
-
-        SELECT 
-          id,
-          company,
-          person,
-          email,
-          phone,
-          message,
-          category,
-          created_at,
-          product_slug,
-          source_page,
-          'guest' as source_type
-        FROM guest_enquiries
-
-      ) AS combined
+      SELECT * FROM contacts
       ${whereClause}
       ORDER BY created_at DESC
       LIMIT $${index} OFFSET $${index + 1}
@@ -97,13 +72,9 @@ export async function GET(req) {
 
     const dataResult = await pool.query(dataQuery, dataValues);
 
-    // ✅ COUNT QUERY
+    // ✅ Count Query (same filters, no limit/offset)
     const countQuery = `
-      SELECT COUNT(*) FROM (
-        SELECT company, category, created_at FROM contacts
-        UNION ALL
-        SELECT company, category, created_at FROM guest_enquiries
-      ) AS combined
+      SELECT COUNT(*) FROM contacts
       ${whereClause}
     `;
 

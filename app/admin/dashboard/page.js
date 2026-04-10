@@ -254,7 +254,7 @@ export default function AdminDashboard() {
 
         {enquiries.map((enquiry) => (
           <div
-            key={enquiry.id}
+            key={`${enquiry.source_type}-${enquiry.id}`}
             className="grid grid-cols-[40px_2fr_1.5fr_2fr_1fr_1fr_1fr_80px] px-4 py-2 text-sm border-t items-center"
           >
             <div>
