@@ -45,6 +45,16 @@ export default function Home() {
         ))}
 
         <div className="absolute inset-0 bg-black/60"></div>
+		{/* Watermark Logo */}
+<div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 z-20 opacity-80">
+  <Image
+    src="/images/logo-watermark.png"
+    alt="Enviol Logo"
+    width={340}
+    height={220}
+    className="object-contain"
+  />
+</div>
 
         <div className="relative z-20 max-w-4xl px-6">
           <h1 className="text-5xl font-bold mb-4">
@@ -82,6 +92,7 @@ export default function Home() {
               Explore Our Products
             </a>
           </div>
+		  
         </div>
       </section>
 
