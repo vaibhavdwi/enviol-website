@@ -46,18 +46,18 @@ export default function Navbar() {
           <Image
             src="/images/logo-n.png"
             alt="Enviol"
-            width={50}
-            height={50}
+            width={60}
+            height={60}
             priority
           />
 
           <div className="leading-tight">
-            <h1 className="text-xl md:text-2xl font-bold text-white">
-              Enviol Polytech Solutions
+            <h1 className="text-xl md:text-5xl font-bold text-white">
+              ENVIOL
             </h1>
 
             <p className="text-xs md:text-sm tracking-wider text-gray-300">
-              Reuse What You Waste
+              POLYTECH SOLUTIONS
             </p>
           </div>
         </Link>

@@ -56,7 +56,7 @@ export default function TechnologyClient() {
       </section>
 
       {/* 🔥 R&D SECTION (RESTORED) */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
 
           <h2 className="text-2xl font-semibold mb-6 text-center">
@@ -101,7 +101,7 @@ export default function TechnologyClient() {
       </section>
 
       {/* STRATEGIC ADVANTAGES */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
 
           <h2 className="text-2xl font-semibold mb-8 text-center">

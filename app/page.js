@@ -27,7 +27,8 @@ export default function Home() {
     <>
       {/* HERO */}
       <section className="relative h-[600px] flex items-center justify-center text-center text-white overflow-hidden -mt-24">
-        {images.map((src, index) => (
+    
+		{images.map((src, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -99,9 +100,9 @@ export default function Home() {
 	  
 {/* SEO section */}
 
-<section className="py-10 bg-white">
+<section className="py-10 bg-yellow-50">
   <div className="max-w-6xl mx-auto px-6 text-center">
-    <h2 className="text-2xl font-bold mb-4">
+    <h2 className="text-3xl font-bold text-center text-primary mb-8">
       Global Polyester Polyol Manufacturer & Supplier
     </h2>
 

@@ -136,12 +136,11 @@ export default function Footer() {
           </h4>
 
           <p className="text-sm leading-relaxed">
-            Khasra No.164, Prasiddhpur Bhant,<br />
-            Near Parshuram Mandir,<br />
-            Khanchandpur Road,<br />
-            Rania Industrial Area,<br />
-            Tehsil Akbarpur,<br />
-            Kanpur Dehat, Uttar Pradesh India
+            Enviol Polytech Solutions Pvt. Ltd<br />
+            PNo.164-B , Unit I<br />
+            Khanpur Kharanja<br />
+            Rania , Kanpur Dehat<br />
+            Uttar Pradesh , India
           </p>
 
           <p className="mt-4 text-sm">
