@@ -74,7 +74,7 @@ export default function Sustainability() {
 
           <div className="relative h-80 w-full">
             <Image
-              src="/images/economy.jpg"
+              src="/images/circular-economy.jpg"
               alt="Circular economy model for polymer recycling into polyols"
               fill
               className="object-cover rounded"

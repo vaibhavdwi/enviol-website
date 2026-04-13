@@ -155,18 +155,174 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= WHAT WE DO ================= */}
+      {/* WHAT WE DO */}
       <section className="py-12 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-primary mb-8">
             What We Do
           </h2>
 
+          <p className="text-center max-w-3xl mx-auto text-gray-700 mb-6">
+            We specialize in chemical recycling of PET and polyurethane waste streams through controlled depolymerization and regeneration processes to produce high-performance polyols with consistent hydroxyl value and viscosity.
+          </p>
+
           <div className="grid md:grid-cols-3 gap-8 text-center">
-            {["♻️", "🧪", "🔄"].map((icon, index) => (
-              <div key={index} className="bg-white p-6 rounded shadow">
-                <div className="text-4xl mb-4">{icon}</div>
-                <p className="text-gray-600">High-performance sustainable polyol solutions.</p>
+            {[
+              {
+                title: "Sustainable Polyol Recovery",
+                desc: "We recover valuable polyols from industrial waste streams and reprocess them into premium-grade polyester and polyether polyols for CASE applications.",
+                icon: "♻️",
+              },
+              {
+                title: "Advanced Research & Development",
+                desc: "Our R&D-driven processes ensure consistent hydroxyl value, stable viscosity, and reliable industrial performance.",
+                icon: "🧪",
+              },
+              {
+                title: "Circular Chemical Manufacturing",
+                desc: "We help manufacturers reduce raw material dependency and carbon footprint through sustainable circular sourcing.",
+                icon: "🔄",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="relative group rounded-xl p-[1px] bg-gradient-to-r from-[#42b3a5] to-green-400 hover:scale-105 transition-transform duration-300"
+              >
+                <div className="bg-white h-full rounded-xl p-6 shadow-md group-hover:shadow-xl transition">
+                  <div className="text-4xl mb-4">{item.icon}</div>
+
+                  <h3 className="text-xl font-semibold mb-3 group-hover:text-[#42b3a5] transition">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+	  
+	  {/* WHY ENVIOL */}
+      <section className="py-12 bg-yellow-50">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-primary mb-8">
+            Why Enviol Polytech Solutions
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-10">
+            <ul className="space-y-4 text-lg">
+              <li>✔ Sustainable Raw Material Alternative</li>
+              <li>✔ Waste-to-Value Innovation</li>
+              <li>✔ Reliable Industrial Supply</li>
+              <li>✔ Technical Documentation & Batch Traceability</li>
+              <li>✔ Research-Driven Manufacturing</li>
+              <li>✔ Controlled Hydroxyl Value (OH) & Viscosity</li>
+              <li>✔ Compatible with Standard PU Formulations</li>
+			  <li>✔ Serving clients across India, Middle East, Europe & global markets</li>
+            </ul>
+
+            <div className="relative w-full h-80 rounded overflow-hidden shadow-lg">
+              <Image
+                src="/images/banner.jpg"
+                alt="Polyol manufacturing facility India polyurethane raw materials plant"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* OUR COMMITMENT */}
+      <section className="py-12 bg-yellow-50 text-center">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-primary mb-6">
+            Our Commitment to Sustainability
+          </h2>
+
+          <p className="text-lg mb-6">
+            We believe chemical manufacturing must evolve responsibly.
+            By recovering polyols from waste streams, we reduce landfill impact, conserve resources, and support global sustainability goals while maintaining industrial-grade performance standards.
+          </p>
+
+          <p className="text-gray-700">
+            Our polyols are widely used in coatings, adhesives, sealants, elastomers, polyurethane foams, and synthetic leather applications across multiple industries.
+          </p>
+        </div>
+      </section>
+
+      {/* INDUSTRIES */}
+      <section className="py-12 bg-yellow-50 text-center">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="mb-8">
+            <Link href="/industries" className="group inline-block">
+              <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
+                Industries We Serve
+                <span className="absolute left-0 -bottom-2 h-[3px] w-full bg-[#42b3a5] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+              </h2>
+            </Link>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { name: "Polyurethane Manufacturing", path: "/industries/polyurethane" },
+              { name: "Foam Production", path: "/industries/foam-production" },
+              { name: "Paint & Coatings", path: "/industries/paint-coatings" },
+              { name: "Adhesives", path: "/industries/adhesives" },
+              { name: "Sealents", path: "/industries/pu-sealents" },
+              { name: "Powder Coating", path: "/industries/powder-coating" },
+              { name: "Elastomers", path: "/industries/elastomers" },
+              { name: "Artificial Leather", path: "/industries/artificial-leather" },
+            ].map((industry, index) => (
+              <Link key={index} href={industry.path} className="group">
+                <div className="bg-gray-100 p-6 rounded shadow transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-lg group-hover:bg-[#42b3a5] group-hover:text-white">
+                  {industry.name}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* IMPACT */}
+      <section className="py-12 bg-yellow-50 border-t">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold mb-8">
+            Our Industrial Impact Commitment
+          </h2>
+
+          <p className="max-w-3xl mx-auto text-gray-700 mb-6">
+            Our operations focus on scaling sustainable chemical recycling to reduce dependence on virgin petrochemical feedstock while delivering consistent industrial-grade performance.
+          </p>
+
+          <div className="grid md:grid-cols-4 gap-10 justify-items-center">
+            {[
+              { value: "1000 TPA", label: "Target Recycling Capacity" },
+              { value: "PET & PU", label: "Polymer Waste Streams Processed" },
+              { value: "Low Carbon", label: "Regeneration Model" },
+              { value: "Make in India", label: "Import Substitution Focus" },
+            ].map((item, index) => (
+              <div key={index} className="flex flex-col items-center text-center">
+
+                <div
+                  className="w-40 h-40 flex items-center justify-center rounded-full 
+                  bg-gradient-to-br from-[#42b3a5] to-green-400 
+                  text-white shadow-xl animate-pulseSlow hover:scale-110 
+                  transition-transform duration-300"
+                  style={{ animationDelay: `${index * 0.4}s` }}
+                >
+                  <h3 className="text-xl font-bold px-4 text-center">
+                    {item.value}
+                  </h3>
+                </div>
+
+                <p className="mt-4 text-sm uppercase tracking-wide text-gray-600 max-w-[150px]">
+                  {item.label}
+                </p>
+
               </div>
             ))}
           </div>
