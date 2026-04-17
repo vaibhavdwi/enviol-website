@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 export default function Home() {
   const images = [
@@ -57,9 +58,9 @@ export default function Home() {
         </div>
 
         <div className="relative z-20 max-w-4xl px-6">
-          <h1 className="text-5xl font-bold mb-4">
-            Sustainable Polyester & Polyether Polyol Manufacturers for Global Industries
-          </h1>
+          
+            <AnimatedHeading title="Sustainable Polyester & Polyether Polyol Manufacturers for Global Industries"/>
+         
 
           <p className="text-lg text-gray-200 mb-6">
             Leading manufacturer of polyester and polyether polyols, specializing in recycled PET & PU waste upcycling into high-performance polyols for polyurethane, coatings, adhesives, sealants, and elastomer (CASE) applications worldwide.
@@ -116,9 +117,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/70"></div>
 
         <div className="relative z-20">
-          <h1 className="text-2xl font-bold leading-snug mb-3">
-            Sustainable Polyol Manufacturers
-          </h1>
+         <AnimatedHeading title="Sustainable Polyol Manufacturers"/>
+         
 
           <p className="text-sm text-gray-200 mb-4">
             Polyester & Polyether Polyols from recycled PET & PU waste.

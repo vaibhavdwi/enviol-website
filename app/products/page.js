@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { products } from "../../data/products";
-
+import AnimatedHeading from "@/components/AnimatedHeading";
 export default function ProductsPage() {
   return (
     <main className="bg-yellow-50 min-h-screen">
       
       <div className="container mx-auto px-6 py-12">
         
-        <h1 className="text-4xl font-bold mb-10 text-gray-800">
-          Our Products
-        </h1>
+        
+          <AnimatedHeading title="Our Products"/>
+        
 
         <div className="grid md:grid-cols-2 gap-8">
           {products.map((product) => (

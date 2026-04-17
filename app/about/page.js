@@ -1,11 +1,12 @@
 // app/about/page.js
 import Image from 'next/image';
+import AnimatedHeading from '@/components/AnimatedHeading';
 
 export const metadata = {
   title: "About Enviol | Polyester & Polyether Polyol Manufacturer & Exporter",
 
   description:
-    "Enviol is a manufacturer of polyester and polyether polyols specializing in sustainable chemical recycling and polyurethane raw materials for coatings, adhesives, sealants, elastomers, and foam applications. Serving India and global markets.",
+    "Enviol is a manufacturer of polyester and polyether polyols specializing in sustainable chemical recycling of PET and polyurethane waste into high-performance polyols. Serving India and global markets.",
 
   keywords: [
     "polyester polyol manufacturer",
@@ -32,9 +33,8 @@ export default function AboutPage() {
   return (
     <main className="container mx-auto px-6 py-12 bg-yellow-50">
       
-      <h1 className="text-4xl font-bold text-center mb-8">
-        About Enviol – Polyester & Polyether Polyol Manufacturer
-      </h1>
+      {/* ✅ Animated Heading with dynamic text */}
+      <AnimatedHeading title="About Enviol – Polyester & Polyether Polyol Manufacturer & Exporter" />
 
       {/* Who We Are */}
       <section className="mb-8">

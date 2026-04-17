@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 export default function TechnologyClient() {
   const [activeCard, setActiveCard] = useState(null);
@@ -13,9 +14,9 @@ export default function TechnologyClient() {
       <section className="py-20 border-b">
         <div className="max-w-6xl mx-auto px-6 text-center">
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Polyol Manufacturing Technology | Polymer Recycling & Depolymerization Process
-          </h1>
+        
+           <AnimatedHeading title="Polyol Manufacturing Technology | Polymer Recycling & Depolymerization Process" />
+          
 
           <p className="text-lg max-w-3xl mx-auto">
             Enviol Polytech Solutions converts PET and polyurethane waste into high-performance polyester and polyether polyols using advanced chemical recycling and depolymerization processes.

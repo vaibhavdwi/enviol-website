@@ -1,5 +1,6 @@
 import Image from "next/image";
 import SustainabilityWasteCards from "../../components/SustainabilityWasteCards";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 export const metadata = {
   title:
@@ -39,9 +40,8 @@ export default function Sustainability() {
       <section className="py-20 border-b">
         <div className="max-w-6xl mx-auto px-6 text-center">
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Driving Circular Economy in Sustainable Polyol Manufacturing
-          </h1>
+          <AnimatedHeading title="Driving Circular Economy in Sustainable Polyol Manufacturing"/>
+          
 
           <p className="text-lg max-w-3xl mx-auto text-gray-700">
             Enviol transforms polymer waste into high-performance polyester and polyether polyols, enabling ESG-compliant manufacturing and supporting global sustainability goals across coatings, adhesives, sealants, elastomers, and polyurethane foam systems.

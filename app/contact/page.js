@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 export default function Contact() {
   const [loading, setLoading] = useState(false);
@@ -122,9 +123,9 @@ export default function Contact() {
     <div className="bg-yellow-50 py-20">
       <div className="max-w-6xl mx-auto px-6">
 
-        <h1 className="text-4xl font-bold text-primary mb-10 text-center">
-          Contact Enviol Polytech Solutions
-        </h1>
+        
+          <AnimatedHeading title="Contact Enviol Polytech Solutions"/>
+        
 
         <div className="grid md:grid-cols-2 gap-12">
 

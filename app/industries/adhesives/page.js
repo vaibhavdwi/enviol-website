@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import AnimatedHeading from "@/components/AnimatedHeading";
 export const metadata = {
   title:
     "PU Adhesives for Industrial Manufacturing | Polyester & Polyether Polyols",

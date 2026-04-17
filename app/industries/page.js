@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ApplicationsTable from "../../components/ApplicationsTable";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 export default function IndustriesPage() {
   return (
@@ -8,9 +9,7 @@ export default function IndustriesPage() {
       {/* HERO */}
       <section className="py-20 border-b">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Industries & Applications We Support
-          </h1>
+          <AnimatedHeading title="Industries & Applications We Support"/>
           <p className="text-lg max-w-3xl mx-auto">
             Enviol Polytech Solutions provides regenerated polyols
             tailored for industrial sectors seeking sustainable,
