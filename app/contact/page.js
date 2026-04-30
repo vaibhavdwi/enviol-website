@@ -143,7 +143,7 @@ export default function Contact() {
             <div className="mb-6 text-lg space-y-1">
               <h3 className="font-semibold mb-2">Our Office:</h3>
               <p>Enviol Polytech Solutions Pvt. Ltd.</p>
-              <p></p>
+              <p>127/625, W1 Saket Nagar</p>
               <p>Kanpur, Uttar Pradesh, India</p>
               <p>Phone: <a href="tel:+919625093722" className="text-primary underline">+91 96250 93722</a></p>
               <p>Email: <a href="mailto:info@enviol.com" className="text-primary underline">info@enviol.com</a></p>

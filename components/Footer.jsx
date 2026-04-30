@@ -137,9 +137,9 @@ export default function Footer() {
 
           <p className="text-sm leading-relaxed">
             Enviol Polytech Solutions Pvt. Ltd<br />
-            
+            127/625 W1 Saket Nagar, Kanpur<br />
+			Uttar Pradesh - 208014
           </p>
-
           <p className="mt-4 text-sm">
             Phone: +91 96250 93722
           </p>
