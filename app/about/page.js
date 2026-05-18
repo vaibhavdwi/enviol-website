@@ -52,13 +52,43 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* Vision */}
-      <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
-        <p className="text-gray-700">
-          Our vision is to become a globally recognized polyol manufacturer, driving the transition toward sustainable polyurethane raw materials through innovation in chemical recycling and circular manufacturing systems.
-        </p>
-      </section>
+      {/* Vision + Video Section */}
+<section className="mb-16">
+  <div className="grid md:grid-cols-2 gap-10 items-center">
+    
+    {/* Left Content */}
+    <div>
+      <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
+      <p className="text-gray-700 leading-relaxed">
+        Our vision is to become a globally recognized polyol manufacturer, driving
+        the transition toward sustainable polyurethane raw materials through
+        innovation in chemical recycling and circular manufacturing systems.
+      </p>
+
+      <p className="text-gray-700 mt-4 leading-relaxed">
+        Through advanced recycling technologies, sustainable production practices,
+        and industrial innovation, Enviol aims to build a self-reliant circular
+        economy that reduces environmental impact while delivering world-class
+        polyurethane solutions.
+      </p>
+    </div>
+
+    {/* Right Side Video */}
+    <div className="flex justify-center md:justify-center">
+      <div className="w-72 md:w-80 aspect-[9/16] rounded-xl overflow-hidden shadow-xl border border-yellow-200">
+        <iframe
+          className="w-full h-full"
+          src="https://www.youtube.com/embed/ZAW8eWskipw"
+          title="Enviol Vision Video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+    </div>
+
+  </div>
+</section>
 
       {/* Aim */}
       <section className="mb-8">
