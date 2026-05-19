@@ -87,23 +87,23 @@ export default function Navbar() {
             );
           })}
 
-          {/* CTA */}
-          <Link
+ <Link
   href="/contact"
-  className="ml-4 relative px-6 py-2.5 rounded-full text-base font-semibold text-white overflow-hidden group transition-all duration-300"
+  className="ml-4 relative inline-flex items-center gap-2 px-7 py-3 rounded-full text-base font-semibold text-white overflow-hidden
+  bg-gradient-to-r from-[#42b3a5] to-green-400
+  animate-contactDance
+  hover:scale-105 transition duration-300 shadow-lg"
 >
-  {/* Background glow */}
-  <span className="absolute inset-0 bg-gradient-to-r from-[#42b3a5] to-green-400 opacity-90 group-hover:opacity-100 transition duration-300"></span>
+  {/* Glow */}
+  <span className="absolute inset-0 rounded-full animate-contactPulse border border-white/30"></span>
 
-  {/* Soft pulse ring */}
-  <span className="absolute inset-0 rounded-full border border-white/20 animate-softGlow"></span>
+  {/* Shine Effect */}
+  <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition"></span>
 
   {/* Text */}
   <span className="relative z-10 flex items-center gap-2">
     Contact
-    <span className="transition-transform duration-300 group-hover:translate-x-1">
-      →
-    </span>
+    <span className="animate-arrowMove">→</span>
   </span>
 </Link>
         </nav>

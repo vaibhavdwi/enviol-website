@@ -31,3 +31,62 @@ body {
 .animate-softGlow {
   animation: softGlow 2.5s ease-in-out infinite;
 }
+@keyframes contactDance {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  20% {
+    transform: translateY(-2px) rotate(-1deg);
+  }
+  40% {
+    transform: translateY(1px) rotate(1deg);
+  }
+  60% {
+    transform: translateY(-2px) rotate(-1deg);
+  }
+  80% {
+    transform: translateY(1px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes contactPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes arrowMove {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+.animate-contactDance {
+  animation: contactDance 3s ease-in-out infinite;
+}
+
+.animate-contactPulse {
+  animation: contactPulse 2s ease-in-out infinite;
+}
+
+.animate-arrowMove {
+  animation: arrowMove 1.2s ease-in-out infinite;
+}
