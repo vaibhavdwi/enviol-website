@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import AnimatedTagline from "@/components/AnimatedTagline";
+import AnimatedSubheading from "@/components/AnimatedSubheading";
+import AnimatedBrand from "@/components/AnimatedBrand";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -42,25 +45,48 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-3 flex justify-between items-center">
 
         {/* Logo + Name */}
-        <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/images/logo-n.png"
-            alt="Enviol"
-            width={60}
-            height={60}
-            priority
-          />
+        <Link href="/" className="flex flex-col">
 
-          <div className="leading-tight">
-            <h1 className="text-xl md:text-5xl font-bold text-white">
-              ENVIOL
-            </h1>
+  {/* Logo + Brand */}
+  <div className="flex items-center gap-3">
 
-            <p className="text-xs md:text-sm tracking-wider text-gray-300">
-              POLYTECH SOLUTIONS
-            </p>
-          </div>
-        </Link>
+    <div className="relative animate-logoFloat">
+  
+  {/* Glow */}
+  <div className="absolute inset-0 rounded-full bg-[#5ffbf1]/20 blur-xl animate-logoPulse"></div>
+
+  <Image
+    src="/images/logo-n.png"
+    alt="Enviol"
+    width={60}
+    height={60}
+    priority
+    className="relative z-10"
+  />
+
+</div>
+
+    <div className="leading-none">
+      <AnimatedBrand
+  key={`brand-${pathname}`}
+  text="E N V I O L"
+/>
+ 
+
+<AnimatedSubheading
+  key={`sub-${pathname}`}
+  text="POLYTECH SOLUTIONS"
+/>
+    </div>
+
+  </div>
+
+  {/* Tagline */}
+  <div className="pl-[8px] mt-1">
+    <AnimatedTagline text="Reuse waste to Sustainable Polyurethanes" />
+  </div>
+
+</Link>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-10 text-base md:text-lg font-medium text-white">

@@ -90,3 +90,53 @@ body {
 .animate-arrowMove {
   animation: arrowMove 1.2s ease-in-out infinite;
 }
+@keyframes logoFloat {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+
+  20% {
+    transform: translate(2px, -3px) rotate(1deg);
+  }
+
+  40% {
+    transform: translate(-1px, -5px) rotate(-1deg);
+  }
+
+  60% {
+    transform: translate(-2px, -2px) rotate(1deg);
+  }
+
+  80% {
+    transform: translate(1px, 2px) rotate(-1deg);
+  }
+
+  100% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+}
+
+@keyframes logoPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 0.55;
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+}
+
+.animate-logoFloat {
+  animation: logoFloat 1.8s ease-in-out infinite;
+}
+
+.animate-logoPulse {
+  animation: logoPulse 2s ease-in-out infinite;
+}
