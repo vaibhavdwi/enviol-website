@@ -89,7 +89,7 @@ export default function Navbar() {
 </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center gap-10 text-base md:text-lg font-medium text-white">
+        <nav className="hidden md:flex items-center gap-10 text-base md:text-lg font-medium text-[#d8f3f1]">
           {navLinks.map((link) => {
             const isActive = pathname === link.path;
 
@@ -97,7 +97,11 @@ export default function Navbar() {
               <Link
                 key={link.path}
                 href={link.path}
-                className="relative group transition hover:text-gray-300"
+                className={`relative group transition-all duration-300 ${
+  isActive
+    ? "text-[#5ffbf1]"
+    : "text-[#d8f3f1] hover:text-[#7be0d4]"
+}`}
               >
                 {link.name}
 
