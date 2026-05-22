@@ -6,7 +6,7 @@ export default function AnimatedHeading({ title }) {
   const letters = title.split("");
 
   return (
-    <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">
+    <h1 className="text-3xl md:text-4xl font-bold mb-3 text-center leading-tight">
       {letters.map((char, i) => (
         <motion.span
           key={i}

@@ -31,7 +31,7 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="container mx-auto px-6 py-12 bg-yellow-50">
+    <main className="container mx-auto px-6 pt-20 pb-12 bg-yellow-50">
       
       {/* ✅ Animated Heading with dynamic text */}
       <AnimatedHeading title="About Enviol – Polyester & Polyether Polyol Manufacturer & Exporter" />

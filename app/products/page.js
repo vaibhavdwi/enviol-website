@@ -5,7 +5,7 @@ export default function ProductsPage() {
   return (
     <main className="bg-yellow-50 min-h-screen">
       
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-6 py-12 pt-20 pb-12">
         
         
           <AnimatedHeading title="Our Products"/>

@@ -63,7 +63,7 @@ export default function Home() {
          
 
           <p className="text-lg text-gray-200 mb-6">
-            Leading manufacturer of polyester and polyether polyols, specializing in recycled PET & PU waste upcycling into high-performance polyols for polyurethane, coatings, adhesives, sealants, and elastomer (CASE) applications worldwide.
+            Leading manufacturer of polyester and polyether polyols based Polyurethane systems, specializing in waste upcycling into high-performance polyols for polyurethane based Rigid Foams, Coatings, Adhesives, Sealants, and Elastomers (CASE) applications worldwide.
           </p>
 
           <div className="flex gap-6 justify-center">
@@ -249,7 +249,7 @@ export default function Home() {
           </p>
 
           <p className="text-gray-700">
-            Our polyols are widely used in coatings, adhesives, sealants, elastomers, polyurethane foams, and synthetic leather applications across multiple industries.
+            Our speciality polyols can be widely used in coatings, adhesives, sealants, elastomers, polyurethane foams, and synthetic leather applications across multiple industries.
           </p>
         </div>
       </section>
