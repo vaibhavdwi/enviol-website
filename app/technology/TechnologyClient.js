@@ -11,7 +11,7 @@ export default function TechnologyClient() {
     <div className="bg-yellow-50">
 
       {/* HERO */}
-      <section className="py-20 border-b">
+      <section className="pt-20 pb-10 border-b">
         <div className="max-w-6xl mx-auto px-6 text-center">
 
         
@@ -26,7 +26,7 @@ export default function TechnologyClient() {
       </section>
 
       {/* TECHNOLOGICAL FRAMEWORK */}
-      <section className="py-16">
+      <section className="pt-6 pb-10">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
 
           <div>
@@ -57,7 +57,7 @@ export default function TechnologyClient() {
       </section>
 
       {/* 🔥 R&D SECTION (RESTORED) */}
-      <section className="py-16 bg-yellow-50">
+      <section className="pt-6 pb-12 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
 
           <h2 className="text-2xl font-semibold mb-6 text-center">
@@ -72,7 +72,7 @@ export default function TechnologyClient() {
       </section>
 
       {/* 🔥 MANUFACTURING ROADMAP (RESTORED) */}
-      <section className="py-16">
+      <section className="pt-8 pb-12">
         <div className="max-w-6xl mx-auto px-6">
 
           <h2 className="text-2xl font-semibold mb-6">
@@ -87,7 +87,7 @@ export default function TechnologyClient() {
       </section>
 
       {/* SEO SECTION */}
-      <section className="py-16 bg-yellow-50 text-center">
+      <section className="pt-4 pb-12 bg-yellow-50 text-center">
         <div className="max-w-6xl mx-auto px-6">
 
           <h2 className="text-2xl font-semibold mb-4">
@@ -102,7 +102,7 @@ export default function TechnologyClient() {
       </section>
 
       {/* STRATEGIC ADVANTAGES */}
-      <section className="py-16 bg-yellow-50">
+      <section className="pt-4 pb-12 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
 
           <h2 className="text-2xl font-semibold mb-8 text-center">

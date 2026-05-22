@@ -51,7 +51,7 @@ export default function Sustainability() {
       </section>
 
       {/* CIRCULAR MODEL */}
-      <section className="py-16">
+      <section className="pt-4 pb-12">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
 
           <div>
@@ -85,7 +85,7 @@ export default function Sustainability() {
       </section>
 
       {/* ENVIRONMENTAL IMPACT */}
-      <section className="py-16 bg-yellow-50">
+      <section className="pt-4 pb-12 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6 text-center">
 
           <h2 className="text-2xl font-semibold mb-6">
@@ -100,7 +100,7 @@ export default function Sustainability() {
       </section>
 
       {/* LOW VOC */}
-      <section className="py-16">
+      <section className="pt-4 pb-12">
         <div className="max-w-6xl mx-auto px-6 text-center">
 
           <h2 className="text-2xl font-semibold mb-6">
@@ -115,7 +115,7 @@ export default function Sustainability() {
       </section>
 
       {/* WASTE + POLLUTION */}
-      <section className="py-16 bg-yellow-50">
+      <section className="pt-4 pb-12 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6 text-center">
 
           <h2 className="text-2xl font-semibold mb-6">
@@ -132,7 +132,7 @@ export default function Sustainability() {
       </section>
 
       {/* MAKE IN INDIA */}
-      <section className="py-16">
+      <section className="pt-4 pb-12">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
 
           <div>
@@ -158,7 +158,7 @@ export default function Sustainability() {
       </section>
 
       {/* INDUSTRY PARTNERSHIP */}
-      <section className="py-16 bg-yellow-50">
+      <section className="pt-4 pb-12 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6 text-center">
 
           <h2 className="text-2xl font-semibold mb-6">

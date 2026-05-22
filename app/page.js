@@ -143,7 +143,7 @@ export default function Home() {
       </section>
 
       {/* ================= SEO ================= */}
-      <section className="py-10 bg-yellow-50">
+      <section className="pt-8 pb-4 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-primary mb-8">
             Global Polyester Polyol Manufacturer & Supplier
@@ -156,7 +156,7 @@ export default function Home() {
       </section>
 
       {/* WHAT WE DO */}
-      <section className="py-12 bg-yellow-50">
+      <section className="pt-4 pb-10 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-primary mb-8">
             What We Do
@@ -206,7 +206,7 @@ export default function Home() {
       </section>
 	  
 	  {/* WHY ENVIOL */}
-      <section className="py-12 bg-yellow-50">
+      <section className="pt-4 pb-10 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-primary mb-8">
             Why Enviol Polytech Solutions
@@ -224,7 +224,7 @@ export default function Home() {
 			  <li>✔ Serving clients across India, Middle East, Europe & global markets</li>
             </ul>
 
-            <div className="relative w-full h-80 rounded overflow-hidden shadow-lg">
+            <div className="relative w-[65%] h-30 mx-auto rounded overflow-hidden shadow-lg">
               <Image
                 src="/images/banner.jpg"
                 alt="Polyol manufacturing facility India polyurethane raw materials plant"
@@ -237,7 +237,7 @@ export default function Home() {
       </section>
 
       {/* OUR COMMITMENT */}
-      <section className="py-12 bg-yellow-50 text-center">
+      <section className="pt-4 pb-10 bg-yellow-50 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-primary mb-6">
             Our Commitment to Sustainability
@@ -255,7 +255,7 @@ export default function Home() {
       </section>
 
       {/* INDUSTRIES */}
-      <section className="py-12 bg-yellow-50 text-center">
+      <section className="pt-4 pb-10 bg-yellow-50 text-center">
         <div className="max-w-6xl mx-auto px-6">
           <div className="mb-8">
             <Link href="/industries" className="group inline-block">
