@@ -1,8 +1,11 @@
-import { products } from "../../../data/products";
-import { notFound } from "next/navigation";
+import products from "@/data/products.json";
 import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
-export default async function ProductDetail({ params }) {
+
+export async function generateMetadata({ params }) {
+
   const { slug } = await params;
 
   const product = products.find(
@@ -10,148 +13,302 @@ export default async function ProductDetail({ params }) {
   );
 
   if (!product) {
+    return {
+      title: "Product Not Found | ENVIOL",
+    };
+  }
+
+  return {
+    title: `${product.product_code} | ${product.product_name} | ENVIOL`,
+
+    description:
+      product.short_description || product.description,
+  };
+}
+
+export default async function ProductPage({ params }) {
+	const { slug } = await params;
+  const product = products.find((p) => p.slug === slug);
+
+  if (!product) {
     notFound();
   }
 
+  const relatedProducts = products.filter(
+    (p) =>
+      p.category === product.category &&
+      p.slug !== product.slug
+  );
+
   return (
-    <section className="py-20 max-w-6xl mx-auto px-6">
+    <main className="bg-yellow-50 min-h-screen pt-24 pb-16">
+      <div className="max-w-7xl mx-auto px-6">
 
-      {/* HERO SECTION */}
-      <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-        <div>
-          <h1 className="text-4xl font-bold mb-4">
-            {product.name}
-          </h1>
-          <p className="text-gray-600 mb-6">
-            {product.description}
-          </p>
+        {/* Breadcrumb */}
+        <div className="text-sm text-gray-500 mb-8 flex items-center gap-2 flex-wrap">
+          <Link href="/" className="hover:text-[#42b3a5] transition">
+            Home
+          </Link>
+
+          <span>/</span>
+
+          <Link
+            href="/products"
+            className="hover:text-[#42b3a5] transition"
+          >
+            Products
+          </Link>
+
+          <span>/</span>
+
+          <span className="text-[#42b3a5] font-medium">
+            {product.product_name}
+          </span>
         </div>
 
-        {product.image && (
-  <div className="flex flex-col items-center">
+        {/* Top Section */}
+        <div className="grid lg:grid-cols-2 gap-14 items-start">
 
-    <Image
-      src={product.image}
-      alt={product.name}
-      width={500}
-      height={400}
-      className="rounded-lg shadow"
-    />
+          {/* Product Image */}
+          <div className="bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
+            <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gray-100">
+              <Image
+                src={product.image}
+                alt={product.product_name}
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
 
-    {/* ACTION BUTTONS */}
-    <div className="flex gap-4 mt-6">
+          {/* Product Content */}
+          <div>
 
-      <a
-        href={`/guest/enquire?product=${product.slug}`}
-        className="bg-[#42b3a5] text-white px-6 py-3 rounded-full font-semibold shadow-md hover:scale-105 transition"
-      >
-        Enquire
-      </a>
+            {/* Category */}
+            <div className="inline-flex items-center px-4 py-1 rounded-full bg-[#42b3a5]/10 text-[#42b3a5] text-sm font-semibold mb-5">
+              {product.category}
+            </div>
 
-      <a
-        href={`/guest/quick-order?product=${product.slug}`}
-        className="border border-[#42b3a5] text-[#42b3a5] px-6 py-3 rounded-full font-semibold hover:bg-[#42b3a5] hover:text-white transition"
-      >
-        Quick Order
-      </a>
+            {/* Product Code */}
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+              {product.product_code}
+            </h1>
 
-    </div>
-  </div>
-)}
-      </div>
+            {/* Product Name */}
+            <h2 className="text-2xl md:text-3xl font-semibold text-[#42b3a5] mt-3">
+              {product.product_name}
+            </h2>
 
-      {/* APPLICATIONS */}
-      {product.applications && (
-        <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">
-            Applications
-          </h2>
-          <ul className="list-disc pl-6 space-y-2 text-gray-700">
-            {product.applications.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+            {/* Description */}
+            <p className="mt-6 text-gray-700 leading-relaxed text-lg">
+              {product.description}
+            </p>
 
-      {/* TECHNICAL SPECIFICATIONS */}
-      {product.specifications && (
-        <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6">
-            Technical Specifications
-          </h2>
+            {/* Features */}
+            {product.features && (
+              <div className="mt-8">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  Key Features
+                </h3>
 
-          <div className="overflow-x-auto">
-            <table className="w-full border border-gray-200 text-sm">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="p-3 text-left">Property</th>
-                  <th className="p-3 text-left">Test Condition</th>
-                  <th className="p-3 text-left">Value</th>
-                  <th className="p-3 text-left">Unit</th>
-                  <th className="p-3 text-left">Standard</th>
-                </tr>
-              </thead>
-              <tbody>
-                {product.specifications.map((spec, index) => (
-                  <tr key={index} className="border-t">
-                    <td className="p-3">{spec.property}</td>
-                    <td className="p-3">{spec.testCondition || "-"}</td>
-                    <td className="p-3">{spec.value}</td>
-                    <td className="p-3">{spec.unit || "-"}</td>
-                    <td className="p-3">{spec.standard || "-"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {product.features.map((feature, index) => (
+                    <div
+                      key={index}
+                      className="bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100 text-gray-700"
+                    >
+                      ✓ {feature}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Buttons */}
+            <div className="mt-10 flex flex-wrap gap-4">
+
+  {/* Enquire Now */}
+  <Link
+    href="/guest/enquire"
+    className="px-6 py-3 rounded-xl bg-[#42b3a5] hover:bg-[#36998d] text-white font-semibold transition shadow-lg"
+  >
+    Enquire Now
+  </Link>
+
+  {/* Order Now */}
+  <Link
+    href="/guest/quick-order"
+    className="px-6 py-3 rounded-xl border border-[#42b3a5] text-[#42b3a5] hover:bg-[#42b3a5] hover:text-white font-semibold transition"
+  >
+    Order Now
+  </Link>
+
+</div>
           </div>
         </div>
-      )}
 
-      {/* COMPATIBILITY */}
-      {product.compatibility && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">
-            Compatibility
-          </h2>
-          <p>{product.compatibility}</p>
-        </div>
-      )}
+        {/* Applications */}
+        {product.applications && (
+          <section className="mt-20">
+            <h3 className="text-3xl font-bold text-gray-900 mb-8">
+              Applications
+            </h3>
 
-      {/* STORAGE */}
-      {product.storage && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">
-            Storage
-          </h2>
-          <p>{product.storage}</p>
-        </div>
-      )}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {product.applications.map((application, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-lg transition"
+                >
+                  <div className="text-[#42b3a5] font-semibold text-lg">
+                    {application}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
-      {/* SOLUBILITY */}
-      {product.solubility && (
-        <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">
-            Solubility
-          </h2>
-          <p>{product.solubility}</p>
-        </div>
-      )}
+        {/* Technical Data */}
+        {product.technical_data && (
+          <section className="mt-20">
+            <h3 className="text-3xl font-bold text-gray-900 mb-8">
+              Technical Data
+            </h3>
 
-      {/* DOWNLOAD TDS */}
-{product.tds && (
-  <div className="mt-10">
+            <div className="overflow-x-auto rounded-2xl shadow-lg border border-gray-200 bg-white">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-[#42b3a5] text-white">
+                    <th className="px-6 py-4 text-left font-semibold">
+                      Property
+                    </th>
+
+                    <th className="px-6 py-4 text-left font-semibold">
+                      Value
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {Object.entries(product.technical_data).map(
+                    ([key, value], index) => (
+                      <tr
+                        key={key}
+                        className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      >
+                        <td className="px-6 py-4 font-medium text-gray-800 capitalize">
+                          {key.replaceAll("_", " ")}
+                        </td>
+
+                        <td className="px-6 py-4 text-gray-700">
+                          {value}
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+		{product.tds_file && (
+
+  <div className="mt-6">
+
     <a
-      href={product.tds}
+      href={product.tds_file}
       target="_blank"
       rel="noopener noreferrer"
-      className="bg-primary text-white px-6 py-3 rounded hover:opacity-90 transition inline-block"
+      className="inline-flex items-center px-5 py-3 rounded-xl bg-[#1f2937] hover:bg-[#111827] text-white font-semibold transition shadow-lg"
     >
       Download Technical Data Sheet
     </a>
+
   </div>
 )}
 
-    </section>
+        {/* Compatibility & Storage */}
+        <section className="mt-20 grid lg:grid-cols-2 gap-8">
+
+          {product.compatibility && (
+            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Compatibility
+              </h3>
+
+              <p className="text-gray-700 leading-relaxed">
+                {product.compatibility}
+              </p>
+            </div>
+          )}
+
+          {product.storage && (
+            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Storage Guidelines
+              </h3>
+
+              <p className="text-gray-700 leading-relaxed">
+                {product.storage}
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <section className="mt-24">
+            <h3 className="text-3xl font-bold text-gray-900 mb-10">
+              Related Products
+            </h3>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {relatedProducts.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 hover:-translate-y-2 hover:shadow-2xl transition duration-300"
+                >
+                  <div className="relative h-56 w-full bg-gray-100">
+                    <Image
+                      src={item.image}
+                      alt={item.product_name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+
+                  <div className="p-6">
+
+                    <div className="text-xs font-semibold text-[#42b3a5] uppercase tracking-wide mb-2">
+                      {item.category}
+                    </div>
+
+                    <h4 className="text-xl font-bold text-gray-900 leading-snug">
+                      {item.product_code}
+                    </h4>
+
+                    <p className="text-[#42b3a5] font-medium mt-2">
+                      {item.product_name}
+                    </p>
+
+                    <p className="mt-4 text-gray-600 text-sm leading-relaxed line-clamp-3">
+                      {item.short_description}
+                    </p>
+
+                    <Link
+                      href={`/products/${item.slug}`}
+                      className="inline-flex items-center mt-6 font-semibold text-[#42b3a5] hover:text-[#2d8e83] transition"
+                    >
+                      View Product →
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </main>
   );
 }

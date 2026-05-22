@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+
+    "product_code": "RePolyester 2100",
+
+    "product_name": "CASE Grade Recycled Polyester Polyol",
+
+    "slug": "repolyester-2100",
+
+    "category": "Specialty Polyols",
+
+    "subcategory": "CASE Applications",
+
+    "product_family": "RePolyester",
+
+    "description": "Recycled polyester polyol for CASE applications.",
+
+    "short_description": "Recycled polyester polyol designed for coatings, adhesives, sealants and elastomers.",
+
+    "image": "/images/repolyester-2100.jpg",
+
+    "applications": [
+      "Coatings",
+      "Adhesives",
+      "Sealants",
+      "Elastomers (CASE)"
+    ],
+
+    "features": [
+      "Recycled raw material based",
+      "Good polyurethane compatibility",
+      "Suitable for CASE systems"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "150 - 174 mg KOH/g",
+      "dynamic_viscosity": "16,000 - 31,000 mPa.s @ 23°C",
+      "water_content": "≤ 0.1%"
+    },
+
+    "compatibility": "Compatible with conventional polyurethane systems and standard isocyanates.",
+
+    "storage": "Store in tightly closed containers in a dry place at 20–30°C. Avoid moisture contamination.",
+
+    "solubility": "Soluble in common organic solvents used in polyurethane systems.",
+
+    "tds_file": "/tds/repolyester-2100.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 2,
+
+    "product_code": "RePolyether 3300",
+
+    "product_name": "Recovered Polyether Polyol",
+
+    "slug": "repolyether-3300",
+
+    "category": "Specialty Polyols",
+
+    "subcategory": "Foam Systems",
+
+    "product_family": "RePolyether",
+
+    "description": "Recovered polyether polyol designed for flexible and rigid foam systems.",
+
+    "short_description": "Recovered polyether polyol for flexible and rigid polyurethane foam applications.",
+
+    "image": "/images/repolyether-3300.jpg",
+
+    "applications": [
+      "Flexible polyurethane foam",
+      "Rigid foam systems",
+      "Insulation materials",
+      "Automotive seating"
+    ],
+
+    "features": [
+      "Recovered polyether technology",
+      "Suitable for flexible and rigid systems",
+      "Good process compatibility"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "48 - 56 mg KOH/g",
+      "dynamic_viscosity": "400 - 800 mPa.s @ 25°C",
+      "water_content": "≤ 0.1%",
+      "acid_value": "≤ 0.5 mg KOH/g"
+    },
+
+    "compatibility": "Compatible with conventional isocyanates used in polyurethane foam production.",
+
+    "storage": "Store in sealed containers in a dry environment between 20–30°C. Avoid prolonged exposure to air and moisture.",
+
+    "solubility": "Miscible with common polyether polyols and compatible polyurethane raw materials.",
+
+    "tds_file": "/tds/repolyether-3300.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 3,
+
+    "product_code": "RENVIOL-PolyRig-2800",
+
+    "product_name": "PIR Foam Board Polyol",
+
+    "slug": "pir-foam-board-polyol",
+
+    "category": "Rigid Foam Polyols",
+
+    "subcategory": "PIR Systems",
+
+    "product_family": "PolyRig",
+
+    "description": "High-performance regenerated polyester polyol for PIR insulation foam board applications.",
+
+    "short_description": "Polyester polyol developed for PIR rigid insulation systems.",
+
+    "image": "/images/pir-foam-board.jpg",
+
+    "applications": [
+      "PIR Insulation Boards",
+      "Cold Storage Panels",
+      "Continuous Sandwich Panels",
+      "Thermal Insulation Systems"
+    ],
+
+    "features": [
+      "Excellent thermal insulation",
+      "High thermal stability",
+      "Recycled PET based",
+      "Suitable for PIR systems"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "240 - 280 mg KOH/g",
+      "dynamic_viscosity": "4000 - 7000 mPa.s @ 25°C",
+      "acid_value": "≤ 2.0 mg KOH/g"
+    },
+
+    "compatibility": "Compatible with conventional PIR polyurethane systems and polymeric MDI.",
+
+    "storage": "Store in tightly closed moisture-free containers at 20–30°C.",
+
+    "solubility": "Compatible with standard rigid polyurethane additives and catalysts.",
+
+    "tds_file": "/tds/polyrig-2800.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 4,
+
+    "product_code": "RENVIOL-PolyRig-2400",
+
+    "product_name": "PUF Foam Board Polyol",
+
+    "slug": "puf-foam-board-polyol",
+
+    "category": "Rigid Foam Polyols",
+
+    "subcategory": "PUF Systems",
+
+    "product_family": "PolyRig",
+
+    "description": "Sustainable polyester polyol for rigid polyurethane foam board systems.",
+
+    "short_description": "Polyester polyol for rigid polyurethane foam insulation systems.",
+
+    "image": "/images/puf-foam-board.jpg",
+
+    "applications": [
+      "Rigid Foam Boards",
+      "Refrigeration Panels",
+      "Construction Insulation",
+      "PUF Panel Systems"
+    ],
+
+    "features": [
+      "Good insulation properties",
+      "Excellent dimensional stability",
+      "Recycled PET based",
+      "Optimized for rigid foam"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "220 - 260 mg KOH/g",
+      "dynamic_viscosity": "3500 - 6500 mPa.s @ 25°C",
+      "water_content": "≤ 0.1%"
+    },
+
+    "compatibility": "Compatible with conventional rigid polyurethane systems and MDI grades.",
+
+    "storage": "Store in sealed dry containers away from moisture contamination.",
+
+    "solubility": "Miscible with standard rigid PU raw materials.",
+
+    "tds_file": "/tds/polyrig-2400.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 5,
+
+    "product_code": "RENVIOL-PolyCoat-1200",
+
+    "product_name": "Furniture Coating Polyols",
+
+    "slug": "furniture-coating-polyols",
+
+    "category": "Coating Grade Polyols",
+
+    "subcategory": "Furniture Coatings",
+
+    "product_family": "PolyCoat",
+
+    "description": "PU coating polyester polyols for furniture and wood finishing applications.",
+
+    "short_description": "Polyurethane coating polyols for furniture coating systems.",
+
+    "image": "/images/furniture-coating.jpg",
+
+    "applications": [
+      "Wood Coatings",
+      "Furniture Finishes",
+      "Protective PU Coatings"
+    ],
+
+    "features": [
+      "Good surface finish",
+      "Excellent adhesion",
+      "High durability"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "120 - 160 mg KOH/g",
+      "dynamic_viscosity": "3000 - 6000 mPa.s"
+    },
+
+    "compatibility": "Compatible with conventional PU coating systems.",
+
+    "storage": "Store in dry airtight containers at ambient temperature.",
+
+    "solubility": "Compatible with conventional coating solvents.",
+
+    "tds_file": "/tds/polycoat-1200.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 6,
+
+    "product_code": "RENVIOL-PolyCoat-1600",
+
+    "product_name": "Metal Coating Polyols",
+
+    "slug": "metal-coating-polyols",
+
+    "category": "Coating Grade Polyols",
+
+    "subcategory": "Metal Coatings",
+
+    "product_family": "PolyCoat",
+
+    "description": "Industrial polyurethane coating polyols for metal coating systems.",
+
+    "short_description": "Polyurethane coating polyols for industrial metal coatings.",
+
+    "image": "/images/metal-coating.jpg",
+
+    "applications": [
+      "Industrial Coatings",
+      "Metal Protection",
+      "Machinery Coatings"
+    ],
+
+    "features": [
+      "Good chemical resistance",
+      "Excellent hardness",
+      "High coating durability"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "140 - 180 mg KOH/g",
+      "dynamic_viscosity": "4000 - 7000 mPa.s"
+    },
+
+    "compatibility": "Compatible with standard solvent-based PU coating systems.",
+
+    "storage": "Store in sealed moisture-free containers.",
+
+    "solubility": "Soluble in common PU coating solvents.",
+
+    "tds_file": "/tds/polycoat-1600.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 7,
+
+    "product_code": "RENVIOL-PolyCoat-1400",
+
+    "product_name": "Leather Coating Polyols",
+
+    "slug": "leather-coating-polyols",
+
+    "category": "Coating Grade Polyols",
+
+    "subcategory": "Leather Coatings",
+
+    "product_family": "PolyCoat",
+
+    "description": "Specialized PU coating polyols for synthetic leather finishing applications.",
+
+    "short_description": "PU coating polyols for leather and synthetic leather systems.",
+
+    "image": "/images/leather-coating.jpg",
+
+    "applications": [
+      "Synthetic Leather",
+      "Leather Finishing",
+      "Flexible PU Coatings"
+    ],
+
+    "features": [
+      "Good flexibility",
+      "Soft touch finish",
+      "Excellent adhesion"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "130 - 170 mg KOH/g",
+      "dynamic_viscosity": "2500 - 5500 mPa.s"
+    },
+
+    "compatibility": "Compatible with flexible polyurethane coating systems.",
+
+    "storage": "Store in tightly sealed dry containers.",
+
+    "solubility": "Compatible with leather coating solvents and additives.",
+
+    "tds_file": "/tds/polycoat-1400.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 8,
+
+    "product_code": "RENVIOL-PolyAd-3100",
+
+    "product_name": "Laminating Adhesive Polyols",
+
+    "slug": "laminating-adhesive-polyols",
+
+    "category": "Adhesive Grade Polyols",
+
+    "subcategory": "Laminating Adhesives",
+
+    "product_family": "PolyAd",
+
+    "description": "Polyester polyols developed for laminating adhesive systems.",
+
+    "short_description": "Polyester polyols for flexible laminating adhesive systems.",
+
+    "image": "/images/laminating-adhesive.jpg",
+
+    "applications": [
+      "Flexible Packaging",
+      "Film Lamination",
+      "Industrial Laminates"
+    ],
+
+    "features": [
+      "Excellent bonding strength",
+      "Good flexibility",
+      "Stable processing"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "90 - 130 mg KOH/g",
+      "dynamic_viscosity": "2000 - 5000 mPa.s"
+    },
+
+    "compatibility": "Compatible with conventional laminating adhesive systems.",
+
+    "storage": "Store in sealed moisture-free containers.",
+
+    "solubility": "Compatible with standard adhesive solvents.",
+
+    "tds_file": "/tds/polyad-3100.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 9,
+
+    "product_code": "RENVIOL-PolyAd-3500",
+
+    "product_name": "PUR Hot Melt Polyols",
+
+    "slug": "pur-hot-melt-polyols",
+
+    "category": "Adhesive Grade Polyols",
+
+    "subcategory": "PUR Hot Melt",
+
+    "product_family": "PolyAd",
+
+    "description": "Reactive polyurethane hot melt polyols for advanced bonding systems.",
+
+    "short_description": "Reactive polyurethane hot melt adhesive polyols.",
+
+    "image": "/images/pur-hotmelt.jpg",
+
+    "applications": [
+      "Furniture Bonding",
+      "Textile Lamination",
+      "Automotive Interiors"
+    ],
+
+    "features": [
+      "Fast setting",
+      "High green strength",
+      "Excellent adhesion"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "70 - 110 mg KOH/g",
+      "dynamic_viscosity": "1500 - 4000 mPa.s"
+    },
+
+    "compatibility": "Compatible with reactive PUR hot melt systems.",
+
+    "storage": "Store in airtight dry containers away from moisture.",
+
+    "solubility": "Compatible with conventional PUR hot melt additives.",
+
+    "tds_file": "/tds/polyad-3500.pdf",
+
+    "is_active": true
+  },
+
+  {
+    "id": 10,
+
+    "product_code": "RENVIOL-PolyAd-3300",
+
+    "product_name": "PU/Leather Adhesive Polyols",
+
+    "slug": "pu-leather-adhesive-polyols",
+
+    "category": "Adhesive Grade Polyols",
+
+    "subcategory": "Leather Adhesives",
+
+    "product_family": "PolyAd",
+
+    "description": "Specialized polyurethane adhesive polyols for leather bonding applications.",
+
+    "short_description": "PU adhesive polyols for leather and footwear bonding systems.",
+
+    "image": "/images/leather-adhesive.jpg",
+
+    "applications": [
+      "Footwear Adhesives",
+      "Leather Bonding",
+      "Flexible PU Adhesives"
+    ],
+
+    "features": [
+      "Excellent flexibility",
+      "Strong adhesion",
+      "Good durability"
+    ],
+
+    "technical_data": {
+      "hydroxyl_number": "100 - 140 mg KOH/g",
+      "dynamic_viscosity": "2500 - 5500 mPa.s"
+    },
+
+    "compatibility": "Compatible with conventional PU adhesive systems.",
+
+    "storage": "Store in sealed dry containers between 20–30°C.",
+
+    "solubility": "Compatible with common polyurethane adhesive solvents.",
+
+    "tds_file": "/tds/polyad-3300.pdf",
+
+    "is_active": true
+  }
+]
