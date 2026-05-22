@@ -15,7 +15,7 @@ export default function ProductsPage() {
           {products.map((product) => (
             <div
               key={product.id}
-              className="bg-white p-6 shadow rounded-xl hover:shadow-lg transition"
+              className="bg-white p-6 shadow rounded-xl transition-all duration-300 hover:bg-[#55BAAE] hover:text-white hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] cursor-pointer group"
             >
               <h3 className="text-xl font-semibold text-gray-800">
                 {product.name}
