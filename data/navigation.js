@@ -1,6 +1,7 @@
 export const productMenu = [
   {
     name: "Rigid Foam Polyols",
+	path: "/products/rigid-foam-polyols",
     subDropdown: [
       {
         name: "PIR Foam Board Polyol",
@@ -15,6 +16,7 @@ export const productMenu = [
 
   {
     name: "Coating Grade Polyols",
+	path: "/products/coating-grade-polyols",
     subDropdown: [
       {
         name: "Furniture Coating Polyols",
@@ -33,6 +35,7 @@ export const productMenu = [
 
   {
     name: "Adhesive Grade Polyols",
+	path: "/products/adhesive-grade-polyols",
     subDropdown: [
       {
         name: "Laminating Adhesive Polyols",

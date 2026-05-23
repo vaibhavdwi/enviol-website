@@ -357,7 +357,7 @@ export default function Navbar() {
   </div>
 
   {/* SCROLLABLE CONTENT */}
-  <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-3">
+  <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-2 space-y-1">
 
     {navLinks.map((link) => (
       <div key={link.name} className="flex flex-col">
@@ -370,7 +370,7 @@ export default function Navbar() {
               setMenuOpen(false);
               setOpenMobileDropdown(null);
             }}
-            className="px-3 py-3 rounded-xl text-[#d8f3f1] font-medium hover:bg-[#2b3748] hover:text-[#5ffbf1] transition"
+            className="pl-4 pr-3 py-2.5 rounded-xl text-[#d8f3f1] font-medium hover:bg-[#2b3748] hover:text-[#5ffbf1] transition"
           >
             {link.name}
           </Link>
@@ -378,7 +378,7 @@ export default function Navbar() {
 
         {/* DROPDOWN */}
         {link.dropdown && (
-          <div className="border-l border-white/10 pl-3">
+          <div className="border-l border-white/10 pl-2">
 
             {/* TOGGLE */}
             <button
@@ -387,7 +387,7 @@ export default function Navbar() {
                   openMobileDropdown === link.name ? null : link.name
                 )
               }
-              className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-[#d8f3f1] font-medium hover:bg-[#2b3748] transition"
+              className="w-full flex items-center justify-between pl-4 pr-3 py-2.5 rounded-lg text-[#d8f3f1] font-medium hover:bg-[#2b3748] transition"
             >
               <span>{link.name}</span>
 
