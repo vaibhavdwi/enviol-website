@@ -22,6 +22,7 @@ export default function Navbar() {
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
 
   useEffect(() => {
 
@@ -326,7 +327,150 @@ export default function Navbar() {
             <Menu size={30} />
           )}
         </button>
+{/* MOBILE MENU OVERLAY (PRODUCTION FIX) */}
+{menuOpen && (
+  <div className="md:hidden fixed inset-0 z-50">
 
+    {/* BACKDROP */}
+    <div
+      className="absolute inset-0 bg-black/50"
+      onClick={() => {
+        setMenuOpen(false);
+        setOpenMobileDropdown(null);
+      }}
+    />
+
+    {/* DRAWER */}
+<div className="absolute right-0 top-0 h-full w-80 bg-[#1f2937] shadow-2xl flex flex-col">
+
+  {/* CLOSE BUTTON ONLY (NO MENU TEXT) */}
+  <div className="sticky top-0 z-10 flex justify-end px-4 py-2 bg-[#1f2937]">
+    <button
+      onClick={() => {
+        setMenuOpen(false);
+        setOpenMobileDropdown(null);
+      }}
+      className="text-white"
+    >
+      <X size={26} />
+    </button>
+  </div>
+
+  {/* SCROLLABLE CONTENT */}
+  <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-3">
+
+    {navLinks.map((link) => (
+      <div key={link.name} className="flex flex-col">
+
+        {/* SIMPLE LINK */}
+        {!link.dropdown && (
+          <Link
+            href={link.path}
+            onClick={() => {
+              setMenuOpen(false);
+              setOpenMobileDropdown(null);
+            }}
+            className="px-3 py-3 rounded-xl text-[#d8f3f1] font-medium hover:bg-[#2b3748] hover:text-[#5ffbf1] transition"
+          >
+            {link.name}
+          </Link>
+        )}
+
+        {/* DROPDOWN */}
+        {link.dropdown && (
+          <div className="border-l border-white/10 pl-3">
+
+            {/* TOGGLE */}
+            <button
+              onClick={() =>
+                setOpenMobileDropdown(
+                  openMobileDropdown === link.name ? null : link.name
+                )
+              }
+              className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-[#d8f3f1] font-medium hover:bg-[#2b3748] transition"
+            >
+              <span>{link.name}</span>
+
+              <span
+                className={`transition-transform duration-300 ${
+                  openMobileDropdown === link.name ? "rotate-180" : ""
+                }`}
+              >
+                ▼
+              </span>
+            </button>
+
+            {/* CONTENT */}
+            {openMobileDropdown === link.name && (
+              <div className="ml-2 mt-2 space-y-2">
+
+                {link.dropdown.map((item) => (
+                  <div key={item.name} className="flex flex-col">
+
+                    {item.path ? (
+                      <Link
+                        href={item.path}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          setOpenMobileDropdown(null);
+                        }}
+                        className="px-3 py-2 rounded-lg text-sm font-medium text-[#d8f3f1] hover:bg-[#2b3748] hover:text-[#5ffbf1] transition"
+                      >
+                        {item.name}
+                      </Link>
+                    ) : (
+                      <div className="px-3 py-2 text-sm font-medium text-[#d8f3f1]">
+                        {item.name}
+                      </div>
+                    )}
+
+                    {item.subDropdown && (
+                      <div className="ml-4 mt-1 border-l border-white/10 pl-3 space-y-1">
+
+                        {item.subDropdown.map((sub) => (
+                          <Link
+                            key={sub.name}
+                            href={sub.path}
+                            onClick={() => {
+                              setMenuOpen(false);
+                              setOpenMobileDropdown(null);
+                            }}
+                            className="block px-3 py-2 rounded-md text-sm text-[#b8d7d4] hover:text-[#b6ff7a] hover:bg-[#2b3748] transition"
+                          >
+                            • {sub.name}
+                          </Link>
+                        ))}
+
+                      </div>
+                    )}
+
+                  </div>
+                ))}
+
+              </div>
+            )}
+          </div>
+        )}
+
+      </div>
+    ))}
+
+    {/* CONTACT */}
+    <Link
+      href="/contact"
+      onClick={() => {
+        setMenuOpen(false);
+        setOpenMobileDropdown(null);
+      }}
+      className="block mt-6 text-center px-6 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[#42b3a5] to-green-400 shadow-lg active:scale-95 transition"
+    >
+      Contact →
+    </Link>
+
+  </div>
+</div>
+  </div>
+)}
       </div>
     </header>
   );

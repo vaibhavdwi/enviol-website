@@ -6,7 +6,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
+import AnimatedTagline from "@/components/AnimatedTagline";
+import AnimatedSubheading from "@/components/AnimatedSubheading";
+import AnimatedBrand from "@/components/AnimatedBrand";
+
+import {
+  productMenu,
+  industriesMenu,
+} from "@/data/navigation";
+
 export default function Navbar() {
+
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -14,24 +24,48 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () =>
+      window.removeEventListener("scroll", handleScroll);
+
   }, []);
 
   const navLinks = [
     { name: "Home", path: "/" },
+
     { name: "About", path: "/about" },
-    { name: "Technology", path: "/technology" },
-    { name: "Sustainability", path: "/sustainability" },
-    { name: "Industries", path: "/industries" },
-    { name: "Products", path: "/products" },
+
+    {
+  name: "Industries",
+  path: "/industries",
+  dropdown: industriesMenu,
+},
+
+{
+  name: "Products",
+  path: "/products",
+  dropdown: productMenu,
+},
+
+    {
+      name: "Technology",
+      path: "/technology",
+    },
+
+    {
+      name: "Sustainability",
+      path: "/sustainability",
+    },
   ];
 
   return (
+
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled || !isHome
@@ -39,117 +73,260 @@ export default function Navbar() {
           : "bg-transparent"
       }`}
     >
+
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-3 flex justify-between items-center">
 
-        {/* Logo + Name */}
-        <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/images/logo-n.png"
-            alt="Enviol"
-            width={60}
-            height={60}
-            priority
-          />
+        {/* Logo */}
+        <Link href="/" className="flex flex-col">
 
-          <div className="leading-tight">
-            <h1 className="text-xl md:text-5xl font-bold text-white">
-              ENVIOL
-            </h1>
+          <div className="flex items-center gap-3">
 
-            <p className="text-xs md:text-sm tracking-wider text-gray-300">
-              POLYTECH SOLUTIONS
-            </p>
+            <div className="relative animate-logoFloat">
+
+              <div className="absolute inset-0 rounded-full bg-[#5ffbf1]/20 blur-xl animate-logoPulse"></div>
+
+              <Image
+                src="/images/logo-n.png"
+                alt="Enviol"
+                width={60}
+                height={60}
+                priority
+                className="relative z-10"
+              />
+            </div>
+
+            <div className="leading-none">
+
+              <AnimatedBrand
+                key={`brand-${pathname}`}
+                text="E N V I O L"
+              />
+
+              <AnimatedSubheading
+                key={`sub-${pathname}`}
+                text="POLYTECH SOLUTIONS"
+              />
+
+            </div>
           </div>
+
+          <div className="pl-[8px] mt-1">
+            <AnimatedTagline text="Reuse waste to Sustainable Polyurethanes" />
+          </div>
+
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center gap-10 text-base md:text-lg font-medium text-white">
+        <nav className="hidden md:flex items-center gap-8 text-base md:text-lg font-medium text-[#d8f3f1]">
+
           {navLinks.map((link) => {
-            const isActive = pathname === link.path;
 
-            return (
-              <Link
-                key={link.path}
-                href={link.path}
-                className="relative group transition hover:text-gray-300"
-              >
-                {link.name}
+            const isActive =
+              pathname === link.path;
 
-                {/* Underline */}
-                <span
-                  className={`absolute left-0 -bottom-1 h-[2px] w-full bg-[#42b3a5] transform transition-transform duration-300 origin-left ${
+            // NORMAL LINKS
+            if (!link.dropdown) {
+
+              return (
+
+                <Link
+                  key={link.name}
+                  href={link.path}
+                  className={`relative group transition-all duration-300 ${
                     isActive
-                      ? "scale-x-100"
-                      : "scale-x-0 group-hover:scale-x-100"
+                      ? "text-[#5ffbf1]"
+                      : "text-[#d8f3f1] hover:text-[#7be0d4]"
                   }`}
-                />
-              </Link>
+                >
+
+                  {link.name}
+
+                  <span
+                    className={`absolute left-0 -bottom-1 h-[2px] w-full bg-[#42b3a5] transform transition-transform duration-300 origin-left ${
+                      isActive
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
+
+                </Link>
+              );
+            }
+
+            // DROPDOWN LINKS
+            return (
+
+              <div
+                key={link.name}
+                className="relative group"
+              >
+
+                {/* Parent Button */}
+                <Link
+  href={link.path}
+                  className={`flex items-center gap-1 transition-all duration-300 ${
+                    pathname.startsWith(
+                      `/${link.name.toLowerCase()}`
+                    )
+                      ? "text-[#5ffbf1]"
+                      : "text-[#d8f3f1] hover:text-[#7be0d4]"
+                  }`}
+                >
+
+                  {link.name}
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-4 h-4 group-hover:rotate-180 transition duration-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+
+                </Link>
+
+                {/* Main Dropdown */}
+                <div className="absolute top-full left-0 mt-3 w-72 bg-[#1f2937]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-3">
+
+                  {link.dropdown.map((item) => (
+
+                    <div
+                      key={item.name}
+                      className="group/sub"
+                    >
+
+                      {/* First Level */}
+                      <div className="flex flex-col">
+
+                        {item.path ? (
+
+                          <Link
+                            href={item.path}
+                            className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-[#2b3748] hover:text-[#42b3a5] transition text-sm font-medium text-[#d8f3f1]"
+                          >
+
+                            <span>{item.name}</span>
+
+                            {item.subDropdown && (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-3.5 h-3.5 group-hover/sub:rotate-180 transition duration-300"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 9l-7 7-7-7"
+                                />
+                              </svg>
+                            )}
+
+                          </Link>
+
+                        ) : (
+
+                          <div
+                            className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-[#2b3748] hover:text-[#42b3a5] transition text-sm font-medium text-[#d8f3f1]"
+                          >
+
+                            <span>{item.name}</span>
+
+                            {item.subDropdown && (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-3.5 h-3.5 group-hover/sub:rotate-180 transition duration-300"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 9l-7 7-7-7"
+                                />
+                              </svg>
+                            )}
+
+                          </div>
+
+                        )}
+
+                        {/* SECOND LEVEL */}
+                        {item.subDropdown && (
+
+                          <div className="max-h-0 overflow-hidden group-hover/sub:max-h-96 transition-all duration-500 ease-in-out pl-5">
+
+                            {item.subDropdown.map(
+                              (subItem) => (
+
+                                <Link
+                                  key={subItem.name}
+                                  href={subItem.path}
+                                  className="block px-4 py-2 rounded-lg hover:bg-[#2b3748] hover:text-[#b6ff7a] transition text-xs text-[#b8d7d4]"
+                                >
+
+                                  • {subItem.name}
+
+                                </Link>
+                              )
+                            )}
+
+                          </div>
+                        )}
+
+                      </div>
+                    </div>
+                  ))}
+
+                </div>
+              </div>
             );
           })}
 
- <Link
-  href="/contact"
-  className="ml-4 relative inline-flex items-center gap-2 px-7 py-3 rounded-full text-base font-semibold text-white overflow-hidden
-  bg-gradient-to-r from-[#42b3a5] to-green-400
-  animate-contactDance
-  hover:scale-105 transition duration-300 shadow-lg"
->
-  {/* Glow */}
-  <span className="absolute inset-0 rounded-full animate-contactPulse border border-white/30"></span>
+          {/* Contact */}
+          <Link
+            href="/contact"
+            className="ml-4 relative inline-flex items-center gap-2 px-7 py-3 rounded-full text-base font-semibold text-white overflow-hidden bg-gradient-to-r from-[#42b3a5] to-green-400 animate-contactDance hover:scale-105 transition duration-300 shadow-lg"
+          >
 
-  {/* Shine Effect */}
-  <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition"></span>
+            <span className="absolute inset-0 rounded-full animate-contactPulse border border-white/30"></span>
 
-  {/* Text */}
-  <span className="relative z-10 flex items-center gap-2">
-    Contact
-    <span className="animate-arrowMove">→</span>
-  </span>
-</Link>
+            <span className="relative z-10 flex items-center gap-2">
+              Contact
+              <span className="animate-arrowMove">
+                →
+              </span>
+            </span>
+
+          </Link>
+
         </nav>
 
         {/* Mobile Toggle */}
         <button
           className="text-white md:hidden"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() =>
+            setMenuOpen(!menuOpen)
+          }
         >
-          {menuOpen ? <X size={30} /> : <Menu size={30} />}
+          {menuOpen ? (
+            <X size={30} />
+          ) : (
+            <Menu size={30} />
+          )}
         </button>
-      </div>
 
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden fixed top-0 left-0 w-full h-screen bg-[#1f2937] z-40 transform transition-transform duration-300 ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-700">
-          <span className="font-bold text-lg text-white">Menu</span>
-          <button onClick={() => setMenuOpen(false)}>
-            <X size={30} className="text-white" />
-          </button>
-        </div>
-
-        <nav className="flex flex-col gap-6 px-6 py-8 text-xl text-white">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              onClick={() => setMenuOpen(false)}
-              className="hover:text-[#42b3a5]"
-            >
-              {link.name}
-            </Link>
-          ))}
-
-          <Link
-            href="/contact"
-            onClick={() => setMenuOpen(false)}
-            className="mt-4 bg-[#42b3a5] text-white px-6 py-3 rounded-full text-center font-semibold"
-          >
-            Contact Us
-          </Link>
-        </nav>
       </div>
     </header>
   );
