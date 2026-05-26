@@ -1,0 +1,36 @@
+{
+  "name": "Enviol Polytech Solutions",
+  "short_name": "Enviol",
+  "description": "Sustainable polyester and polyether polyol manufacturers for polyurethane, PIR, PUF, CASE and industrial insulation applications.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fefce8",
+  "theme_color": "#42b3a5",
+  "orientation": "portrait-primary",
+  "lang": "en-IN",
+  "scope": "/",
+  "categories": [
+    "industrial",
+    "chemical",
+    "manufacturing",
+    "polyurethane",
+    "recycling"
+  ],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/images/logo-n.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo-n.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
