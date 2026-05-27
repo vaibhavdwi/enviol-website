@@ -21,28 +21,20 @@ export default function RigidFoamPolyolsPage() {
           {/* LEFT CONTENT */}
           <div className="md:w-1/2">
 
-            <AnimatedHeading title="Rigid Foam Polyols for Polyurethane Insulation Systems" />
+            <AnimatedHeading title="Rigid Foam Polyols" />
 
             <div className="mt-6 space-y-4 leading-relaxed text-gray-700">
-
               <p>
-                Enviol manufactures high-performance rigid foam polyols
-                for polyurethane insulation systems including PIR and
-                PUF foam applications.
+                Rigid polyurethane foam systems are closed-cell polymer networks formed by the reaction of polyols with isocyanates.
               </p>
 
               <p>
-                Our rigid polyurethane foam formulations are engineered
-                for superior thermal insulation, dimensional stability,
-                low thermal conductivity, and long-term structural performance.
+                These systems are engineered for high thermal insulation, structural stability, and long-term durability.
               </p>
 
               <p>
-                These insulation systems are widely used in sandwich panels,
-                cold storage insulation, refrigeration systems,
-                insulated roofing panels, and industrial thermal insulation applications.
+                They are widely used in insulation boards, refrigeration panels, sandwich panels, and cold storage applications.
               </p>
-
             </div>
 
           </div>
@@ -72,81 +64,18 @@ export default function RigidFoamPolyolsPage() {
         </h2>
 
         <div className="max-w-4xl space-y-4 leading-relaxed text-gray-700">
-
           <p>
-            Rigid polyurethane foam is formed through a controlled reaction
-            between polyol and polymeric MDI to create a closed-cell insulation structure.
+            Rigid polyurethane foam is formed through a controlled reaction between polyol and polymeric MDI.
           </p>
 
           <p>
-            In PIR systems, higher isocyanate index improves thermal stability,
-            fire resistance, and dimensional performance at elevated temperatures.
+            In PIR systems, higher isocyanate index improves thermal stability and fire resistance.
           </p>
 
           <p>
-            In PUF systems, formulations are optimized for efficient insulation,
-            processing stability, and cost-effective thermal insulation performance.
+            In PUF systems, formulation is optimized for cost-effective insulation and flexibility.
           </p>
-
         </div>
-
-        {/* APPLICATIONS */}
-<h2 className="text-2xl font-semibold mt-14 mb-6 text-gray-800">
-  Industrial Applications
-</h2>
-
-<div className="grid md:grid-cols-2 gap-6">
-
-  {[
-    {
-      title: "Sandwich Panel Insulation",
-      desc: "Rigid foam polyols are extensively used in continuous sandwich panel production for thermal insulation applications.",
-      href: "/products/rigid-foam-polyols/sandwich-panel-insulation"
-    },
-    {
-      title: "Cold Storage Insulation",
-      desc: "PUF insulation systems help maintain low temperatures with excellent energy efficiency and dimensional stability.",
-      href: "/products/rigid-foam-polyols/cold-storage-insulation"
-    },
-    {
-      title: "Refrigeration Insulation",
-      desc: "Rigid polyurethane foam systems provide low thermal conductivity for refrigeration and cooling systems.",
-      href: "/products/rigid-foam-polyols/refrigeration-panel"
-    },
-    {
-      title: "Industrial Roofing Insulation",
-      desc: "PIR insulation materials are widely used in insulated roofing panels due to superior fire performance.",
-      href: "/products/rigid-foam-polyols/industrial-roofing"
-    }
-  ].map((item, idx) => (
-
-    <Link
-      key={idx}
-      href={item.href}
-      className="
-        bg-white rounded-xl p-6 shadow border border-gray-100
-        hover:shadow-xl hover:-translate-y-1
-        transition-all duration-300 block
-      "
-    >
-
-      <h3 className="text-lg font-semibold text-gray-800">
-        {item.title}
-      </h3>
-
-      <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-        {item.desc}
-      </p>
-
-      <span className="inline-flex mt-4 text-[#42b3a5] font-semibold">
-        Explore Application →
-      </span>
-
-    </Link>
-
-  ))}
-
-</div>
 
         {/* PRODUCTS */}
         <h2 className="text-2xl font-semibold mt-14 mb-6 text-gray-800">
@@ -223,47 +152,6 @@ export default function RigidFoamPolyolsPage() {
 
         </div>
 
-        {/* RELATED INSULATION SYSTEMS */}
-        <h2 className="text-2xl font-semibold mt-14 mb-6 text-gray-800">
-          Explore Related Insulation Polyols
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-6">
-
-          <Link
-            href="/products/rigid-foam-polyols/pir-foam-polyol"
-            className="bg-white rounded-xl border border-gray-200 p-6 shadow hover:shadow-lg transition"
-          >
-
-            <h3 className="text-lg font-semibold text-gray-800">
-              PIR Foam Polyols
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-600">
-              High-performance polyisocyanurate insulation systems
-              engineered for fire-resistant thermal insulation applications.
-            </p>
-
-          </Link>
-
-          <Link
-            href="/products/rigid-foam-polyols/puf-foam-polyol"
-            className="bg-white rounded-xl border border-gray-200 p-6 shadow hover:shadow-lg transition"
-          >
-
-            <h3 className="text-lg font-semibold text-gray-800">
-              PUF Foam Polyols
-            </h3>
-
-            <p className="mt-2 text-sm text-gray-600">
-              Cost-effective rigid polyurethane foam systems
-              for refrigeration, cold storage, and insulation panels.
-            </p>
-
-          </Link>
-
-        </div>
-
         {/* TECHNICAL TABLE */}
         <h2 className="text-2xl font-semibold mt-14 mb-6 text-gray-800">
           Technical Overview
@@ -274,7 +162,6 @@ export default function RigidFoamPolyolsPage() {
           <table className="w-full text-sm border border-gray-200 bg-white rounded-lg overflow-hidden">
 
             <thead className="bg-gray-100 text-gray-800">
-
               <tr>
                 <th className="p-3 text-left">Product Code</th>
                 <th className="p-3 text-left">Product</th>
@@ -283,13 +170,11 @@ export default function RigidFoamPolyolsPage() {
                 <th className="p-3 text-left">Water Content</th>
                 <th className="p-3 text-left">Acid Value</th>
               </tr>
-
             </thead>
 
             <tbody>
 
               {rigidProducts.map((p) => (
-
                 <tr
                   key={p.id}
                   className="border-t border-gray-100 hover:bg-gray-50"
@@ -320,7 +205,6 @@ export default function RigidFoamPolyolsPage() {
                   </td>
 
                 </tr>
-
               ))}
 
             </tbody>
@@ -329,59 +213,7 @@ export default function RigidFoamPolyolsPage() {
 
         </div>
 
-        {/* PIR VS PUF */}
-        <h2 className="text-2xl font-semibold mt-14 mb-6 text-gray-800">
-          PIR vs PUF Insulation Systems
-        </h2>
-
-        <div className="overflow-x-auto">
-
-          <table className="w-full text-sm border border-gray-200 bg-white rounded-lg overflow-hidden">
-
-            <thead className="bg-gray-100 text-gray-800">
-
-              <tr>
-                <th className="p-3 text-left">Property</th>
-                <th className="p-3 text-left">PIR Foam</th>
-                <th className="p-3 text-left">PUF Foam</th>
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              <tr className="border-t">
-                <td className="p-3">Fire Resistance</td>
-                <td className="p-3">Higher</td>
-                <td className="p-3">Moderate</td>
-              </tr>
-
-              <tr className="border-t">
-                <td className="p-3">Thermal Insulation</td>
-                <td className="p-3">Excellent</td>
-                <td className="p-3">Excellent</td>
-              </tr>
-
-              <tr className="border-t">
-                <td className="p-3">Temperature Stability</td>
-                <td className="p-3">Higher</td>
-                <td className="p-3">Standard</td>
-              </tr>
-
-              <tr className="border-t">
-                <td className="p-3">Applications</td>
-                <td className="p-3">Industrial insulation</td>
-                <td className="p-3">General insulation</td>
-              </tr>
-
-            </tbody>
-
-          </table>
-
-        </div>
-
       </div>
-
     </main>
   );
 }
