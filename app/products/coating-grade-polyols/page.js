@@ -4,8 +4,10 @@ import products from "@/data/products.json";
 import Link from "next/link";
 import Image from "next/image";
 import AnimatedHeading from "@/components/AnimatedHeading";
+import { useState } from "react";
 
 export default function CoatingGradePolyolsPage() {
+	const [modal, setModal] = useState(null);
   const coatingProducts = products.filter(
     (p) => p.category === "Coating Grade Polyols"
   );
@@ -76,6 +78,115 @@ export default function CoatingGradePolyolsPage() {
             By adjusting functionality and molecular weight, coating properties such as drying time, adhesion, and elasticity can be precisely controlled.
           </p>
         </div>
+
+{/* 🔷 ECOSYSTEM NAVIGATION HUB */}
+<h2 className="text-2xl font-semibold mt-16 mb-6 text-gray-800">
+  Explore Coating Grade Polyols Ecosystem
+</h2>
+
+<div className="grid md:grid-cols-2 gap-6">
+
+  {[
+    {
+      title: "Polyester Coating Polyols",
+      short: "High hardness & chemical resistance systems",
+      link: "/products/coating-grade-polyols/polyester-coating-polyols",
+      content: "Used in industrial coatings, flooring, and metal protection systems requiring high durability and chemical resistance."
+    },
+    {
+      title: "Polyether Coating Polyols",
+      short: "Flexible & hydrolysis-resistant systems",
+      link: "/products/coating-grade-polyols/polyether-coating-polyols",
+      content: "Best suited for humid environments, waterproof coatings, sealants, and elastomeric applications."
+    },
+    {
+      title: "Acrylic Modified Polyols",
+      short: "UV stable high gloss hybrid systems",
+      link: "/products/coating-grade-polyols/acrylic-modified-polyols",
+      content: "Used in automotive, architectural, and decorative coatings requiring gloss retention and UV stability."
+    },
+    {
+      title: "Aliphatic Polyols",
+      short: "Non-yellowing exterior grade systems",
+      link: "/products/coating-grade-polyols/aliphatic-polyols",
+      content: "Ideal for outdoor coatings, automotive clear coats, and high-end exterior applications."
+    },
+    {
+      title: "Aromatic Polyols",
+      short: "Cost-effective industrial coating systems",
+      link: "/products/coating-grade-polyols/aromatic-polyols",
+      content: "Used in flooring, industrial coatings, and metal protection where cost and strength are key."
+    },
+    {
+      title: "Waterborne Polyols",
+      short: "Low VOC sustainable coating systems",
+      link: "/products/coating-grade-polyols/waterborne-polyols",
+      content: "Eco-friendly systems used in green coatings, wood finishes, and regulatory-compliant applications."
+    },
+
+    // ⚙️ AUTHORITY PAGES (IMPORTANT FIXED PATHS)
+    {
+      title: "Polyester vs Polyether Guide",
+      short: "Technical comparison of coating chemistries",
+      link: "/products/coating-grade-polyols/authority/comparison-polyester-vs-polyether",
+      content: "Detailed comparison of mechanical strength vs flexibility trade-offs between polyester and polyether systems."
+    },
+    {
+      title: "Manufacturing Process",
+      short: "Industrial production of polyols",
+      link: "/products/coating-grade-polyols/authority/manufacturing-process",
+      content: "Explains polycondensation, molecular weight control, and industrial production methods."
+    },
+    {
+      title: "Advanced Technology Guide",
+      short: "Deep coating chemistry insights",
+      link: "/products/coating-grade-polyols/authority/technology-guide",
+      content: "Covers polymer design, crosslinking chemistry, and performance tuning strategies."
+    },
+    {
+      title: "Low VOC Guide",
+      short: "Sustainable coating formulations",
+      link: "/products/coating-grade-polyols/authority/low-voc-guide",
+      content: "Explains regulatory compliance, solvent reduction strategies, and green chemistry approaches."
+    }
+  ].map((item, idx) => (
+    <div
+      key={idx}
+      className="
+        bg-white p-6 rounded-xl border shadow
+        hover:bg-[#55BAAE] hover:text-white
+        hover:shadow-2xl hover:-translate-y-2
+        transition cursor-pointer group
+      "
+    >
+      <h3 className="text-lg font-bold text-gray-800 group-hover:text-white">
+        {item.title}
+      </h3>
+
+      <p className="text-sm text-gray-600 mt-2 group-hover:text-white/90">
+        {item.short}
+      </p>
+
+      <div className="flex gap-4 mt-4">
+        <button
+          onClick={() => setModal(item)}
+          className="text-sm font-semibold text-[#55BAAE] group-hover:text-white"
+        >
+          See More →
+        </button>
+
+        <Link
+          href={item.link}
+          className="text-sm font-semibold underline text-gray-700 group-hover:text-white"
+        >
+          Click Here
+        </Link>
+      </div>
+    </div>
+  ))}
+
+</div>
+
 
         {/* PRODUCTS */}
         <h2 className="text-2xl font-semibold mt-14 mb-6 text-gray-800">
