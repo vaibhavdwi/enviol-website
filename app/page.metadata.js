@@ -129,7 +129,7 @@ export const metadata = {
 
     images: [
       {
-        url: "/hero/hero1.png",
+        url: "/images/hero/hero1.png",
         width: 1200,
         height: 630,
         alt: "Enviol Sustainable Polyol Manufacturing",
@@ -145,7 +145,7 @@ export const metadata = {
     description:
       "Sustainable rigid foam, PIR & PUF polyol manufacturer serving India and global polyurethane industries.",
 
-    images: ["/hero/hero1.jpg"],
+    images: ["/images/hero/hero1.jpg"],
   },
 
   other: {
