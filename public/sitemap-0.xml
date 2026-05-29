@@ -10,6 +10,7 @@
 <url><loc>https://enviol.com/industries/paint-coatings</loc><lastmod>2026-02-20T12:58:28.882Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://enviol.com/industries/polyurethane</loc><lastmod>2026-02-20T12:58:28.882Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://enviol.com/industries/powder-coating</loc><lastmod>2026-02-20T12:58:28.882Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+<url><loc>https://enviol.com/industries/pu-sealents</loc><lastmod>2026-02-20T12:58:28.882Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://enviol.com</loc><lastmod>2026-02-20T12:58:28.882Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://enviol.com/products/repolyester-2100</loc><lastmod>2026-02-20T12:58:28.882Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 <url><loc>https://enviol.com/products/repolyether-3300</loc><lastmod>2026-02-20T12:58:28.882Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -36,6 +37,39 @@
   <changefreq>weekly</changefreq>
   <priority>0.8</priority>
 </url>
+
+<url>
+  <loc>https://enviol.com/products/pir-foam-board-polyol</loc>
+</url>
+
+<url>
+  <loc>https://enviol.com/products/puf-foam-board-polyol</loc>
+</url>
+
+<url>
+  <loc>https://enviol.com/products/leather-coating-polyols</loc>
+</url>
+
+<url>
+  <loc>https://enviol.com/products/metal-coating-polyols</loc>
+</url>
+
+<url>
+  <loc>https://enviol.com/products/furniture-coating-polyols</loc>
+</url>
+<url>
+  <loc>https://enviol.com/products/laminating-adhesive-polyols</loc>
+</url>
+
+<url>
+  <loc>https://enviol.com/products/pur-hot-melt-polyols</loc>
+</url>
+
+<url>
+  <loc>https://enviol.com/products/pu-leather-adhesive-polyols</loc>
+</url>
+
+
 <url>
   <loc>https://enviol.com/products/rigid-foam-polyols</loc>
 </url>
