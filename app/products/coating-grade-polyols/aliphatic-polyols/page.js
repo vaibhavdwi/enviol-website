@@ -114,7 +114,7 @@ Benefits:
           <div className="flex justify-center md:justify-end">
             <div className="w-full max-w-md rounded-xl overflow-hidden shadow border border-gray-200">
               <Image
-                src="/images/aliphatic-coating-hero.jpg"
+                src="/images/aliphatic-coating-hero.png"
                 alt="Aliphatic Polyols"
                 width={600}
                 height={400}

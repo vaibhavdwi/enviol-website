@@ -228,7 +228,7 @@ Applications:
             <div className="w-full max-w-lg rounded-2xl overflow-hidden shadow border border-gray-200">
 
               <Image
-                src="/images/industrial-roofing-main.jpg"
+                src="/images/industrial-roofing-main.png"
                 alt="Industrial Roofing Insulation"
                 width={700}
                 height={500}

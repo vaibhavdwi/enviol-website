@@ -119,7 +119,7 @@ Benefits:
           <div className="flex justify-center md:justify-end">
             <div className="w-full max-w-md rounded-xl overflow-hidden shadow border border-gray-200">
               <Image
-                src="/images/polyester-coating-hero.jpg"
+                src="/images/polyester-coating-hero.png"
                 alt="Polyester Coating Polyols"
                 width={600}
                 height={400}
