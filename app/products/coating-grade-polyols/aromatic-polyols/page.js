@@ -116,15 +116,15 @@ Benefits:
         <div className="grid md:grid-cols-3 gap-6 mt-12">
 
           <div className="rounded-xl overflow-hidden shadow border bg-white">
-            <Image src="/images/aromatic-industrial.jpg" alt="Industrial Coatings" width={500} height={350} className="w-full h-64 object-cover" />
+            <Image src="/images/coating-industrial.jpg" alt="Industrial Coatings" width={500} height={350} className="w-full h-64 object-cover" />
           </div>
 
           <div className="rounded-xl overflow-hidden shadow border bg-white">
-            <Image src="/images/aromatic-floor.jpg" alt="Floor Coatings" width={500} height={350} className="w-full h-64 object-cover" />
+            <Image src="/images/coating-floor.jpg" alt="Floor Coatings" width={500} height={350} className="w-full h-64 object-cover" />
           </div>
 
           <div className="rounded-xl overflow-hidden shadow border bg-white">
-            <Image src="/images/aromatic-metal.jpg" alt="Metal Protection" width={500} height={350} className="w-full h-64 object-cover" />
+            <Image src="/images/coating-metal.jpg" alt="Metal Protection" width={500} height={350} className="w-full h-64 object-cover" />
           </div>
 
         </div>

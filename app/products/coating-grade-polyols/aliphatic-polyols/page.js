@@ -129,7 +129,7 @@ Benefits:
 
           <div className="rounded-xl overflow-hidden shadow border bg-white hover:shadow-lg transition">
             <Image
-              src="/images/aliphatic-auto.jpg"
+              src="/images/acrylic-auto.jpg"
               alt="Automotive Clear Coat"
               width={500}
               height={350}
@@ -139,7 +139,7 @@ Benefits:
 
           <div className="rounded-xl overflow-hidden shadow border bg-white hover:shadow-lg transition">
             <Image
-              src="/images/aliphatic-exterior.jpg"
+              src="/images/acrylic-building.jpg"
               alt="Exterior Coating"
               width={500}
               height={350}
@@ -149,7 +149,7 @@ Benefits:
 
           <div className="rounded-xl overflow-hidden shadow border bg-white hover:shadow-lg transition">
             <Image
-              src="/images/aliphatic-industrial.jpg"
+              src="/images/coating-industrial.jpg"
               alt="Industrial Coating"
               width={500}
               height={350}
