@@ -101,7 +101,7 @@ Benefits:
           <div className="flex justify-center md:justify-end">
             <div className="w-full max-w-md rounded-xl overflow-hidden shadow border border-gray-200">
               <Image
-                src="/images/aromatic-coating-hero.jpg"
+                src="/images/aromatic-coating-hero.png"
                 alt="Aromatic Polyols"
                 width={600}
                 height={400}

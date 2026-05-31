@@ -38,11 +38,11 @@ export default function ManufacturingProcessPage() {
         <div className="mt-12 rounded-xl overflow-hidden shadow border bg-white">
 
           <Image
-            src="/images/polyol-manufacturing-process.jpg"
+            src="/images/polyol-manufacturing-process.png"
             alt="Polyol Manufacturing Process"
             width={1200}
             height={500}
-            className="w-full h-80 object-cover"
+            className="w-full h-auto object-contain"
           />
 
         </div>

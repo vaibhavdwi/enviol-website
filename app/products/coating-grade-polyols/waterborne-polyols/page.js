@@ -102,7 +102,7 @@ Benefits:
           <div className="flex justify-center md:justify-end">
             <div className="w-full max-w-md rounded-xl overflow-hidden shadow border border-gray-200">
               <Image
-                src="/images/waterborne-polyols-hero.jpg"
+                src="/images/waterborne-polyols-hero.png"
                 alt="Waterborne Polyols"
                 width={600}
                 height={400}

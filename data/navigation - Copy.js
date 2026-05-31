@@ -51,41 +51,6 @@ export const productMenu = [
       },
     ],
   },
-  {
-  name: "Footwear Grade Polyols",
-  path: "/products/footwear-grade-polyols",
-
-  subDropdown: [
-    {
-      name: "Sports Shoe Sole Polyols",
-      path: "/products/sports-shoe-sole-polyols",
-    },
-
-    {
-      name: "Leather Shoe Sole Polyols",
-      path: "/products/leather-shoe-sole-polyols",
-    },
-
-    {
-      name: "Sandal Sole Polyols",
-      path: "/products/sandal-sole-polyols",
-    },
-
-    {
-      name: "Slipper Sole Polyols",
-      path: "/products/slipper-sole-polyols",
-    },
-
-    {
-      name: "Flexible Sole Polyols",
-      path: "/products/flexible-sole-polyols",
-    },
-	{
-      name: "Safety Sole Polyols",
-      path: "/products/safety-shoe-polyols",
-    },
-  ],
-},
 ];
 
 export const industriesMenu = [
