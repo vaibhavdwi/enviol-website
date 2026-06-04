@@ -29,6 +29,7 @@ export default function DashboardLayout({ children }) {
     { name: "Sales", path: "/admin/dashboard/sales" },
     { name: "Accounting", path: "/admin/dashboard/accounting" },
 	{ name: "Production", path: "/admin/dashboard/production" },
+	{ name: "Reports", path: "/admin/dashboard/reports" },
   ];
 
   return (
@@ -66,7 +67,7 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">{children}</div>
+      <div className="flex-1 p-8 pt-20">{children}</div>
     </div>
   );
 }

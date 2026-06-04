@@ -5,10 +5,11 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-
 import AnimatedTagline from "@/components/AnimatedTagline";
 import AnimatedSubheading from "@/components/AnimatedSubheading";
 import AnimatedBrand from "@/components/AnimatedBrand";
+import { track } from "@/utils/tracker";
+import { NAVIGATION_EVENTS, LEAD_EVENTS } from "@/analytics/events";
 
 import {
   productMenu,
@@ -133,6 +134,15 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.path}
+				  onClick={() =>
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: link.name,
+        path: link.path,
+        source: "navbar_desktop",
+      },
+    })
+  }
                   className={`relative group transition-all duration-300 ${
                     isActive
                       ? "text-[#5ffbf1]"
@@ -165,6 +175,15 @@ export default function Navbar() {
                 {/* Parent Button */}
                 <Link
   href={link.path}
+  onClick={() =>
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: link.name,
+        path: link.path,
+        source: "navbar_dropdown_parent",
+      },
+    })
+  }
                   className={`flex items-center gap-1 transition-all duration-300 ${
                     pathname.startsWith(
                       `/${link.name.toLowerCase()}`
@@ -210,6 +229,15 @@ export default function Navbar() {
 
                           <Link
                             href={item.path}
+							onClick={() =>
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: item.name,
+        path: item.path,
+        source: link.name.toLowerCase(),
+      },
+    })
+  }
                             className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-[#2b3748] hover:text-[#42b3a5] transition text-sm font-medium text-[#d8f3f1]"
                           >
 
@@ -274,6 +302,16 @@ export default function Navbar() {
                                 <Link
                                   key={subItem.name}
                                   href={subItem.path}
+								  onClick={() =>
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: subItem.name,
+        path: subItem.path,
+        parent: item.name,
+        source: link.name.toLowerCase(),
+      },
+    })
+  }
                                   className="block px-4 py-2 rounded-lg hover:bg-[#2b3748] hover:text-[#b6ff7a] transition text-xs text-[#b8d7d4]"
                                 >
 
@@ -298,6 +336,14 @@ export default function Navbar() {
           {/* Contact */}
           <Link
             href="/contact"
+			onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "contact",
+        source: "navbar_desktop",
+      },
+    })
+  }
             className="ml-4 relative inline-flex items-center gap-2 px-7 py-3 rounded-full text-base font-semibold text-white overflow-hidden bg-gradient-to-r from-[#42b3a5] to-green-400 animate-contactDance hover:scale-105 transition duration-300 shadow-lg"
           >
 
@@ -366,7 +412,15 @@ export default function Navbar() {
         {!link.dropdown && (
           <Link
             href={link.path}
+			
             onClick={() => {
+				track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: link.name,
+        path: link.path,
+        source: "navbar_mobile",
+      },
+    });
               setMenuOpen(false);
               setOpenMobileDropdown(null);
             }}
@@ -380,25 +434,46 @@ export default function Navbar() {
         {link.dropdown && (
           <div className="border-l border-white/10 pl-2">
 
-            {/* TOGGLE */}
-            <button
-              onClick={() =>
-                setOpenMobileDropdown(
-                  openMobileDropdown === link.name ? null : link.name
-                )
-              }
-              className="w-full flex items-center justify-between pl-4 pr-3 py-2.5 rounded-lg text-[#d8f3f1] font-medium hover:bg-[#2b3748] transition"
-            >
-              <span>{link.name}</span>
+            {/* PARENT LINK + TOGGLE */}
+<div className="flex items-center">
 
-              <span
-                className={`transition-transform duration-300 ${
-                  openMobileDropdown === link.name ? "rotate-180" : ""
-                }`}
-              >
-                ▼
-              </span>
-            </button>
+  <Link
+    href={link.path}
+    onClick={() => {
+      track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+        metadata: {
+          target: link.name,
+          path: link.path,
+          source: "navbar_mobile_parent",
+        },
+      });
+
+      setMenuOpen(false);
+      setOpenMobileDropdown(null);
+    }}
+    className="flex-1 pl-4 pr-3 py-2.5 rounded-lg text-[#d8f3f1] font-medium hover:bg-[#2b3748] transition"
+  >
+    {link.name}
+  </Link>
+
+  <button
+    onClick={() =>
+      setOpenMobileDropdown(
+        openMobileDropdown === link.name ? null : link.name
+      )
+    }
+    className="px-4 py-2.5 text-[#d8f3f1]"
+  >
+    <span
+      className={`block transition-transform duration-300 ${
+        openMobileDropdown === link.name ? "rotate-180" : ""
+      }`}
+    >
+      ▼
+    </span>
+  </button>
+
+</div>
 
             {/* CONTENT */}
             {openMobileDropdown === link.name && (
@@ -459,6 +534,12 @@ export default function Navbar() {
     <Link
       href="/contact"
       onClick={() => {
+		  track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "contact",
+        source: "navbar_mobile",
+      },
+    });
         setMenuOpen(false);
         setOpenMobileDropdown(null);
       }}

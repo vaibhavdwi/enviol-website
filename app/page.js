@@ -3,6 +3,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import AnimatedHeading from "@/components/AnimatedHeading";
+import { track } from "@/utils/tracker";
+import { LEAD_EVENTS } from "@/analytics/events";
+import { NAVIGATION_EVENTS } from "@/analytics/events";
 
 export default function Home() {
   const images = [
@@ -17,6 +20,12 @@ export default function Home() {
   const [activeBtn, setActiveBtn] = useState("contact");
 
   useEffect(() => {
+	    // Track homepage visit
+  track("page_view", {
+    metadata: {
+      page_type: "home"
+    }
+  });
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 4000);
@@ -69,6 +78,14 @@ export default function Home() {
           <div className="flex gap-6 justify-center">
             <a
               href="/contact"
+			    onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "contact",
+        source: "homepage_hero"
+      }
+    })
+  }
               onMouseEnter={() => setActiveBtn("contact")}
               onMouseLeave={() => setActiveBtn("contact")}
               className={`px-8 py-4 rounded font-semibold transition-all duration-300 ${
@@ -82,6 +99,14 @@ export default function Home() {
 
             <a
               href="/products"
+			  onClick={() =>
+			  track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "products",
+        source: "homepage_hero"
+      }
+    })
+  }
               onMouseEnter={() => setActiveBtn("products")}
               onMouseLeave={() => setActiveBtn("contact")}
               className={`px-8 py-4 rounded font-semibold transition-all duration-300 ${
@@ -127,6 +152,14 @@ export default function Home() {
           <div className="flex flex-col gap-3">
             <a
               href="/contact"
+			  onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "contact",
+        source: "homepage_mobile"
+      }
+    })
+  }
               className="bg-green-600 py-2.5 rounded font-semibold"
             >
               Get Consultation
@@ -134,6 +167,14 @@ export default function Home() {
 
             <a
               href="/products"
+			  onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "products",
+        source: "homepage_mobile"
+      }
+    })
+  }
               className="border border-white py-2.5 rounded"
             >
               View Products
@@ -255,37 +296,67 @@ export default function Home() {
       </section>
 
       {/* INDUSTRIES */}
-      <section className="pt-4 pb-10 bg-yellow-50 text-center">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-8">
-            <Link href="/industries" className="group inline-block">
-              <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
-                Industries We Serve
-                <span className="absolute left-0 -bottom-2 h-[3px] w-full bg-[#42b3a5] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-              </h2>
-            </Link>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { name: "Polyurethane Manufacturing", path: "/industries/polyurethane" },
-              { name: "Foam Production", path: "/industries/foam-production" },
-              { name: "Paint & Coatings", path: "/industries/paint-coatings" },
-              { name: "Adhesives", path: "/industries/adhesives" },
-              { name: "Sealents", path: "/industries/pu-sealents" },
-              { name: "Powder Coating", path: "/industries/powder-coating" },
-              { name: "Elastomers", path: "/industries/elastomers" },
-              { name: "Artificial Leather", path: "/industries/artificial-leather" },
-            ].map((industry, index) => (
-              <Link key={index} href={industry.path} className="group">
-                <div className="bg-gray-100 p-6 rounded shadow transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-lg group-hover:bg-[#42b3a5] group-hover:text-white">
-                  {industry.name}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+<section className="pt-4 pb-10 bg-yellow-50 text-center">
+  <div className="max-w-6xl mx-auto px-6">
+    <div className="mb-8">
+      <Link
+        href="/industries"
+        onClick={() =>
+          track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+            metadata: {
+              target: "industries",
+              path: "/industries",
+              source: "homepage_industries_heading",
+            },
+          })
+        }
+        className="group inline-block"
+      >
+        <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
+          Industries We Serve
+          <span className="absolute left-0 -bottom-2 h-[3px] w-full bg-[#42b3a5] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+        </h2>
+      </Link>
+    </div>
+
+
+<div className="grid md:grid-cols-3 gap-8">
+  {[
+    { name: "Polyurethane Manufacturing", path: "/industries/polyurethane" },
+    { name: "Foam Production", path: "/industries/foam-production" },
+    { name: "Paint & Coatings", path: "/industries/paint-coatings" },
+    { name: "Adhesives", path: "/industries/adhesives" },
+    { name: "Sealents", path: "/industries/pu-sealents" },
+    { name: "Powder Coating", path: "/industries/powder-coating" },
+    { name: "Elastomers", path: "/industries/elastomers" },
+    { name: "Artificial Leather", path: "/industries/artificial-leather" },
+  ].map((industry) => (
+    <Link
+      key={industry.path}
+      href={industry.path}
+      onClick={() =>
+        track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+          metadata: {
+            target: industry.name,
+            path: industry.path,
+            source: "homepage_industries_section",
+          },
+        })
+      }
+      className="group"
+    >
+      <div className="bg-gray-100 p-6 rounded shadow transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-lg group-hover:bg-[#42b3a5] group-hover:text-white">
+        {industry.name}
+      </div>
+    </Link>
+  ))}
+</div>
+
+
+  </div>
+</section>
+
 
       {/* IMPACT */}
       <section className="py-12 bg-yellow-50 border-t">
@@ -337,6 +408,14 @@ export default function Home() {
 
         <a
           href="/products"
+		  onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "products",
+        source: "homepage_hero"
+      }
+    })
+  }
           className="bg-accent text-black px-8 py-4 rounded font-semibold"
         >
           Explore Products
