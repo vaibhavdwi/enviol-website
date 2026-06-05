@@ -6,6 +6,16 @@ import {
   getTopPages,
   getTopCTAs,
   getTopNavigation,
+
+  getUniqueVisitors,
+  getSessions,
+  getCountries,
+  getRegions,
+  getReturningVisitors,
+
+  getTopCountries,
+  getTopRegions,
+  getTopCities,
 } from "./reportQueries";
 
 import { buildDashboardMetrics } from "./dashboardMetrics";
@@ -23,50 +33,86 @@ export async function generateDailyReport(reportDate) {
     // ----------------------------------
 
     const [
-      totalEvents,
-      eventCounts,
-      topPages,
-      topCTAs,
-      topNavigation,
-    ] = await Promise.all([
-      getTotalEvents(reportDate),
-      getEventCounts(reportDate),
-      getTopPages(reportDate),
-      getTopCTAs(reportDate),
-      getTopNavigation(reportDate),
-    ]);
+  totalEvents,
+  eventCounts,
+  topPages,
+  topCTAs,
+  topNavigation,
+
+  uniqueVisitors,
+  sessions,
+  countries,
+  regions,
+  returningVisitors,
+
+  topCountries,
+  topRegions,
+  topCities,
+] = await Promise.all([
+  getTotalEvents(reportDate),
+  getEventCounts(reportDate),
+  getTopPages(reportDate),
+  getTopCTAs(reportDate),
+  getTopNavigation(reportDate),
+
+  getUniqueVisitors(reportDate),
+  getSessions(reportDate),
+  getCountries(reportDate),
+  getRegions(reportDate),
+  getReturningVisitors(reportDate),
+
+  getTopCountries(reportDate),
+  getTopRegions(reportDate),
+  getTopCities(reportDate),
+]);
 
     // ----------------------------------
     // BUILD DASHBOARD METRICS
     // ----------------------------------
 
     const dashboardMetrics = buildDashboardMetrics({
-      totalEvents,
-      eventCounts,
-      topPages,
-      topCTAs,
-      topNavigation,
-    });
+  totalEvents,
+  eventCounts,
+  topPages,
+  topCTAs,
+  topNavigation,
+
+  uniqueVisitors,
+  sessions,
+  countries,
+  regions,
+  returningVisitors,
+
+  topCountries,
+  topRegions,
+  topCities,
+});
 
     // ----------------------------------
     // FINAL REPORT JSON
     // ----------------------------------
 
     const report = {
-      reportDate,
+  reportDate,
 
-      generatedAt: new Date().toISOString(),
+  generatedAt: new Date().toISOString(),
 
-      summary: dashboardMetrics.summary,
+  summary: dashboardMetrics.summary,
 
-      topPages: dashboardMetrics.topPages,
+  topPages: dashboardMetrics.topPages,
 
-      topCTAs: dashboardMetrics.topCTAs,
+  topCTAs: dashboardMetrics.topCTAs,
 
-      topNavigation: dashboardMetrics.topNavigation,
+  topNavigation: dashboardMetrics.topNavigation,
 
-      rawEventCounts: eventCounts,
-    };
+  topCountries: dashboardMetrics.topCountries,
+
+  topRegions: dashboardMetrics.topRegions,
+
+  topCities: dashboardMetrics.topCities,
+
+  rawEventCounts: eventCounts,
+};
 
     // ----------------------------------
     // UPSERT INTO daily_reports

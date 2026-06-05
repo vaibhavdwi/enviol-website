@@ -1,159 +1,195 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function ReportsPage() {
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
-  const [data, setData] = useState(null);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [loading, setLoading] = useState(false);
+  const [report, setReport] = useState(null);
+  const [error, setError] = useState("");
 
-  const fetchReports = async () => {
+  const fetchReport = async () => {
     setLoading(true);
+    setError("");
+    setReport(null);
 
     try {
-      const res = await fetch(
-        `/api/reports/generate?from=${from}&to=${to}`
-      );
+      const url = fromDate
+        ? `/api/reports/generate?from=${fromDate}&to=${toDate}`
+        : `/api/reports/generate`;
 
-      const json = await res.json();
-      setData(json);
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch report");
+      }
+
+      const data = await res.json();
+      setReport(data);
     } catch (err) {
       console.error(err);
+      setError("Failed to load report");
     }
 
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchReports();
-  }, []);
-
   return (
-    <div className="p-6">
-
+    <div>
       {/* HEADER */}
-      <h1 className="text-2xl font-bold mb-6">
-        Analytics Dashboard
+      <h1 className="text-2xl font-bold text-[#1F524F] mb-4">
+        Analytics Reports
       </h1>
 
       {/* FILTERS */}
-      <div className="flex gap-3 mb-6">
+      <div className="flex gap-3 mb-6 flex-wrap">
         <input
           type="date"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
+          value={fromDate}
+          onChange={(e) => setFromDate(e.target.value)}
           className="border p-2 rounded"
         />
 
         <input
           type="date"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
+          value={toDate}
+          onChange={(e) => setToDate(e.target.value)}
           className="border p-2 rounded"
         />
 
         <button
-          onClick={fetchReports}
+          onClick={fetchReport}
           className="bg-[#42B3A5] text-white px-4 py-2 rounded"
         >
-          Apply
+          Generate
         </button>
       </div>
 
-      {loading && <p>Loading analytics...</p>}
+      {/* LOADING */}
+      {loading && <p className="text-gray-600">Loading report...</p>}
 
-      {data && (
-        <>
-          {/* KPI CARDS */}
-          <div className="grid grid-cols-4 gap-4 mb-6">
+      {/* ERROR */}
+      {error && <p className="text-red-500">{error}</p>}
 
-            <div className="bg-white shadow rounded p-4">
-              <h3 className="text-sm text-gray-500">Page Views</h3>
-              <p className="text-2xl font-bold">
-                {data.summary.pageViews}
-              </p>
-            </div>
+      {/* EMPTY STATE */}
+      {!loading && !report && (
+        <p className="text-gray-500">Select a date and generate report</p>
+      )}
 
-            <div className="bg-white shadow rounded p-4">
-              <h3 className="text-sm text-gray-500">Events</h3>
-              <p className="text-2xl font-bold">
-                {data.summary.events}
-              </p>
-            </div>
+      {/* REPORT */}
+      {report && (
+        <div className="space-y-6">
 
-            <div className="bg-white shadow rounded p-4">
-              <h3 className="text-sm text-gray-500">Unique Visitors</h3>
-              <p className="text-2xl font-bold">
-                {data.summary.uniqueVisitors}
-              </p>
-            </div>
-
-            <div className="bg-white shadow rounded p-4">
-              <h3 className="text-sm text-gray-500">Conversions</h3>
-              <p className="text-2xl font-bold">
-                {data.summary.conversions || 0}
-              </p>
-            </div>
-
+          {/* SUMMARY CARDS */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card title="Total Events" value={report?.summary?.total || 0} />
+            <Card title="Page Views" value={report?.summary?.pageViews || 0} />
+            <Card title="CTA Clicks" value={report?.summary?.ctaClicks || 0} />
+            <Card title="Navigation" value={report?.summary?.navClicks || 0} />
           </div>
 
-          {/* TWO COLUMN LAYOUT */}
-          <div className="grid grid-cols-2 gap-6">
+          {/* TOP PAGES */}
+          <Section title="Top Pages">
+            <Table
+              headers={["Page", "Views"]}
+              data={report?.topPages || []}
+              render={(row) => (
+                <>
+                  <td className="p-2 border">{row.page || "-"}</td>
+                  <td className="p-2 border">{row.views || 0}</td>
+                </>
+              )}
+            />
+          </Section>
 
-            {/* TOP PAGES */}
-            <div className="bg-white shadow rounded p-4">
-              <h2 className="font-semibold mb-3">
-                Top Pages
-              </h2>
+          {/* TOP CTAs */}
+          <Section title="Top CTAs">
+            <Table
+              headers={["Target", "Clicks"]}
+              data={report?.topCTAs || []}
+              render={(row) => (
+                <>
+                  <td className="p-2 border">{row.target || "-"}</td>
+                  <td className="p-2 border">{row.clicks || 0}</td>
+                </>
+              )}
+            />
+          </Section>
 
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-gray-500">
-                    <th>Page</th>
-                    <th>Views</th>
-                  </tr>
-                </thead>
+          {/* TOP NAVIGATION */}
+          <Section title="Top Navigation">
+            <Table
+              headers={["Target", "Clicks"]}
+              data={report?.topNavigation || []}
+              render={(row) => (
+                <>
+                  <td className="p-2 border">{row.target || "-"}</td>
+                  <td className="p-2 border">{row.clicks || 0}</td>
+                </>
+              )}
+            />
+          </Section>
 
-                <tbody>
-                  {data.topPages?.map((p, i) => (
-                    <tr key={i} className="border-t">
-                      <td className="py-2">{p.page}</td>
-                      <td>{p.views}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          {/* RAW EVENTS (DEBUG VIEW) */}
+          <Section title="Event Breakdown">
+            <pre className="text-xs bg-gray-100 p-3 rounded overflow-auto">
+              {JSON.stringify(report?.rawEventCounts || [], null, 2)}
+            </pre>
+          </Section>
 
-            {/* TOP REGIONS */}
-            <div className="bg-white shadow rounded p-4">
-              <h2 className="font-semibold mb-3">
-                Top Regions
-              </h2>
-
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-gray-500">
-                    <th>Region</th>
-                    <th>Users</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {data.topRegions?.map((r, i) => (
-                    <tr key={i} className="border-t">
-                      <td className="py-2">{r.region}</td>
-                      <td>{r.users}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-          </div>
-        </>
+        </div>
       )}
     </div>
+  );
+}
+
+/* ---------------- UI COMPONENTS ---------------- */
+
+function Card({ title, value }) {
+  return (
+    <div className="bg-white shadow rounded p-4">
+      <p className="text-sm text-gray-500">{title}</p>
+      <p className="text-xl font-bold text-[#1F524F]">{value}</p>
+    </div>
+  );
+}
+
+function Section({ title, children }) {
+  return (
+    <div className="bg-white shadow rounded p-4">
+      <h2 className="font-semibold mb-3">{title}</h2>
+      {children}
+    </div>
+  );
+}
+
+function Table({ headers, data, render }) {
+  return (
+    <table className="w-full text-sm border">
+      <thead>
+        <tr>
+          {headers.map((h, i) => (
+            <th key={i} className="text-left p-2 border bg-gray-50">
+              {h}
+            </th>
+          ))}
+        </tr>
+      </thead>
+
+      <tbody>
+        {data.length === 0 ? (
+          <tr>
+            <td className="p-2 border text-gray-500" colSpan={headers.length}>
+              No data available
+            </td>
+          </tr>
+        ) : (
+          data.map((row, i) => (
+            <tr key={i}>{render(row)}</tr>
+          ))
+        )}
+      </tbody>
+    </table>
   );
 }

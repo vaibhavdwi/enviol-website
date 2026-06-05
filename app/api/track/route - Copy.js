@@ -12,17 +12,6 @@ const ipRaw =
   "";
 
 const ip = ipRaw.split(",")[0].trim();
-const country =
-  req.headers.get("x-vercel-ip-country") ||
-  "Unknown";
-
-const region =
-  req.headers.get("x-vercel-ip-country-region") ||
-  "Unknown";
-
-const city =
-  req.headers.get("x-vercel-ip-city") ||
-  "Unknown";
 
 const geo = null;
 
@@ -35,9 +24,8 @@ const enrichedEvent = {
 
   ip,
 
-  country,
-  region,
-  city
+  region: "Unknown",
+  city: "Unknown"
 };
 // -----------------------------
 // BASIC VALIDATION
@@ -61,7 +49,6 @@ await pool.query(
   `
   INSERT INTO events (
     event,
-	visitor_id,
     session_id,
     page,
     full_url,
@@ -70,16 +57,14 @@ await pool.query(
     server_timestamp,
     user_agent,
     ip,
-	country,
 	region,
 	city,
     metadata
   )
-  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
   `,
   [
     enrichedEvent.event,
-	enrichedEvent.visitor_id || null,
     enrichedEvent.session_id || null,
     enrichedEvent.page || null,
     enrichedEvent.full_url || null,
@@ -88,7 +73,6 @@ await pool.query(
     enrichedEvent.server_timestamp,
     enrichedEvent.user_agent,
     enrichedEvent.ip,
-	enrichedEvent.country || "Unknown",
 	enrichedEvent.region || "Unknown",
 	enrichedEvent.city || "Unknown",
 

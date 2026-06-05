@@ -24,9 +24,10 @@ export async function getEventCounts(reportDate) {
 export async function getUniqueVisitors(reportDate) {
   const result = await pool.query(
     `
-    SELECT COUNT(DISTINCT session_id)::int AS unique_visitors
+    SELECT COUNT(DISTINCT visitor_id)::int AS unique_visitors
     FROM events
     WHERE DATE(event_timestamp) = $1
+	AND visitor_id IS NOT NULL
     `,
     [reportDate]
   );
@@ -34,6 +35,137 @@ export async function getUniqueVisitors(reportDate) {
   return result.rows[0]?.unique_visitors || 0;
 }
 
+export async function getSessions(reportDate) {
+  const result = await pool.query(
+    `
+    SELECT COUNT(DISTINCT session_id)::int AS sessions
+    FROM events
+    WHERE DATE(event_timestamp) = $1
+      AND session_id IS NOT NULL
+    `,
+    [reportDate]
+  );
+
+  return result.rows[0]?.sessions || 0;
+}
+
+export async function getCountries(reportDate) {
+  const result = await pool.query(
+    `
+    SELECT COUNT(DISTINCT country)::int AS countries
+    FROM events
+    WHERE DATE(event_timestamp) = $1
+      AND country IS NOT NULL
+      AND country <> 'Unknown'
+    `,
+    [reportDate]
+  );
+
+  return result.rows[0]?.countries || 0;
+}
+
+export async function getRegions(reportDate) {
+  const result = await pool.query(
+    `
+    SELECT COUNT(DISTINCT region)::int AS regions
+    FROM events
+    WHERE DATE(event_timestamp) = $1
+      AND region IS NOT NULL
+      AND region <> 'Unknown'
+    `,
+    [reportDate]
+  );
+
+  return result.rows[0]?.regions || 0;
+}
+
+export async function getReturningVisitors(reportDate) {
+  const result = await pool.query(
+    `
+    SELECT COUNT(*)::int AS returning_visitors
+    FROM (
+      SELECT visitor_id
+      FROM events
+      WHERE DATE(event_timestamp) = $1
+        AND visitor_id IS NOT NULL
+      GROUP BY visitor_id
+      HAVING COUNT(DISTINCT session_id) > 1
+    ) t
+    `,
+    [reportDate]
+  );
+
+  return result.rows[0]?.returning_visitors || 0;
+}
+
+export async function getTopCountries(
+  reportDate,
+  limit = 10
+) {
+  const result = await pool.query(
+    `
+    SELECT
+      country,
+      COUNT(DISTINCT visitor_id)::int AS visitors
+    FROM events
+    WHERE DATE(event_timestamp) = $1
+      AND country IS NOT NULL
+      AND country <> 'Unknown'
+    GROUP BY country
+    ORDER BY visitors DESC
+    LIMIT $2
+    `,
+    [reportDate, limit]
+  );
+
+  return result.rows;
+}
+
+export async function getTopRegions(
+  reportDate,
+  limit = 10
+) {
+  const result = await pool.query(
+    `
+    SELECT
+      region,
+      COUNT(DISTINCT visitor_id)::int AS visitors
+    FROM events
+    WHERE DATE(event_timestamp) = $1
+      AND region IS NOT NULL
+      AND region <> 'Unknown'
+    GROUP BY region
+    ORDER BY visitors DESC
+    LIMIT $2
+    `,
+    [reportDate, limit]
+  );
+
+  return result.rows;
+}
+
+export async function getTopCities(
+  reportDate,
+  limit = 10
+) {
+  const result = await pool.query(
+    `
+    SELECT
+      city,
+      COUNT(DISTINCT visitor_id)::int AS visitors
+    FROM events
+    WHERE DATE(event_timestamp) = $1
+      AND city IS NOT NULL
+      AND city <> 'Unknown'
+    GROUP BY city
+    ORDER BY visitors DESC
+    LIMIT $2
+    `,
+    [reportDate, limit]
+  );
+
+  return result.rows;
+}
 
 export async function getConversions(reportDate) {
   const result = await pool.query(

@@ -1,5 +1,5 @@
 import { getSessionId } from "./session";
-
+import { getVisitorId } from "./visitor";
 /**
  * Main tracking function
  * Sends event to:
@@ -17,6 +17,7 @@ export function track(eventName, payload = {}) {
     full_url: window.location.href,
     referrer: document.referrer || null,
 
+    visitor_id:getVisitorId(),
     // session
     session_id: getSessionId(),
 
