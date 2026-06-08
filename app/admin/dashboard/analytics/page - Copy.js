@@ -10,11 +10,6 @@ export default function AnalyticsDashboard() {
   const [error, setError] = useState("");
 
   const fetchAnalytics = async () => {
-    if (!fromDate || !toDate) {
-      setError("Please select both from and to dates");
-      return;
-    }
-
     setLoading(true);
     setError("");
     setData(null);
@@ -79,13 +74,13 @@ export default function AnalyticsDashboard() {
         <div className="text-red-500">{error}</div>
       )}
 
-      {/* SUMMARY */}
+      {/* SUMMARY CARDS */}
       {data && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card title="Events" value={data.summary?.total_events} />
-          <Card title="Visitors" value={data.summary?.unique_visitors} />
-          <Card title="Sessions" value={data.summary?.sessions} />
-          <Card title="Page Views" value={data.summary?.page_views} />
+          <Card title="Events" value={data.summary.total_events} />
+          <Card title="Visitors" value={data.summary.unique_visitors} />
+          <Card title="Sessions" value={data.summary.sessions} />
+          <Card title="Page Views" value={data.summary.page_views} />
         </div>
       )}
 
@@ -93,8 +88,7 @@ export default function AnalyticsDashboard() {
       {data && (
         <div className="bg-white border p-4 rounded">
           <h2 className="font-semibold mb-2">Top Countries</h2>
-
-          {(data.topCountries || []).map((c, i) => (
+          {data.topCountries.map((c, i) => (
             <div key={i} className="flex justify-between border-b py-1">
               <span>{c.country}</span>
               <span>{c.visitors}</span>
@@ -107,8 +101,7 @@ export default function AnalyticsDashboard() {
       {data && (
         <div className="bg-white border p-4 rounded">
           <h2 className="font-semibold mb-2">Top Pages</h2>
-
-          {(data.topPages || []).map((p, i) => (
+          {data.topPages.map((p, i) => (
             <div key={i} className="flex justify-between border-b py-1">
               <span className="break-all">{p.page}</span>
               <span>{p.views}</span>

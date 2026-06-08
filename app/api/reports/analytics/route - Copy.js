@@ -14,25 +14,18 @@ export async function GET(req) {
       );
     }
 
-    // ----------------------------------
-    // PAGE VIEWS (NEW VIEW)
-    // ----------------------------------
-    const pagesResult = await pool.query(
+    // KPI data
+    const kpiResult = await pool.query(
       `
-      SELECT
-        page,
-        SUM(total_views) AS views
-      FROM analytics_page_views_daily
+      SELECT *
+      FROM analytics_daily
       WHERE date BETWEEN $1 AND $2
-      GROUP BY page
-      ORDER BY views DESC
+      ORDER BY date
       `,
       [from, to]
     );
 
-    // ----------------------------------
-    // GEO (KEEP YOUR EXISTING VIEW FOR NOW)
-    // ----------------------------------
+    // GEO country
     const geoCountry = await pool.query(
       `
       SELECT country, SUM(visitors) AS visitors
@@ -44,18 +37,19 @@ export async function GET(req) {
       [from, to]
     );
 
-    // ----------------------------------
-    // KPIs (KEEP UNTIL YOU MIGRATE LATER)
-    // ----------------------------------
-    const kpiResult = await pool.query(
+    // Pages
+    const pages = await pool.query(
       `
-      SELECT *
-      FROM analytics_daily
+      SELECT page, SUM(views) AS views
+      FROM analytics_pages
       WHERE date BETWEEN $1 AND $2
+      GROUP BY page
+      ORDER BY views DESC
       `,
       [from, to]
     );
 
+    // Aggregate KPIs (SUM across days)
     const summary = kpiResult.rows.reduce(
       (acc, row) => {
         acc.total_events += Number(row.total_events || 0);
@@ -78,13 +72,12 @@ export async function GET(req) {
 
     return Response.json({
       summary,
-      topPages: pagesResult.rows,
-      topCountries: geoCountry.rows,
       daily: kpiResult.rows,
+      topCountries: geoCountry.rows,
+      topPages: pages.rows,
     });
   } catch (err) {
-    console.error("[ANALYTICS ERROR]", err);
-
+    console.error(err);
     return Response.json(
       { error: "Analytics fetch failed" },
       { status: 500 }
