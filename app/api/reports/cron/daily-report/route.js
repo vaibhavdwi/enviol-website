@@ -1,38 +1,48 @@
 import { generateDailyReport } from "@/analytics/reports/generateDailyReport";
 
-/**
- * Cron Job: Generate Daily Analytics Report
- * Runs once per day (Vercel Cron or external scheduler)
- */
 export async function GET() {
   try {
-    // Get yesterday's date (we always finalize previous day)
+    // ----------------------------------
+    // GET YESTERDAY (SAFE YYYY-MM-DD)
+    // ----------------------------------
+
     const date = new Date();
     date.setDate(date.getDate() - 1);
 
-    const reportDate = date.toISOString().split("T")[0];
+    const reportDate =
+      date.getFullYear() +
+      "-" +
+      String(date.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(date.getDate()).padStart(2, "0");
 
-    console.log("Generating daily report for:", reportDate);
+    console.log("[CRON] Generating daily report for:", reportDate);
 
-    // Force refresh = true (always recompute in cron)
+    // ----------------------------------
+    // FORCE REGENERATE (NO CACHE)
+    // ----------------------------------
+
     const report = await generateDailyReport(reportDate, true);
+
+    console.log("[CRON] Report generated successfully for:", reportDate);
+
+    // ----------------------------------
+    // LIGHTWEIGHT RESPONSE (IMPORTANT FOR VERCEL)
+    // ----------------------------------
 
     return Response.json({
       success: true,
-      message: "Daily report generated successfully",
       reportDate,
-      summary: {
-        totalEvents: report?.summary?.totalEvents || 0,
-        uniqueVisitors: report?.summary?.uniqueVisitors || 0,
-      },
+      totalEvents: report?.summary?.totalEvents || 0,
+      uniqueVisitors: report?.summary?.uniqueVisitors || 0,
     });
   } catch (error) {
-    console.error("Daily report cron error:", error);
+    console.error("[CRON ERROR]", error);
 
     return Response.json(
       {
         success: false,
-        error: "Failed to generate daily report",
+        message: "Daily report generation failed",
       },
       { status: 500 }
     );
