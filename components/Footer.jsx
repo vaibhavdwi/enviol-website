@@ -127,6 +127,36 @@ export default function Footer() {
             <li>Import Substitution</li>
             <li>Circular Economy Solutions</li>
           </ul>
+		  {/* BLOG LINKS */}
+<div className="mt-6">
+  <Link
+    href="/blog"
+    className="text-white font-semibold mb-3 inline-block hover:text-gray-300 transition-colors duration-300"
+  >
+    Blogs
+  </Link>
+
+  <ul className="space-y-2 text-sm">
+    <li>
+      <Link
+        href="/blog/technical"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        Technical Blog
+      </Link>
+    </li>
+
+    <li>
+      <Link
+        href="/blog/general"
+        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
+      >
+        General Blog
+      </Link>
+    </li>
+  </ul>
+</div>
+		  
         </div>
 
         {/* CONTACT DETAILS */}

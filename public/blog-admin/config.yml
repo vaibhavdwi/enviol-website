@@ -1,0 +1,11 @@
+backend:
+  name: test-repo
+
+collections:
+  - name: test
+    label: Test
+    folder: content/technical
+    create: true
+    fields:
+      - { name: title, widget: string }
+      - { name: body, widget: text }
