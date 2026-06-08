@@ -9,31 +9,31 @@ export default function ReportsPage() {
   const [report, setReport] = useState(null);
   const [error, setError] = useState("");
 
-  const fetchReport = async () => {
-    setLoading(true);
-    setError("");
-    setReport(null);
+  const fetchReport = async (force = false) => {
+  setLoading(true);
+  setError("");
+  setReport(null);
+if (!force) setReport(null);
+  try {
+    const url = fromDate
+      ? `/api/reports/generate?from=${fromDate}&to=${toDate}${force ? "&refresh=true" : ""}`
+      : `/api/reports/generate${force ? "?refresh=true" : ""}`;
 
-    try {
-      const url = fromDate
-        ? `/api/reports/generate?from=${fromDate}&to=${toDate}`
-        : `/api/reports/generate`;
+    const res = await fetch(url);
 
-      const res = await fetch(url);
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch report");
-      }
-
-      const data = await res.json();
-      setReport(data);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load report");
+    if (!res.ok) {
+      throw new Error("Failed to fetch report");
     }
 
-    setLoading(false);
-  };
+    const data = await res.json();
+    setReport(data);
+  } catch (err) {
+    console.error(err);
+    setError("Failed to load report");
+  }
+
+  setLoading(false);
+};
 
   return (
     <div className="space-y-6 pt-4">
@@ -71,6 +71,12 @@ export default function ReportsPage() {
           >
             Generate Report
           </button>
+		  <button
+  onClick={() => fetchReport(true)}
+  className="bg-black text-white px-5 py-2 rounded hover:bg-gray-800"
+>
+  Refresh Live Report
+</button>
         </div>
       </div>
 

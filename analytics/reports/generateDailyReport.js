@@ -26,8 +26,29 @@ import { buildDashboardMetrics } from "./dashboardMetrics";
  * Example:
  * await generateDailyReport("2026-06-04");
  */
-export async function generateDailyReport(reportDate) {
+export async function generateDailyReport(reportDate, refresh = false) {
+	console.log("[REPORT] date:", reportDate, "refresh:", refresh);
   try {
+	    // ----------------------------------
+  // CACHE CHECK (VERY IMPORTANT)
+  // ----------------------------------
+
+  if (!refresh) {
+    const cached = await pool.query(
+      `
+      SELECT report_json
+      FROM daily_reports
+      WHERE report_date = $1
+      AND report_type = 'daily'
+      `,
+      [reportDate]
+    );
+
+    if (cached.rows.length > 0) {
+      console.log("Returning cached report for", reportDate);
+      return cached.rows[0].report_json;
+    }
+  }
     // ----------------------------------
     // FETCH RAW DATA
     // ----------------------------------
