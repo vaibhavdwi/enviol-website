@@ -3,7 +3,7 @@ import { generateDailyReport } from "@/analytics/reports/generateDailyReport";
 export async function GET() {
   try {
     // ----------------------------------
-    // GET YESTERDAY (SAFE YYYY-MM-DD)
+    // GET YESTERDAY (YYYY-MM-DD)
     // ----------------------------------
 
     const date = new Date();
@@ -22,13 +22,13 @@ export async function GET() {
     // FORCE REGENERATE (NO CACHE)
     // ----------------------------------
 
-    const report = await generateDailyReport(reportDate, true);
+    const report = await generateDailyReport(
+      reportDate,
+      reportDate,
+      true
+    );
 
     console.log("[CRON] Report generated successfully for:", reportDate);
-
-    // ----------------------------------
-    // LIGHTWEIGHT RESPONSE (IMPORTANT FOR VERCEL)
-    // ----------------------------------
 
     return Response.json({
       success: true,

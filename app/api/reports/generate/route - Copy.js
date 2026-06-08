@@ -5,11 +5,13 @@ export async function GET(req) {
 
   const from = searchParams.get("from");
   const to = searchParams.get("to");
+  const refresh = searchParams.get("refresh") === "true";
 
-  // fallback
-  const reportDate = from || new Date().toISOString().split("T")[0];
+  const reportDate =
+    from || new Date().toISOString().split("T")[0];
 
-  const report = await generateDailyReport(reportDate);
+  // IMPORTANT CHANGE
+  const report = await generateDailyReport(reportDate, refresh);
 
   return Response.json(report);
 }

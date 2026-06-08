@@ -29,6 +29,7 @@ export default function DashboardLayout({ children }) {
     { name: "Sales", path: "/admin/dashboard/sales" },
     { name: "Accounting", path: "/admin/dashboard/accounting" },
 	{ name: "Production", path: "/admin/dashboard/production" },
+	{ name: "Analytics", path: "/admin/dashboard/analytics" },
 	{ name: "Reports", path: "/admin/dashboard/reports" },
   ];
 

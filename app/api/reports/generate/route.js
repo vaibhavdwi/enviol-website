@@ -7,11 +7,16 @@ export async function GET(req) {
   const to = searchParams.get("to");
   const refresh = searchParams.get("refresh") === "true";
 
-  const reportDate =
+  // default fallback (today only)
+  const fromDate =
     from || new Date().toISOString().split("T")[0];
 
-  // IMPORTANT CHANGE
-  const report = await generateDailyReport(reportDate, refresh);
+  const toDate =
+    to || fromDate;
+
+  console.log("[REPORT API] from:", fromDate, "to:", toDate, "refresh:", refresh);
+
+  const report = await generateDailyReport(fromDate, toDate, refresh);
 
   return Response.json(report);
 }
