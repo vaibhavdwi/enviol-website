@@ -44,6 +44,28 @@ export async function GET(req) {
       [from, to]
     );
 
+	const geoRegion = await pool.query(
+`
+SELECT region, SUM(visitors) AS visitors
+FROM analytics_geo_region
+WHERE date BETWEEN $1 AND $2
+GROUP BY region
+ORDER BY visitors DESC
+`,
+[from, to]
+);
+
+const geoCity = await pool.query(
+`
+SELECT city, SUM(visitors) AS visitors
+FROM analytics_geo_city
+WHERE date BETWEEN $1 AND $2
+GROUP BY city
+ORDER BY visitors DESC
+`,
+[from, to]
+);
+
     // ----------------------------------
     // KPIs (KEEP UNTIL YOU MIGRATE LATER)
     // ----------------------------------
@@ -80,6 +102,8 @@ export async function GET(req) {
       summary,
       topPages: pagesResult.rows,
       topCountries: geoCountry.rows,
+	  topRegions: geoRegion.rows,
+	  topCities: geoCity.rows,
       daily: kpiResult.rows,
     });
   } catch (err) {
