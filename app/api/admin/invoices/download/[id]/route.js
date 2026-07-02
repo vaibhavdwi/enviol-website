@@ -178,10 +178,10 @@ export async function GET(request) {
     y = 760;
 
     drawText("Enviol Polytech Solutions Pvt. Ltd.", 14, 130, true);
-    drawText("GSTIN: 2349823472374", 11, 130);
-    drawText("Khasra No.164, Prasiddhpur Bhant,", 10, 130);
-    drawText("Rania Industrial Area, Tehsil Akbarpur,", 10, 130);
-    drawText("Kanpur Dehat, Uttar Pradesh - 209304", 10, 130);
+    drawText("GSTIN: 09AAJCE6554F1ZE", 11, 130);
+    drawText("127/625, W-1 Saket Nagar,", 10, 130);
+    drawText("Juhi Colony Juhi,", 10, 130);
+    drawText("Kanpur Nagar, Uttar Pradesh - 208014", 10, 130);
     drawText("Phone: +91 96250 93722 | Email: info@enviol.com", 10, 130);
 
     // ✅ TITLE FIX

@@ -116,16 +116,16 @@ export async function POST(request) {
     });
 
     page.drawText(
-      "Khasra No.164, Prasiddhpur Bhant, Rania Industrial Area,",
+      "127/625, W-1 Saket Nagar, Juhi Colony Juhi",
       { x: 120, y: Y(785), size: 10, font }
     );
 
     page.drawText(
-      "Tehsil Akbarpur, Kanpur Dehat, Uttar Pradesh - 209304",
+      "Kanpur Nagar, Uttar Pradesh - 209304",
       { x: 120, y: Y(770), size: 10, font }
     );
 
-    page.drawText("GSTIN: 2349823472374", {
+    page.drawText("GSTIN: 09AAJCE6554F1ZE", {
       x: 120,
       y: Y(755),
       size: 10,

@@ -22,7 +22,7 @@ export async function GET(req) {
   doc.on("data", buffers.push.bind(buffers));
 
   doc.fontSize(20).text("ENVIOL POLYTECH SOLUTIONS");
-  doc.fontSize(12).text("GSTIN: 2349823472374");
+  doc.fontSize(12).text("GSTIN: 09AAJCE6554F1ZE");
 
   doc.moveDown();
   doc.text(`Invoice For: ${order.company_name}`);

@@ -95,7 +95,7 @@ export async function GET(request) {
   font: boldFont
 });
 
-page.drawText("GSTIN: 2349823472374", {
+page.drawText("GSTIN: 09AAJCE6554F1ZE", {
   x: 120,
   y: 790,
   size: 10,
@@ -103,7 +103,7 @@ page.drawText("GSTIN: 2349823472374", {
 });
 
 page.drawText(
-  "Khasra No.164, Prasiddhpur Bhant, Rania Industrial Area",
+  "127/625, W-1 Saket Nagar Juhi Colony, Juhi",
   {
     x: 120,
     y: 775,
@@ -113,7 +113,7 @@ page.drawText(
 );
 
 page.drawText(
-  "Tehsil Akbarpur, Kanpur Dehat, Uttar Pradesh - 209304",
+  "Kanpur Nagar, Uttar Pradesh - 208014",
   {
     x: 120,
     y: 760,
