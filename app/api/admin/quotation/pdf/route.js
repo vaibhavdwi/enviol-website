@@ -367,7 +367,7 @@ y -= 25;
 
     y -= 15;
 
-    page.drawText("Account Name: Enviol Polytech Solutions Pvt Ltd.", {
+    page.drawText("Account Name: Enviol Polytech Solutions Private Limited", {
       x: 40,
       y,
       size: 10,
@@ -376,7 +376,7 @@ y -= 25;
 
     y -= 15;
 
-    page.drawText("A/C Number: 1239817231236198237", {
+    page.drawText("A/C Number: 17450210003831", {
       x: 40,
       y,
       size: 10,
@@ -385,7 +385,7 @@ y -= 25;
 
     y -= 15;
 
-    page.drawText("Bank: State Bank of India, Koyla Nagar Kanpur", {
+    page.drawText("Bank: Uco Bank, Sujatganj Kanpur", {
       x: 40,
       y,
       size: 10,
@@ -394,7 +394,7 @@ y -= 25;
 
     y -= 15;
 
-    page.drawText("IFSC Code: SBIN001236", {
+    page.drawText("IFSC Code: UCBA0001745", {
       x: 40,
       y,
       size: 10,

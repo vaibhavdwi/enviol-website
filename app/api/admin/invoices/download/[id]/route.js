@@ -390,10 +390,10 @@ function drawPaymentBlock(page, y, grandTotal, font, boldFont) {
   drawLine("Bank Details:", 40, 11, true);
 
   const bankLines = [
-    "Account Name: Enviol Polytech Solutions Pvt Ltd",
-    "A/C Number: 1239817231236198237",
-    "Bank: State Bank of India, Koyla Nagar Kanpur",
-    "IFSC: SBIN001236",
+    "Account Name: Enviol Polytech Solutions Private Limited",
+    "A/C Number: 17450210003831",
+    "Bank: UCO Bank, Sujatganj Kanpur",
+    "IFSC: UCBA0001745",
     "Mode: Cheque / RTGS Only"
   ];
 
