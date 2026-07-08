@@ -2,9 +2,12 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import AnimatedHeading from "@/components/AnimatedHeading";
+import { track } from "@/utils/tracker";
+import { LEAD_EVENTS } from "@/analytics/events";
+import { NAVIGATION_EVENTS } from "@/analytics/events";
 
 export default function Home() {
-
   const images = [
     "/hero/hero1.jpg",
     "/hero/hero2.jpg",
@@ -17,6 +20,12 @@ export default function Home() {
   const [activeBtn, setActiveBtn] = useState("contact");
 
   useEffect(() => {
+	    // Track homepage visit
+  track("page_view", {
+    metadata: {
+      page_type: "home"
+    }
+  });
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 4000);
@@ -25,10 +34,9 @@ export default function Home() {
 
   return (
     <>
-      {/* HERO */}
-      <section className="relative h-[600px] flex items-center justify-center text-center text-white overflow-hidden -mt-24">
-    
-		{images.map((src, index) => (
+      {/* ================= DESKTOP HERO ================= */}
+      <section className="hidden md:flex relative h-[700px] items-center justify-center text-center text-white overflow-hidden -mt-24">
+        {images.map((src, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -46,29 +54,38 @@ export default function Home() {
         ))}
 
         <div className="absolute inset-0 bg-black/60"></div>
-		{/* Watermark Logo */}
-<div className="absolute left-1/2 -bottom-10 transform -translate-x-1/2 z-20 opacity-80">
-  <Image
-    src="/images/logo-watermark.png"
-    alt="Enviol Logo"
-    width={340}
-    height={220}
-    className="object-contain"
-  />
-</div>
+
+        {/* Watermark Logo */}
+        <div className="absolute left-1/2 -bottom-10 transform -translate-x-1/2 z-20 opacity-80">
+          <Image
+            src="/images/logo-watermark.png"
+            alt="Enviol Logo"
+            width={340}
+            height={220}
+            className="object-contain"
+          />
+        </div>
 
         <div className="relative z-20 max-w-4xl px-6">
-              <h1 className="text-5xl font-bold mb-4">
-  Sustainable Polyester & Polyether Polyol Manufacturers for Global Industries
-  </h1>
+          
+            <AnimatedHeading title="Sustainable Polyester & Polyether Polyol Manufacturers for Global Industries"/>
+         
 
           <p className="text-lg text-gray-200 mb-6">
-            Leading manufacturer of polyester and polyether polyols, specializing in recycled PET & PU waste upcycling into high-performance polyols for polyurethane, coatings, adhesives, sealants, and elastomer (CASE) applications worldwide.
+            Leading manufacturer of polyester and polyether polyols based Polyurethane systems, specializing in waste upcycling into high-performance polyols for polyurethane based Rigid Foams, Coatings, Adhesives, Sealants, and Elastomers (CASE) applications worldwide.
           </p>
 
           <div className="flex gap-6 justify-center">
             <a
               href="/contact"
+			    onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "contact",
+        source: "homepage_hero"
+      }
+    })
+  }
               onMouseEnter={() => setActiveBtn("contact")}
               onMouseLeave={() => setActiveBtn("contact")}
               className={`px-8 py-4 rounded font-semibold transition-all duration-300 ${
@@ -82,7 +99,14 @@ export default function Home() {
 
             <a
               href="/products"
-			  title="Explore polyester and polyether polyol products for polyurethane applications"
+			  onClick={() =>
+			  track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "products",
+        source: "homepage_hero"
+      }
+    })
+  }
               onMouseEnter={() => setActiveBtn("products")}
               onMouseLeave={() => setActiveBtn("contact")}
               className={`px-8 py-4 rounded font-semibold transition-all duration-300 ${
@@ -94,30 +118,86 @@ export default function Home() {
               Explore Our Products
             </a>
           </div>
-		  
         </div>
       </section>
-	  
-{/* SEO section */}
 
-<section className="py-10 bg-yellow-50">
-  <div className="max-w-6xl mx-auto px-6 text-center">
-    <h2 className="text-3xl font-bold text-center text-primary mb-8">
-      Global Polyester Polyol Manufacturer & Supplier
-    </h2>
+      {/* ================= MOBILE HERO ================= */}
+      <section className="flex md:hidden relative min-h-[480px] items-center justify-center text-center text-white overflow-hidden px-4 pt-0 -mt-24">
+        {images.map((src, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === current ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <Image
+              src={src}
+              alt="Polyol manufacturing"
+              fill
+              className="object-cover"
+            />
+          </div>
+        ))}
 
-    <p className="text-gray-700 max-w-4xl mx-auto">
-      Enviol is a trusted polyester polyol manufacturer and polyether polyol supplier based in India, serving global industries with high-performance and sustainable polyol solutions. Our recycled polyester polyols are widely used in polyurethane foam, coatings, adhesives, sealants, elastomers, and synthetic leather applications. With advanced chemical recycling technology, we ensure consistent hydroxyl value, controlled viscosity, and reliable industrial performance.
-    </p>
-  </div>
-</section>
+        <div className="absolute inset-0 bg-black/70"></div>
 
+        <div className="relative z-20">
+         <AnimatedHeading title="Sustainable Polyol Manufacturers"/>
+         
 
+          <p className="text-sm text-gray-200 mb-4">
+            Polyester & Polyether Polyols from recycled PET & PU waste.
+          </p>
 
+          <div className="flex flex-col gap-3">
+            <a
+              href="/contact"
+			  onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "contact",
+        source: "homepage_mobile"
+      }
+    })
+  }
+              className="bg-green-600 py-2.5 rounded font-semibold"
+            >
+              Get Consultation
+            </a>
 
+            <a
+              href="/products"
+			  onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "products",
+        source: "homepage_mobile"
+      }
+    })
+  }
+              className="border border-white py-2.5 rounded"
+            >
+              View Products
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= SEO ================= */}
+      <section className="pt-8 pb-4 bg-yellow-50">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-primary mb-8">
+            Global Polyester Polyol Manufacturer & Supplier
+          </h2>
+
+          <p className="text-gray-700 max-w-4xl mx-auto">
+            Enviol is a trusted polyester polyol manufacturer and polyether polyol supplier based in India, serving global industries with high-performance and sustainable polyol solutions.
+          </p>
+        </div>
+      </section>
 
       {/* WHAT WE DO */}
-      <section className="py-12 bg-yellow-50">
+      <section className="pt-4 pb-10 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-primary mb-8">
             What We Do
@@ -165,9 +245,9 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* WHY ENVIOL */}
-      <section className="py-12 bg-yellow-50">
+	  
+	  {/* WHY ENVIOL */}
+      <section className="pt-4 pb-10 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center text-primary mb-8">
             Why Enviol Polytech Solutions
@@ -185,7 +265,7 @@ export default function Home() {
 			  <li>✔ Serving clients across India, Middle East, Europe & global markets</li>
             </ul>
 
-            <div className="relative w-full h-80 rounded overflow-hidden shadow-lg">
+            <div className="relative w-[65%] h-30 mx-auto rounded overflow-hidden shadow-lg">
               <Image
                 src="/images/banner.jpg"
                 alt="Polyol manufacturing facility India polyurethane raw materials plant"
@@ -198,7 +278,7 @@ export default function Home() {
       </section>
 
       {/* OUR COMMITMENT */}
-      <section className="py-12 bg-yellow-50 text-center">
+      <section className="pt-4 pb-10 bg-yellow-50 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-primary mb-6">
             Our Commitment to Sustainability
@@ -210,43 +290,73 @@ export default function Home() {
           </p>
 
           <p className="text-gray-700">
-            Our polyols are widely used in coatings, adhesives, sealants, elastomers, polyurethane foams, and synthetic leather applications across multiple industries.
+            Our speciality polyols can be widely used in coatings, adhesives, sealants, elastomers, polyurethane foams, and synthetic leather applications across multiple industries.
           </p>
         </div>
       </section>
 
       {/* INDUSTRIES */}
-      <section className="py-12 bg-yellow-50 text-center">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-8">
-            <Link href="/industries" className="group inline-block">
-              <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
-                Industries We Serve
-                <span className="absolute left-0 -bottom-2 h-[3px] w-full bg-[#42b3a5] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-              </h2>
-            </Link>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { name: "Polyurethane Manufacturing", path: "/industries/polyurethane" },
-              { name: "Foam Production", path: "/industries/foam-production" },
-              { name: "Paint & Coatings", path: "/industries/paint-coatings" },
-              { name: "Adhesives", path: "/industries/adhesives" },
-              { name: "Sealents", path: "/industries/pu-sealents" },
-              { name: "Powder Coating", path: "/industries/powder-coating" },
-              { name: "Elastomers", path: "/industries/elastomers" },
-              { name: "Artificial Leather", path: "/industries/artificial-leather" },
-            ].map((industry, index) => (
-              <Link key={index} href={industry.path} className="group">
-                <div className="bg-gray-100 p-6 rounded shadow transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-lg group-hover:bg-[#42b3a5] group-hover:text-white">
-                  {industry.name}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+<section className="pt-4 pb-10 bg-yellow-50 text-center">
+  <div className="max-w-6xl mx-auto px-6">
+    <div className="mb-8">
+      <Link
+        href="/industries"
+        onClick={() =>
+          track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+            metadata: {
+              target: "industries",
+              path: "/industries",
+              source: "homepage_industries_heading",
+            },
+          })
+        }
+        className="group inline-block"
+      >
+        <h2 className="text-3xl font-bold relative inline-block transition-colors duration-300 group-hover:text-[#42b3a5]">
+          Industries We Serve
+          <span className="absolute left-0 -bottom-2 h-[3px] w-full bg-[#42b3a5] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+        </h2>
+      </Link>
+    </div>
+
+
+<div className="grid md:grid-cols-3 gap-8">
+  {[
+    { name: "Polyurethane Manufacturing", path: "/industries/polyurethane" },
+    { name: "Foam Production", path: "/industries/foam-production" },
+    { name: "Paint & Coatings", path: "/industries/paint-coatings" },
+    { name: "Adhesives", path: "/industries/adhesives" },
+    { name: "Sealents", path: "/industries/pu-sealents" },
+    { name: "Powder Coating", path: "/industries/powder-coating" },
+    { name: "Elastomers", path: "/industries/elastomers" },
+    { name: "Artificial Leather", path: "/industries/artificial-leather" },
+  ].map((industry) => (
+    <Link
+      key={industry.path}
+      href={industry.path}
+      onClick={() =>
+        track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+          metadata: {
+            target: industry.name,
+            path: industry.path,
+            source: "homepage_industries_section",
+          },
+        })
+      }
+      className="group"
+    >
+      <div className="bg-gray-100 p-6 rounded shadow transition-all duration-300 transform group-hover:-translate-y-2 group-hover:shadow-lg group-hover:bg-[#42b3a5] group-hover:text-white">
+        {industry.name}
+      </div>
+    </Link>
+  ))}
+</div>
+
+
+  </div>
+</section>
+
 
       {/* IMPACT */}
       <section className="py-12 bg-yellow-50 border-t">
@@ -290,19 +400,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
+      {/* ================= FINAL CTA ================= */}
       <section className="py-12 bg-primary text-white text-center">
         <h2 className="text-3xl font-bold mb-6">
-          Ready to Integrate Sustainable Polyols Into Your Production Line?
+          Ready to Integrate Sustainable Polyols?
         </h2>
-
-        <p className="mb-6">
-          Connect with our technical team for product consultation, application support, and enquiry-based pricing.
-        </p>
 
         <a
           href="/products"
-		  title="Explore polyester and polyether polyol products"
+		  onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "products",
+        source: "homepage_hero"
+      }
+    })
+  }
           className="bg-accent text-black px-8 py-4 rounded font-semibold"
         >
           Explore Products
