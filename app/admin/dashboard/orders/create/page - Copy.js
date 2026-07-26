@@ -1,94 +1,170 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CreateOrder() {
-  const [form, setForm] = useState({
-    product_name: "",
-    product_id: "",
-    quantity: 1,
-    price_offered: "",
-    discount_percent: 0,
 
+  const [products, setProducts] = useState([]);
+
+  const [items, setItems] = useState([
+    {
+      product_name: "",
+      product_id: "",
+      quantity: 1,
+      price_offered: "",
+      discount_percent: 0,
+    },
+  ]);
+
+  const [customer, setCustomer] = useState({
     company_name: "",
     contact_person: "",
     email: "",
     phone: "",
-    gst_number: "", // NEW field
+    gst_number: "",
     address: "",
     city: "",
     state: "",
     pincode: "",
-
-    notes: "", // optional, not stored in DB
+    notes: "",
   });
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
+  // Load products from FG stock
+  useEffect(() => {
+
+    fetch("/api/admin/products")
+      .then((res) => res.json())
+      .then((data) => {
+
+        const formatted = (data.products || []).map((p) => ({
+          name: p.item_name,
+          id: p.item_name.match(/\d+/)?.[0] || "",
+        }));
+
+        setProducts(formatted);
+
+      });
+
+  }, []);
+
+  const handleCustomerChange = (e) => {
+    setCustomer({
+      ...customer,
       [e.target.name]: e.target.value,
     });
   };
 
-  const calculatePricing = () => {
-    const qty = Number(form.quantity);
-    const price = Number(form.price_offered);
-    const discount = Number(form.discount_percent);
+  const handleItemChange = (index, field, value) => {
 
-    if (!qty || !price) {
-      return { discounted_price: 0, total_amount: 0 };
+    const updated = [...items];
+
+    updated[index][field] = value;
+
+    setItems(updated);
+
+  };
+
+  const handleProductChange = (index, productName) => {
+
+    const product = products.find((p) => p.name === productName);
+
+    const updated = [...items];
+
+    updated[index].product_name = product.name;
+    updated[index].product_id = product.id;
+
+    setItems(updated);
+
+  };
+
+  const addItem = () => {
+
+    if (items.length >= 5) {
+      alert("Maximum 5 products allowed");
+      return;
     }
 
-    const discountAmount = (price * discount) / 100;
-    const discounted_price = price - discountAmount;
-    const total_amount = discounted_price * qty;
+    setItems([
+      ...items,
+      {
+        product_name: "",
+        product_id: "",
+        quantity: 1,
+        price_offered: "",
+        discount_percent: 0,
+      },
+    ]);
 
-    return { discounted_price, total_amount };
+  };
+
+  const calculateTotals = () => {
+
+    let grandTotal = 0;
+
+    const calculatedItems = items.map((item) => {
+
+      const qty = Number(item.quantity);
+      const price = Number(item.price_offered);
+      const discount = Number(item.discount_percent);
+
+      const discountAmount = (price * discount) / 100;
+      const discounted_price = price - discountAmount;
+      const line_total = discounted_price * qty;
+
+      grandTotal += line_total;
+
+      return {
+        ...item,
+        discounted_price,
+        line_total,
+      };
+
+    });
+
+    return { calculatedItems, grandTotal };
+
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     setLoading(true);
 
-    const { discounted_price, total_amount } = calculatePricing();
+    const { calculatedItems, grandTotal } = calculateTotals();
 
     try {
+
       const res = await fetch("/api/admin/orders", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          product_name: form.product_name,
-          product_id: form.product_id,
-          quantity: Number(form.quantity),
-          price_offered: Number(form.price_offered),
-          discount_percent: Number(form.discount_percent),
-          discounted_price,
-          total_amount,
-
-          company_name: form.company_name,
-          contact_person: form.contact_person,
-          email: form.email,
-          phone: form.phone,
-          gst_number: form.gst_number, // NEW
-          address: form.address,
-          city: form.city,
-          state: form.state,
-          pincode: form.pincode,
+          customer,
+          items: calculatedItems,
+          total_amount: grandTotal,
         }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        alert("Order Created Successfully!");
-        setForm({
-          product_name: "",
-          product_id: "",
-          quantity: 1,
-          price_offered: "",
-          discount_percent: 0,
+
+        alert("Order Created Successfully");
+
+        setItems([
+          {
+            product_name: "",
+            product_id: "",
+            quantity: 1,
+            price_offered: "",
+            discount_percent: 0,
+          },
+        ]);
+
+        setCustomer({
           company_name: "",
           contact_person: "",
           email: "",
@@ -100,21 +176,30 @@ export default function CreateOrder() {
           pincode: "",
           notes: "",
         });
+
       } else {
+
         alert(data.message || "Error creating order");
+
       }
+
     } catch (err) {
+
       console.error(err);
       alert("Server error");
+
     }
 
     setLoading(false);
+
   };
 
-  const { discounted_price, total_amount } = calculatePricing();
+  const { grandTotal } = calculateTotals();
 
   return (
+
     <div>
+
       <h2 className="text-2xl font-bold text-[#42B3A5] mb-6">
         Create New Order
       </h2>
@@ -123,182 +208,139 @@ export default function CreateOrder() {
         onSubmit={handleSubmit}
         className="bg-white shadow rounded-lg p-8 space-y-8 max-w-4xl"
       >
-        {/* Product Information */}
-        <div className="space-y-4">
+
+        {/* PRODUCTS */}
+
+        <div className="space-y-6">
+
           <h3 className="text-lg font-semibold text-[#42B3A5]">
-            Product Information
+            Products
           </h3>
 
-          <input
-            name="product_name"
-            value={form.product_name}
-            onChange={handleChange}
-            placeholder="Product Name"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
+          {items.map((item, index) => (
 
-          <input
-            name="product_id"
-            value={form.product_id}
-            onChange={handleChange}
-            placeholder="Product ID"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
+            <div
+              key={index}
+              className="border rounded p-4 space-y-3"
+            >
 
-          <input
-            type="number"
-            name="quantity"
-            value={form.quantity}
-            onChange={handleChange}
-            min="1"
-            placeholder="Quantity"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
+              <p className="font-semibold">
+                Product {index + 1}
+              </p>
 
-          <input
-            type="number"
-            name="price_offered"
-            value={form.price_offered}
-            onChange={handleChange}
-            placeholder="Price per Unit"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
+              <select
+                value={item.product_name}
+                onChange={(e) =>
+                  handleProductChange(index, e.target.value)
+                }
+                className="w-full border rounded px-4 py-3"
+                required
+              >
 
-          <input
-            type="number"
-            name="discount_percent"
-            value={form.discount_percent}
-            onChange={handleChange}
-            placeholder="Discount %"
-            className="w-full border rounded px-4 py-3"
-          />
+                <option value="">Select Product</option>
+
+                {products.map((p) => (
+
+                  <option key={p.name} value={p.name}>
+                    {p.name}
+                  </option>
+
+                ))}
+
+              </select>
+
+              <input
+                value={item.product_id}
+                readOnly
+                placeholder="Product ID"
+                className="w-full border rounded px-4 py-3 bg-gray-100"
+              />
+
+              <input
+                type="number"
+                value={item.quantity}
+                onChange={(e) =>
+                  handleItemChange(index, "quantity", e.target.value)
+                }
+                placeholder="Quantity"
+                className="w-full border rounded px-4 py-3"
+              />
+
+              <input
+                type="number"
+                value={item.price_offered}
+                onChange={(e) =>
+                  handleItemChange(index, "price_offered", e.target.value)
+                }
+                placeholder="Price per Unit"
+                className="w-full border rounded px-4 py-3"
+              />
+
+              <input
+                type="number"
+                value={item.discount_percent}
+                onChange={(e) =>
+                  handleItemChange(index, "discount_percent", e.target.value)
+                }
+                placeholder="Discount %"
+                className="w-full border rounded px-4 py-3"
+              />
+
+            </div>
+
+          ))}
+
+          <button
+            type="button"
+            onClick={addItem}
+            className="bg-green-600 text-white px-4 py-2 rounded"
+          >
+            + Add Product
+          </button>
+
         </div>
 
-        {/* Pricing Summary */}
-        <div className="bg-gray-100 p-4 rounded text-sm">
-          <p>Discounted Price per Unit: ₹ {discounted_price.toFixed(2)}</p>
-          <p className="font-semibold mt-2">
-            Total Amount: ₹ {total_amount.toFixed(2)}
+        {/* TOTAL */}
+
+        <div className="bg-gray-100 p-4 rounded">
+          <p className="font-semibold">
+            Order Total: ₹ {grandTotal.toFixed(2)}
           </p>
         </div>
 
-        {/* Customer Information */}
+        {/* CUSTOMER */}
+
         <div className="space-y-4">
+
           <h3 className="text-lg font-semibold text-[#42B3A5]">
             Customer Information
           </h3>
 
-          <input
-            name="company_name"
-            value={form.company_name}
-            onChange={handleChange}
-            placeholder="Company Name"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
+          {Object.keys(customer).map((field) => (
 
-          <input
-            name="contact_person"
-            value={form.contact_person}
-            onChange={handleChange}
-            placeholder="Contact Person"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
+            <input
+              key={field}
+              name={field}
+              value={customer[field]}
+              onChange={handleCustomerChange}
+              placeholder={field.replace("_", " ")}
+              className="w-full border rounded px-4 py-3"
+            />
 
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Email"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
+          ))}
 
-          <input
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            placeholder="Phone"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
-
-          <input
-            name="gst_number"
-            value={form.gst_number}
-            onChange={handleChange}
-            placeholder="Customer GST Number"
-            className="w-full border rounded px-4 py-3"
-          />
-
-          <textarea
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-            placeholder="Company Address"
-            rows="3"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
-
-          <input
-            name="city"
-            value={form.city}
-            onChange={handleChange}
-            placeholder="City"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
-
-          <input
-            name="state"
-            value={form.state}
-            onChange={handleChange}
-            placeholder="State"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
-
-          <input
-            name="pincode"
-            value={form.pincode}
-            onChange={handleChange}
-            placeholder="Pincode"
-            required
-            className="w-full border rounded px-4 py-3"
-          />
-        </div>
-
-        {/* Notes */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-[#42B3A5]">
-            Additional Notes
-          </h3>
-
-          <textarea
-            name="notes"
-            value={form.notes}
-            onChange={handleChange}
-            placeholder="Notes (Optional)"
-            rows="4"
-            className="w-full border rounded px-4 py-3"
-          />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="bg-[#42B3A5] text-white px-8 py-3 rounded hover:opacity-90"
+          className="bg-[#42B3A5] text-white px-8 py-3 rounded"
         >
           {loading ? "Saving..." : "Create Order"}
         </button>
+
       </form>
+
     </div>
   );
 }

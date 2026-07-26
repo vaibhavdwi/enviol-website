@@ -17,8 +17,10 @@ export default function GeneralBlogsPage() {
       </h1>
 
       <p className="text-gray-600 mb-8">
-        Industry updates, insights, applications, and general knowledge around polymers and sustainability.
-      </p>
+  Explore industry insights, sustainability initiatives, recycling innovations,
+  market trends, manufacturing best practices, and general knowledge shaping the
+  future of modern materials and responsible industrial development.
+</p>
 
       {/* BLOG LIST */}
       {generalBlogs.length === 0 ? (

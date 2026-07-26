@@ -47,5 +47,62 @@ export const blogs = [
   publishedAt: "2026-06-09",
   summary:
     "Explore rigid foam polyols, their role in PIR and PUF formulations, hydroxyl value selection, insulation applications and polyurethane system development."
-}
+},
+
+
+
+// ==========================
+  // GENERAL BLOGS
+  // ==========================
+
+  {
+    slug: "building-a-circular-economy",
+    title: "Building a Circular Economy: How Chemical Recycling Gives Plastic Waste a Second Life",
+    category: "general",
+    author: "Anonymous",
+    publishedAt: "2026-07-26",
+    summary:
+      "Discover how chemical recycling transforms plastic waste into valuable raw materials, helping industries transition from a linear economy to a sustainable circular economy."
+  },
+
+{
+    slug: "why-plastic-recycling-matters",
+    title: "Why Plastic Recycling Matters: Creating a Sustainable Future for Industry and the Environment",
+    category: "general",
+    author: "Anonymous",
+    publishedAt: "2026-07-26",
+    summary:
+      "Understand why plastic recycling is essential for reducing waste, conserving natural resources, lowering emissions, and supporting sustainable industrial growth."
+  },
+
+  {
+    slug: "pet-waste-to-high-performance-materials",
+    title: "From PET Waste to High-Performance Materials: The Journey of Chemical Recycling",
+    category: "general",
+    author: "Anonymous",
+    publishedAt: "2026-07-26",
+    summary:
+      "Learn how discarded PET plastic can be transformed into high-performance polyester polyols and other valuable industrial materials through chemical recycling."
+  },
+  
+  {
+    slug: "recycled-polyols-for-sustainable-manufacturing",
+    title: "Recycled Polyols: A Sustainable Alternative for Modern Manufacturing",
+    category: "general",
+    author: "Anonymous",
+    publishedAt: "2026-07-26",
+    summary:
+      "Explore the environmental and industrial advantages of recycled polyols and how they support sustainable manufacturing without compromising product performance."
+  },
+
+  {
+    slug: "low-carbon-manufacturing-and-esg",
+    title: "How Low-Carbon Manufacturing Supports ESG, CSR and Sustainable Business Growth",
+    category: "general",
+    author: "Anonymous",
+    publishedAt: "2026-07-26",
+    summary:
+      "Learn how low-carbon manufacturing, recycled raw materials, and responsible production practices help organizations achieve ESG objectives, strengthen CSR commitments, and build long-term business value."
+  }
+
 ];
