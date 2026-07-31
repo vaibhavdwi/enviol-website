@@ -103,6 +103,106 @@ export const blogs = [
     publishedAt: "2026-07-26",
     summary:
       "Learn how low-carbon manufacturing, recycled raw materials, and responsible production practices help organizations achieve ESG objectives, strengthen CSR commitments, and build long-term business value."
-  }
+  },
+  
+  {
+  slug: "hydroxyl-value-explained",
+  title: "Hydroxyl Value Explained: The Most Important Parameter in Polyester Polyols",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-01",
+  summary:
+    "Understand hydroxyl value, how it is measured, its relationship with molecular weight, functionality, polyurethane reactivity, and why it is the most critical specification in polyester polyol formulation."
+},
+
+{
+  slug: "glycol-selection-in-polyester-polyols",
+  title: "How Glycol Selection Influences Polyester Polyol Performance",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-02",
+  summary:
+    "Explore how ethylene glycol, diethylene glycol, neopentyl glycol, 1,4-butanediol, and hexanediol influence hydroxyl value, flexibility, hydrolytic stability, viscosity, and overall polyester polyol performance."
+},
+
+{
+  slug: "choosing-acids-for-polyester-polyols",
+  title: "Choosing the Right Acids for Polyester Polyol Synthesis",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-03",
+  summary:
+    "Learn how adipic acid, phthalic anhydride, isophthalic acid, and terephthalic acid influence polyester polyol properties, chemical resistance, flexibility, rigidity, and application performance."
+},
+
+{
+  slug: "designing-polyester-polyols-for-different-oh-values",
+  title: "Designing Polyester Polyols for Different Hydroxyl Values",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Discover how polyester polyols are formulated for different hydroxyl values and how OH number influences molecular weight, crosslink density, polyurethane reactivity, and end-use applications."
+},
+
+{
+  slug: "molecular-weight-and-viscosity-of-polyester-polyols",
+  title: "How Molecular Weight Influences the Viscosity and Performance of Polyester Polyols",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-05",
+  summary:
+    "Understand the relationship between molecular weight, viscosity, hydroxyl value, processability, and the mechanical properties of polyurethane systems based on polyester polyols."
+},
+
+{
+  slug: "polyol-functionality-explained",
+  title: "Polyol Functionality Explained: Why It Matters in Polyurethane Formulations",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-06",
+  summary:
+    "Learn how polyol functionality influences crosslink density, foam structure, hardness, dimensional stability, and the performance of polyurethane coatings, adhesives, elastomers, and rigid foams."
+},
+
+{
+  slug: "controlling-acid-value-in-polyester-polyols",
+  title: "Controlling Acid Value During Polyester Polyol Manufacturing",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-07",
+  summary:
+    "Explore why acid value is a critical quality parameter, how it is measured, common causes of high acid value, and practical methods for controlling it during polyester polyol production."
+},
+
+{
+  slug: "pet-glycolysis-to-polyester-polyols",
+  title: "PET Glycolysis: Converting Plastic Waste into High-Performance Polyester Polyols",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-08",
+  summary:
+    "Understand the chemistry of PET glycolysis, catalyst selection, reaction parameters, product purification, and how recycled PET becomes a valuable raw material for polyester polyol manufacturing."
+},
+
+{
+  slug: "polyester-polyols-for-rigid-foam",
+  title: "Selecting Polyester Polyols for High-Performance Rigid Foam Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-09",
+  summary:
+    "Learn how hydroxyl value, functionality, viscosity, aromatic content, and formulation strategy influence the performance of polyester polyols in rigid polyurethane and PIR foam insulation systems."
+},
+
+{
+  slug: "recycled-vs-virgin-polyester-polyols",
+  title: "Recycled vs Virgin Polyester Polyols: Chemistry, Performance and Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-10",
+  summary:
+    "Compare recycled and virgin polyester polyols across raw materials, chemistry, molecular structure, quality, sustainability, processing characteristics, and polyurethane application performance."
+}
 
 ];
