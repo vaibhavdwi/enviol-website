@@ -30,6 +30,25 @@ export default function BlogPage() {
             PIR insulation, PUF applications and sustainable
             chemical recycling innovations.
           </p>
+		  {/* CATEGORY BUTTONS */}
+    <div className="mt-8 flex flex-wrap justify-center gap-4">
+
+      <Link
+        href="/blog/technical"
+        className="px-8 py-3 rounded-lg bg-[#55BAAE] text-white font-semibold shadow hover:bg-[#46a296] transition"
+      >
+        Technical Blogs
+      </Link>
+
+      <Link
+        href="/blog/general"
+        className="px-8 py-3 rounded-lg border-2 border-[#55BAAE] text-[#55BAAE] font-semibold bg-white hover:bg-[#55BAAE] hover:text-white transition"
+      >
+        General Blogs
+      </Link>
+
+    </div>
+
 
         </div>
 
