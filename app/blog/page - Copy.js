@@ -4,21 +4,13 @@ import AnimatedHeading from "@/components/AnimatedHeading";
 
 export default function BlogPage() {
 
-  // Sort by date (newest first).
-  // If dates are identical, later entries in blogs.js appear first.
-  const sortedBlogs = [...blogs]
-    .map((blog, index) => ({ ...blog, index }))
-    .sort((a, b) => {
-      const dateDiff =
+  const latestBlogs = [...blogs]
+    .sort(
+      (a, b) =>
         new Date(b.publishedAt) -
-        new Date(a.publishedAt);
-
-      if (dateDiff !== 0) return dateDiff;
-
-      return b.index - a.index;
-    });
-
-  const latestBlogs = sortedBlogs.slice(0, 10);
+        new Date(a.publishedAt)
+    )
+    .slice(0, 10);
 
   return (
     <main className="bg-yellow-50 min-h-screen">
@@ -38,25 +30,25 @@ export default function BlogPage() {
             PIR insulation, PUF applications and sustainable
             chemical recycling innovations.
           </p>
+		  {/* CATEGORY BUTTONS */}
+    <div className="mt-8 flex flex-wrap justify-center gap-4">
 
-          {/* CATEGORY BUTTONS */}
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
+      <Link
+        href="/blog/technical"
+        className="px-8 py-3 rounded-lg bg-[#55BAAE] text-white font-semibold shadow hover:bg-[#46a296] transition"
+      >
+        Technical Blogs
+      </Link>
 
-            <Link
-              href="/blog/technical"
-              className="px-8 py-3 rounded-lg bg-[#55BAAE] text-white font-semibold shadow hover:bg-[#46a296] transition"
-            >
-              Technical Blogs
-            </Link>
+      <Link
+        href="/blog/general"
+        className="px-8 py-3 rounded-lg border-2 border-[#55BAAE] text-[#55BAAE] font-semibold bg-white hover:bg-[#55BAAE] hover:text-white transition"
+      >
+        General Blogs
+      </Link>
 
-            <Link
-              href="/blog/general"
-              className="px-8 py-3 rounded-lg border-2 border-[#55BAAE] text-[#55BAAE] font-semibold bg-white hover:bg-[#55BAAE] hover:text-white transition"
-            >
-              General Blogs
-            </Link>
+    </div>
 
-          </div>
 
         </div>
 
@@ -70,7 +62,7 @@ export default function BlogPage() {
           {/* BLOG LIST */}
           <div className="lg:col-span-3 space-y-8">
 
-            {sortedBlogs.map((blog) => (
+            {blogs.map((blog) => (
 
               <div
                 key={blog.slug}

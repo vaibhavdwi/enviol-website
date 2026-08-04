@@ -393,6 +393,85 @@ export const blogs = [
   publishedAt: "2026-08-04",
   summary:
     "Explore how recycled PET-based polyester polyols enable sustainable polyurethane coatings while maintaining performance, durability and supporting circular economy initiatives."
+},
+{
+  slug: "polyurethane-footwear-systems-explained",
+  title: "Polyurethane Footwear Systems Explained",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Learn how polyurethane footwear systems work, including their chemistry, manufacturing processes, key components, and applications in slippers, sandals, safety shoes, and sports footwear."
+},
+
+{
+  slug: "polyester-polyols-in-footwear-applications",
+  title: "Polyester Polyols in Footwear Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Discover the role of polyester polyols in polyurethane footwear, their influence on durability, abrasion resistance, hydrolysis resistance, and sustainable shoe sole manufacturing."
+},
+
+{
+  slug: "eva-vs-pu-footwear-soles",
+  title: "EVA vs PU Footwear Soles: A Comprehensive Comparison",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Compare EVA and polyurethane footwear soles based on comfort, durability, weight, abrasion resistance, manufacturing processes, and ideal applications."
+},
+
+{
+  slug: "pu-slipper-manufacturing-process",
+  title: "PU Slipper Manufacturing Process Explained",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Understand the complete polyurethane slipper manufacturing process, from raw materials and polyol selection to moulding, curing, finishing, and quality control."
+},
+
+{
+  slug: "pu-safety-shoes-manufacturing",
+  title: "PU Safety Shoes Manufacturing Process",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Explore how polyurethane safety shoes are manufactured, including dual-density sole production, material selection, injection moulding, and performance requirements."
+},
+
+{
+  slug: "pu-sports-shoe-soles",
+  title: "PU Sports Shoe Soles Explained",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Learn how polyurethane sports shoe soles are engineered for cushioning, flexibility, durability, and athletic performance using advanced polyurethane systems."
+},
+
+{
+  slug: "density-selection-in-pu-footwear",
+  title: "Density Selection in PU Footwear",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Understand how density selection affects polyurethane footwear performance, including comfort, weight, durability, energy absorption, and application suitability."
+},
+
+{
+  slug: "common-footwear-defects-and-causes",
+  title: "Common PU Footwear Defects and Their Causes",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Learn about common polyurethane footwear manufacturing defects, their root causes, troubleshooting methods, and best practices for improving product quality."
 }
 
 ];
