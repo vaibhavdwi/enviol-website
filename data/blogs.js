@@ -203,6 +203,196 @@ export const blogs = [
   publishedAt: "2026-08-10",
   summary:
     "Compare recycled and virgin polyester polyols across raw materials, chemistry, molecular structure, quality, sustainability, processing characteristics, and polyurethane application performance."
+},
+{
+  slug: "what-are-polyurethane-adhesives",
+  title: "What Are Polyurethane Adhesives? Complete Technical Guide",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Learn the fundamentals of polyurethane adhesives, including their chemistry, types, curing mechanisms, advantages, limitations, and applications across footwear, packaging, construction, automotive and industrial manufacturing."
+},
+
+{
+  slug: "polyester-polyols-for-pu-adhesives",
+  title: "Polyester Polyols for Polyurethane Adhesives",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Discover why polyester polyols are widely used in polyurethane adhesives, their influence on bond strength, flexibility, chemical resistance, durability, and suitability for demanding industrial applications."
+},
+
+{
+  slug: "how-polyol-selection-affects-adhesive-performance",
+  title: "How Polyol Selection Affects Polyurethane Adhesive Performance",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-13",
+  summary:
+    "Understand how hydroxyl value, molecular weight, functionality, crystallinity and polyol chemistry determine adhesion, flexibility, cure rate, durability and overall polyurethane adhesive performance."
+},
+
+{
+  slug: "polyester-vs-polyether-polyols-for-adhesives",
+  title: "Polyester vs Polyether Polyols for Polyurethane Adhesives",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-14",
+  summary:
+    "Compare polyester and polyether polyols for polyurethane adhesives, including differences in chemistry, moisture resistance, mechanical properties, flexibility, durability and application suitability."
+},
+
+{
+  slug: "reactive-vs-non-reactive-pu-adhesives",
+  title: "Reactive vs Non-Reactive Polyurethane Adhesives",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-15",
+  summary:
+    "Explore the differences between reactive and non-reactive polyurethane adhesives, including curing mechanisms, formulation principles, performance characteristics and typical industrial applications."
+},
+
+{
+  slug: "solvent-based-vs-solvent-free-pu-adhesives",
+  title: "Solvent-Based vs Solvent-Free Polyurethane Adhesives",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-16",
+  summary:
+    "Compare solvent-based and solvent-free polyurethane adhesive technologies with respect to formulation, processing, VOC emissions, performance, sustainability and end-use applications."
+},
+
+{
+  slug: "hot-melt-pur-adhesives",
+  title: "Hot Melt PUR Adhesives Explained",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-17",
+  summary:
+    "Understand the chemistry, curing mechanism, processing advantages and industrial applications of reactive polyurethane hot melt (PUR) adhesives used in woodworking, textiles, automotive and packaging."
+},
+
+{
+  slug: "pu-adhesives-for-footwear-manufacturing",
+  title: "Polyurethane Adhesives for Footwear Manufacturing",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-18",
+  summary:
+    "Learn how polyurethane adhesives are formulated for footwear manufacturing, including sole bonding, upper assembly, material compatibility, durability and performance requirements."
+},
+
+{
+  slug: "pu-adhesives-for-flexible-packaging-lamination",
+  title: "Polyurethane Adhesives for Flexible Packaging Lamination",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-19",
+  summary:
+    "Explore polyurethane laminating adhesives used in flexible packaging, including formulation principles, curing behavior, food packaging requirements and high-performance multilayer film bonding."
+},
+
+{
+  slug: "sustainable-polyester-polyols-for-adhesive-applications",
+  title: "Sustainable Polyester Polyols for Adhesive Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-20",
+  summary:
+    "Discover how recycled and sustainable polyester polyols support the development of environmentally responsible polyurethane adhesives while maintaining high performance for industrial bonding applications."
+},
+
+{
+  slug: "what-are-polyurethane-coatings",
+  title: "What Are Polyurethane Coatings? Types, Chemistry and Industrial Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Learn how polyurethane coatings are formulated, their chemistry, major types, performance characteristics and applications across automotive, wood, flooring and industrial protective coatings."
+},
+{
+  slug: "polyester-polyols-for-pu-coatings",
+  title: "Polyester Polyols for Polyurethane Coatings: Properties, Chemistry and Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Discover how polyester polyols influence hardness, flexibility, chemical resistance, durability and long-term performance in polyurethane coating formulations."
+},
+{
+  slug: "polyester-vs-polyether-polyols-for-coatings",
+  title: "Polyester vs Polyether Polyols for Polyurethane Coatings",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Compare polyester and polyether polyols for polyurethane coatings based on chemical resistance, flexibility, hydrolysis resistance, durability and coating performance."
+},
+{
+  slug: "how-hydroxyl-value-affects-pu-coatings",
+  title: "How Hydroxyl Value Affects Polyurethane Coatings",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Understand how hydroxyl value influences curing, crosslink density, hardness, flexibility, chemical resistance and overall polyurethane coating performance."
+},
+{
+  slug: "designing-polyester-polyols-for-pu-coatings",
+  title: "Designing Polyester Polyols for Polyurethane Coatings",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Explore how glycols, acids, molecular weight, hydroxyl value and functionality are optimized when designing polyester polyols for polyurethane coatings."
+},
+{
+  slug: "water-based-vs-solvent-based-pu-coatings",
+  title: "Water-Based vs Solvent-Based Polyurethane Coatings",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Compare water-based and solvent-based polyurethane coatings in terms of chemistry, VOC emissions, curing, durability, applications and environmental performance."
+},
+{
+  slug: "industrial-protective-pu-coatings",
+  title: "Industrial Protective Polyurethane Coatings Explained",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Learn how polyurethane protective coatings provide corrosion resistance, abrasion resistance, weatherability and long-term protection for industrial infrastructure."
+},
+{
+  slug: "pu-wood-coatings-explained",
+  title: "PU Wood Coatings Explained: Chemistry, Properties and Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Discover how polyurethane wood coatings deliver excellent finish quality, scratch resistance, chemical resistance and long-lasting protection for wooden surfaces."
+},
+{
+  slug: "pu-floor-coatings-explained",
+  title: "PU Floor Coatings Explained: Types, Benefits and Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Learn how polyurethane floor coatings provide abrasion resistance, chemical resistance, durability and attractive finishes for industrial, commercial and residential flooring."
+},
+{
+  slug: "sustainable-polyester-polyols-for-pu-coatings",
+  title: "Sustainable Polyester Polyols for Polyurethane Coatings",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-04",
+  summary:
+    "Explore how recycled PET-based polyester polyols enable sustainable polyurethane coatings while maintaining performance, durability and supporting circular economy initiatives."
 }
 
 ];
