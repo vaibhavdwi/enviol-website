@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 export const metadata = {
   title:
@@ -20,25 +21,25 @@ export const metadata = {
 
 export default function EVAVsPUFootwearSoles() {
   return (
-    <main
-      style={{
-        maxWidth: "900px",
-        margin: "0 auto",
-        padding: "40px 20px",
-        lineHeight: "1.8",
-      }}
-    >
-      {/* Hero */}
-      <section>
-        <h1
-          style={{
-            fontSize: "42px",
-            fontWeight: "700",
-            marginBottom: "20px",
-          }}
-        >
-          EVA vs PU Footwear Soles: Which Material Is Better?
-        </h1>
+    <main className="bg-yellow-50 min-h-screen">
+
+  <div className="max-w-5xl mx-auto px-6 pt-24 pb-16">
+
+    {/* Hero */}
+
+    <AnimatedHeading
+      title="EVA vs PU Footwear Soles: Which Material Is Better?"
+    />
+
+    <div className="mt-4 text-sm text-gray-500">
+      Published: August 2026 • Author: Anonymous
+    </div>
+
+    <div className="mt-8 h-80 rounded-xl bg-gray-200 flex items-center justify-center">
+      [EVA vs PU Footwear Soles]
+    </div>
+
+    <section>
 
         <p>
           Choosing the right sole material is one of the most important
@@ -853,6 +854,56 @@ export default function EVAVsPUFootwearSoles() {
           </Link>
         </div>
       </section>
-    </main>
-  );
+        {/* Related Resources */}
+
+    <section className="mt-14 bg-white p-8 rounded-xl shadow">
+
+      <h2 className="text-2xl font-bold mb-4">
+        Related Resources
+      </h2>
+
+      <div className="flex flex-col gap-3">
+
+        <Link
+          href="/blog/technical/pu-adhesives-for-footwear-manufacturing"
+          className="text-[#42b3a5] font-semibold"
+        >
+          → PU Adhesives for Footwear Manufacturing
+        </Link>
+
+        <Link
+          href="/blog/technical/polyester-polyols-for-pu-adhesives"
+          className="text-[#42b3a5] font-semibold"
+        >
+          → Polyester Polyols for PU Adhesives
+        </Link>
+
+        <Link
+          href="/blog/technical/how-polyol-selection-affects-adhesive-performance"
+          className="text-[#42b3a5] font-semibold"
+        >
+          → How Polyol Selection Affects Adhesive Performance
+        </Link>
+
+        <Link
+          href="/blog/technical/polyester-vs-polyether-polyols-for-adhesives"
+          className="text-[#42b3a5] font-semibold"
+        >
+          → Polyester vs Polyether Polyols for Adhesives
+        </Link>
+
+        <Link
+          href="/blog/technical/sustainable-polyester-polyols-for-adhesive-applications"
+          className="text-[#42b3a5] font-semibold"
+        >
+          → Sustainable Polyester Polyols for Adhesive Applications
+        </Link>
+
+      </div>
+
+    </section>
+
+  </div>
+</main>
+);
 }
