@@ -483,17 +483,26 @@ export default function Navbar() {
                   <div key={item.name} className="flex flex-col">
 
                     {item.path ? (
-                      <Link
-                        href={item.path}
-                        onClick={() => {
-                          setMenuOpen(false);
-                          setOpenMobileDropdown(null);
-                        }}
-                        className="px-3 py-2 rounded-lg text-sm font-medium text-[#d8f3f1] hover:bg-[#2b3748] hover:text-[#5ffbf1] transition"
-                      >
-                        {item.name}
-                      </Link>
-                    ) : (
+  <Link
+    href={item.path}
+    onClick={() => {
+      track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+        metadata: {
+          target: item.name,
+          path: item.path,
+          parent: link.name,
+          source: "navbar_mobile",
+        },
+      });
+
+      setMenuOpen(false);
+      setOpenMobileDropdown(null);
+    }}
+    className="px-3 py-2 rounded-lg text-sm font-medium text-[#d8f3f1] hover:bg-[#2b3748] hover:text-[#5ffbf1] transition"
+  >
+    {item.name}
+  </Link>
+) : (
                       <div className="px-3 py-2 text-sm font-medium text-[#d8f3f1]">
                         {item.name}
                       </div>
@@ -504,12 +513,22 @@ export default function Navbar() {
 
                         {item.subDropdown.map((sub) => (
                           <Link
-                            key={sub.name}
-                            href={sub.path}
-                            onClick={() => {
-                              setMenuOpen(false);
-                              setOpenMobileDropdown(null);
-                            }}
+  key={sub.name}
+  href={sub.path}
+  onClick={() => {
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: sub.name,
+        path: sub.path,
+        parent: item.name,
+        category: link.name,
+        source: "navbar_mobile",
+      },
+    });
+
+    setMenuOpen(false);
+    setOpenMobileDropdown(null);
+  }}
                             className="block px-3 py-2 rounded-md text-sm text-[#b8d7d4] hover:text-[#b6ff7a] hover:bg-[#2b3748] transition"
                           >
                             • {sub.name}

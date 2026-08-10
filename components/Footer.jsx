@@ -1,5 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
+import { blogs } from "@/data/blogs";
+import AnimatedHeading from "@/components/AnimatedHeading";
+import TrackedLink from "@/components/TrackedLink";
 
 export default function Footer() {
   return (
@@ -129,30 +132,44 @@ export default function Footer() {
           </ul>
 		  {/* BLOG LINKS */}
 <div className="mt-6">
-  <Link
-    href="/blog"
-    className="text-white font-semibold mb-3 inline-block hover:text-gray-300 transition-colors duration-300"
-  >
-    Blogs
-  </Link>
+  <TrackedLink
+  href="/blog"
+  trackingData={{
+    target: "Blogs",
+    path: "/blog",
+    source: "footer_blog",
+  }}
+  className="text-white font-semibold mb-3 inline-block hover:text-gray-300 transition-colors duration-300"
+>
+  Blogs
+</TrackedLink>
 
   <ul className="space-y-2 text-sm">
     <li>
-      <Link
-        href="/blog/technical"
-        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
-      >
-        Technical Blog
-      </Link>
+      <TrackedLink
+  href="/blog/technical"
+  trackingData={{
+    target: "Technical Blogs",
+    path: "/blog/technical",
+    source: "blog_category_buttons",
+  }}
+>
+  Technical Blogs
+</TrackedLink>
     </li>
 
     <li>
-      <Link
-        href="/blog/general"
-        className="relative inline-block text-gray-300 transition-colors duration-300 hover:text-white after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-full after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100"
-      >
-        General Blog
-      </Link>
+      <TrackedLink
+  href="/blog/general"
+  trackingData={{
+    target: "General Blogs",
+    path: "/blog/general",
+    source: "blog_category_buttons",
+  }}
+  
+>
+  General Blogs
+</TrackedLink>
     </li>
   </ul>
 </div>

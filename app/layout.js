@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Script from "next/script";
 import GoogleAnalytics from "../components/GoogleAnalytics";
+import PageViewTracker from "../components/PageViewTracker";
 
 export const metadata = {
   title: {
@@ -193,6 +194,7 @@ sameAs: [
         />
       </head>
       <body className="bg-lightbg text-industrial">
+	  <PageViewTracker />
   <Navbar />
   <GoogleAnalytics measurementId="G-WYLMK5RJJH" />
   <main className="pt-20">
