@@ -472,6 +472,106 @@ export const blogs = [
   publishedAt: "2026-08-04",
   summary:
     "Learn about common polyurethane footwear manufacturing defects, their root causes, troubleshooting methods, and best practices for improving product quality."
+},
+
+{
+  slug: "how-to-select-polyester-polyols-for-rigid-pu-foam-insulation",
+  title: "How to Select Polyester Polyols for Rigid PU Foam Insulation",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Explore the key polyester polyol parameters used in rigid PU foam insulation, including hydroxyl value, functionality, viscosity, molecular structure, and their influence on foam formulation and performance."
+},
+
+{
+  slug: "polyester-polyols-for-pir-insulation-systems",
+  title: "Polyester Polyols for PIR Insulation Systems: Selection and Performance",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Understand how polyester polyol selection influences PIR insulation systems, including reactivity, functionality, thermal performance, dimensional stability, and formulation requirements."
+},
+
+{
+  slug: "hydroxyl-value-polyester-polyols-rigid-pu-foam",
+  title: "Effect of Hydroxyl Value of Polyester Polyols on Rigid PU Foam",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Examine how the hydroxyl value of polyester polyols influences rigid polyurethane foam formulation, crosslink density, processing behavior, mechanical properties, and insulation performance."
+},
+
+{
+  slug: "polyol-functionality-rigid-pu-foam-performance",
+  title: "Effect of Polyol Functionality on Rigid PU Foam Structure and Performance",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Explore the relationship between polyester polyol functionality, polyurethane network formation, cell structure, dimensional stability, mechanical strength, and rigid foam performance."
+},
+
+{
+  slug: "aromatic-polyester-polyols-rigid-pu-pir-foam",
+  title: "Aromatic Polyester Polyols for Rigid PU and PIR Foam Applications",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Learn how aromatic polyester polyols contribute to rigid PU and PIR foam formulations and how aromatic structure can influence rigidity, thermal stability, processing, and overall foam performance."
+},
+
+{
+  slug: "polyester-polyol-selection-sandwich-panel-insulation",
+  title: "Polyester Polyol Selection for PU/PIR Sandwich Panel Insulation",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Discover how polyester polyol selection affects PU/PIR sandwich panel insulation, including foam reactivity, density, adhesion, dimensional stability, thermal insulation, and processing requirements."
+},
+
+{
+  slug: "polyester-polyols-thermal-insulation-rigid-pu-foam",
+  title: "Polyester Polyols and Thermal Insulation Performance of Rigid PU Foam",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Examine how polyester polyol chemistry and formulation influence cell structure, density, closed-cell content, thermal conductivity, and insulation performance in rigid polyurethane foam."
+},
+
+{
+  slug: "polyester-polyols-flame-performance-rigid-pu-pir-foam",
+  title: "Polyester Polyols and Flame Performance in Rigid PU/PIR Foam Systems",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Explore the role of polyester polyol structure and formulation in the flame performance of rigid PU and PIR foam systems, including aromaticity, functionality, and overall formulation design."
+},
+
+{
+  slug: "pet-derived-polyester-polyols-rigid-pu-pir-insulation",
+  title: "PET-Derived Polyester Polyols for Rigid PU and PIR Insulation",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Explore the use of PET-derived polyester polyols in rigid PU and PIR insulation systems, including feedstock considerations, polyol properties, formulation challenges, and insulation applications."
+},
+
+{
+  slug: "designing-polyester-polyols-high-performance-rigid-foam",
+  title: "Designing Polyester Polyols for High-Performance Rigid Foam Insulation",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-11",
+  summary:
+    "Explore how polyester polyol composition, hydroxyl value, functionality, viscosity, molecular structure, and aromatic content can be engineered for high-performance rigid PU and PIR foam insulation."
 }
 
 ];
