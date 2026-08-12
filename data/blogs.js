@@ -572,6 +572,226 @@ export const blogs = [
   publishedAt: "2026-08-11",
   summary:
     "Explore how polyester polyol composition, hydroxyl value, functionality, viscosity, molecular structure, and aromatic content can be engineered for high-performance rigid PU and PIR foam insulation."
+},
+
+{
+  slug: "polyester-polyols-marine-applications",
+  title:
+    "Designing Polyurethane Insulation Systems for Marine Environments: Moisture, Fire and Thermal Performance",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore the role of polyurethane insulation and polyester polyols in marine environments, focusing on moisture resistance, fire performance, thermal insulation and long-term durability."
+},
+
+{
+  slug: "polyester-polyols-railway-applications",
+  title:
+    "Polyurethane Systems for Railway Applications: Fire Safety, Weight Reduction and Thermal Performance",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore polyurethane systems for railway applications, including fire performance, lightweight construction, thermal insulation, durability and the role of polyester polyols."
+},
+
+{
+  slug: "polyester-polyols-aerospace-applications",
+  title:
+    "Polyester Polyols in Aerospace Polyurethane Systems: Performance, Weight and Durability",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Examine the potential role of polyester polyols in aerospace polyurethane systems, with emphasis on lightweight materials, durability, thermal performance and demanding operating environments."
+},
+
+{
+  slug: "polyurethane-spacecraft-insulation",
+  title:
+    "Polyurethane Insulation for Spacecraft: Thermal Management, Outgassing and Material Stability",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore the material requirements of spacecraft insulation systems, including thermal management, dimensional stability, outgassing considerations and polyurethane chemistry."
+},
+
+{
+  slug: "polyester-polyols-bridge-coatings",
+  title:
+    "Polyester Polyols for Bridge and Infrastructure Protective Coatings",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Examine how polyester polyols can contribute to polyurethane protective coatings for bridges and infrastructure exposed to moisture, abrasion, chemicals and weathering."
+},
+
+{
+  slug: "polyurethane-tunnel-insulation",
+  title:
+    "Polyurethane Insulation Systems for Tunnels and Underground Infrastructure",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore polyurethane insulation and protective systems for tunnels and underground infrastructure, focusing on thermal insulation, moisture resistance, durability and fire performance."
+},
+
+{
+  slug: "polyester-polyols-oil-gas-insulation",
+  title:
+    "Polyester Polyols for Oil and Gas Insulation Systems",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore polyester polyol based polyurethane systems for oil and gas applications, including thermal insulation, chemical resistance, durability and demanding industrial environments."
+},
+
+{
+  slug: "polyester-polyols-pipeline-insulation",
+  title:
+    "Polyester Polyols for Pipeline Insulation: Thermal Performance and Long-Term Stability",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Learn how polyester polyols can be selected for polyurethane pipeline insulation systems requiring low thermal conductivity, dimensional stability, moisture resistance and long service life."
+},
+
+{
+  slug: "polyester-polyols-lng-insulation",
+  title:
+    "Polyester Polyols in LNG and Cryogenic Insulation Systems",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore the role of polyurethane chemistry and polyester polyols in LNG and cryogenic insulation systems, including thermal performance, dimensional stability and low-temperature requirements."
+},
+
+{
+  slug: "polyurethane-tank-vessel-insulation",
+  title:
+    "Polyurethane Insulation for Industrial Tanks, Vessels and Process Equipment",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore polyurethane insulation systems for industrial tanks, vessels and process equipment, focusing on thermal efficiency, moisture resistance, durability and process-temperature requirements."
+},
+
+{
+  slug: "polyester-polyols-district-cooling",
+  title:
+    "Polyester Polyols for District Cooling and Chilled-Water Insulation",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore the use of polyester polyols in polyurethane insulation systems for district cooling and chilled-water networks, with emphasis on thermal efficiency, moisture resistance and long-term stability."
+},
+
+{
+  slug: "polyester-polyols-cold-storage",
+  title:
+    "Polyester Polyols for Cold Storage and Refrigerated Warehouses",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Examine polyester polyol based polyurethane insulation systems for cold storage and refrigerated warehouses, focusing on thermal conductivity, dimensional stability, moisture resistance and energy efficiency."
+},
+
+{
+  slug: "polyester-polyols-refrigeration",
+  title:
+    "Polyester Polyols in Refrigerator and Freezer Insulation Systems",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore the role of polyester polyols in rigid polyurethane insulation for refrigerators and freezers, including low thermal conductivity, dimensional stability and long-term insulation performance."
+},
+
+{
+  slug: "polyester-polyols-sandwich-panels",
+  title:
+    "Polyester Polyols for High-Performance PU/PIR Sandwich Panels",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore polyester polyol selection for PU and PIR sandwich panels, including thermal insulation, dimensional stability, mechanical strength and fire-performance considerations."
+},
+
+{
+  slug: "polyester-polyols-roofing",
+  title:
+    "Polyester Polyols for PU/PIR Roofing Insulation Systems",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Examine the role of polyester polyols in polyurethane and PIR roofing insulation systems designed for thermal efficiency, dimensional stability, moisture resistance and long-term building performance."
+},
+
+{
+  slug: "polyester-polyols-building-envelope",
+  title:
+    "Polyester Polyols for High-Performance Building Envelope Insulation",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore how polyester polyols contribute to high-performance polyurethane insulation for building envelopes, with emphasis on thermal efficiency, dimensional stability, moisture resistance and energy savings."
+},
+
+{
+  slug: "polyester-polyols-spray-foam",
+  title:
+    "Polyester Polyols for High-Performance Spray Polyurethane Foam",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore polyester polyol selection for spray polyurethane foam systems, including reaction characteristics, cell structure, thermal insulation, dimensional stability and application performance."
+},
+
+{
+  slug: "polyester-polyols-automotive",
+  title:
+    "Polyester Polyols in Automotive Polyurethane Systems: Coatings, Adhesives and Components",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore the role of polyester polyols in automotive polyurethane coatings, adhesives and components, focusing on durability, chemical resistance, adhesion, flexibility and performance requirements."
+},
+
+{
+  slug: "polyester-polyols-electrical-insulation",
+  title:
+    "Polyester Polyols for Electrical and Electronic Polyurethane Insulation Systems",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Examine polyester polyols for polyurethane electrical and electronic insulation systems, including dielectric performance, thermal stability, moisture resistance and long-term reliability."
+},
+
+{
+  slug: "polyester-polyols-wind-energy",
+  title:
+    "Polyester Polyols in Wind Turbine Polyurethane Systems: Coatings, Adhesives and Structural Protection",
+  category: "technical",
+  author: "Anonymous",
+  publishedAt: "2026-08-12",
+  summary:
+    "Explore potential applications of polyester polyols in polyurethane systems used in wind energy, including protective coatings, adhesives, composite components and structural protection."
 }
 
 ];

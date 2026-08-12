@@ -5,10 +5,11 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-
 import AnimatedTagline from "@/components/AnimatedTagline";
 import AnimatedSubheading from "@/components/AnimatedSubheading";
 import AnimatedBrand from "@/components/AnimatedBrand";
+import { track } from "@/utils/tracker";
+import { NAVIGATION_EVENTS, LEAD_EVENTS } from "@/analytics/events";
 
 import {
   productMenu,
@@ -22,6 +23,7 @@ export default function Navbar() {
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
 
   useEffect(() => {
 
@@ -132,6 +134,15 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.path}
+				  onClick={() =>
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: link.name,
+        path: link.path,
+        source: "navbar_desktop",
+      },
+    })
+  }
                   className={`relative group transition-all duration-300 ${
                     isActive
                       ? "text-[#5ffbf1]"
@@ -164,6 +175,15 @@ export default function Navbar() {
                 {/* Parent Button */}
                 <Link
   href={link.path}
+  onClick={() =>
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: link.name,
+        path: link.path,
+        source: "navbar_dropdown_parent",
+      },
+    })
+  }
                   className={`flex items-center gap-1 transition-all duration-300 ${
                     pathname.startsWith(
                       `/${link.name.toLowerCase()}`
@@ -209,6 +229,15 @@ export default function Navbar() {
 
                           <Link
                             href={item.path}
+							onClick={() =>
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: item.name,
+        path: item.path,
+        source: link.name.toLowerCase(),
+      },
+    })
+  }
                             className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-[#2b3748] hover:text-[#42b3a5] transition text-sm font-medium text-[#d8f3f1]"
                           >
 
@@ -273,6 +302,16 @@ export default function Navbar() {
                                 <Link
                                   key={subItem.name}
                                   href={subItem.path}
+								  onClick={() =>
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: subItem.name,
+        path: subItem.path,
+        parent: item.name,
+        source: link.name.toLowerCase(),
+      },
+    })
+  }
                                   className="block px-4 py-2 rounded-lg hover:bg-[#2b3748] hover:text-[#b6ff7a] transition text-xs text-[#b8d7d4]"
                                 >
 
@@ -297,6 +336,14 @@ export default function Navbar() {
           {/* Contact */}
           <Link
             href="/contact"
+			onClick={() =>
+    track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "contact",
+        source: "navbar_desktop",
+      },
+    })
+  }
             className="ml-4 relative inline-flex items-center gap-2 px-7 py-3 rounded-full text-base font-semibold text-white overflow-hidden bg-gradient-to-r from-[#42b3a5] to-green-400 animate-contactDance hover:scale-105 transition duration-300 shadow-lg"
           >
 
@@ -326,7 +373,204 @@ export default function Navbar() {
             <Menu size={30} />
           )}
         </button>
+{/* MOBILE MENU OVERLAY (PRODUCTION FIX) */}
+{menuOpen && (
+  <div className="md:hidden fixed inset-0 z-50">
 
+    {/* BACKDROP */}
+    <div
+      className="absolute inset-0 bg-black/50"
+      onClick={() => {
+        setMenuOpen(false);
+        setOpenMobileDropdown(null);
+      }}
+    />
+
+    {/* DRAWER */}
+<div className="absolute right-0 top-0 h-full w-80 bg-[#1f2937] shadow-2xl flex flex-col">
+
+  {/* CLOSE BUTTON ONLY (NO MENU TEXT) */}
+  <div className="sticky top-0 z-10 flex justify-end px-4 py-2 bg-[#1f2937]">
+    <button
+      onClick={() => {
+        setMenuOpen(false);
+        setOpenMobileDropdown(null);
+      }}
+      className="text-white"
+    >
+      <X size={26} />
+    </button>
+  </div>
+
+  {/* SCROLLABLE CONTENT */}
+  <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-2 space-y-1">
+
+    {navLinks.map((link) => (
+      <div key={link.name} className="flex flex-col">
+
+        {/* SIMPLE LINK */}
+        {!link.dropdown && (
+          <Link
+            href={link.path}
+			
+            onClick={() => {
+				track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: link.name,
+        path: link.path,
+        source: "navbar_mobile",
+      },
+    });
+              setMenuOpen(false);
+              setOpenMobileDropdown(null);
+            }}
+            className="pl-4 pr-3 py-2.5 rounded-xl text-[#d8f3f1] font-medium hover:bg-[#2b3748] hover:text-[#5ffbf1] transition"
+          >
+            {link.name}
+          </Link>
+        )}
+
+        {/* DROPDOWN */}
+        {link.dropdown && (
+          <div className="border-l border-white/10 pl-2">
+
+            {/* PARENT LINK + TOGGLE */}
+<div className="flex items-center">
+
+  <Link
+    href={link.path}
+    onClick={() => {
+      track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+        metadata: {
+          target: link.name,
+          path: link.path,
+          source: "navbar_mobile_parent",
+        },
+      });
+
+      setMenuOpen(false);
+      setOpenMobileDropdown(null);
+    }}
+    className="flex-1 pl-4 pr-3 py-2.5 rounded-lg text-[#d8f3f1] font-medium hover:bg-[#2b3748] transition"
+  >
+    {link.name}
+  </Link>
+
+  <button
+    onClick={() =>
+      setOpenMobileDropdown(
+        openMobileDropdown === link.name ? null : link.name
+      )
+    }
+    className="px-4 py-2.5 text-[#d8f3f1]"
+  >
+    <span
+      className={`block transition-transform duration-300 ${
+        openMobileDropdown === link.name ? "rotate-180" : ""
+      }`}
+    >
+      ▼
+    </span>
+  </button>
+
+</div>
+
+            {/* CONTENT */}
+            {openMobileDropdown === link.name && (
+              <div className="ml-2 mt-2 space-y-2">
+
+                {link.dropdown.map((item) => (
+                  <div key={item.name} className="flex flex-col">
+
+                    {item.path ? (
+  <Link
+    href={item.path}
+    onClick={() => {
+      track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+        metadata: {
+          target: item.name,
+          path: item.path,
+          parent: link.name,
+          source: "navbar_mobile",
+        },
+      });
+
+      setMenuOpen(false);
+      setOpenMobileDropdown(null);
+    }}
+    className="px-3 py-2 rounded-lg text-sm font-medium text-[#d8f3f1] hover:bg-[#2b3748] hover:text-[#5ffbf1] transition"
+  >
+    {item.name}
+  </Link>
+) : (
+                      <div className="px-3 py-2 text-sm font-medium text-[#d8f3f1]">
+                        {item.name}
+                      </div>
+                    )}
+
+                    {item.subDropdown && (
+                      <div className="ml-4 mt-1 border-l border-white/10 pl-3 space-y-1">
+
+                        {item.subDropdown.map((sub) => (
+                          <Link
+  key={sub.name}
+  href={sub.path}
+  onClick={() => {
+    track(NAVIGATION_EVENTS.NAVIGATION_CLICK, {
+      metadata: {
+        target: sub.name,
+        path: sub.path,
+        parent: item.name,
+        category: link.name,
+        source: "navbar_mobile",
+      },
+    });
+
+    setMenuOpen(false);
+    setOpenMobileDropdown(null);
+  }}
+                            className="block px-3 py-2 rounded-md text-sm text-[#b8d7d4] hover:text-[#b6ff7a] hover:bg-[#2b3748] transition"
+                          >
+                            • {sub.name}
+                          </Link>
+                        ))}
+
+                      </div>
+                    )}
+
+                  </div>
+                ))}
+
+              </div>
+            )}
+          </div>
+        )}
+
+      </div>
+    ))}
+
+    {/* CONTACT */}
+    <Link
+      href="/contact"
+      onClick={() => {
+		  track(LEAD_EVENTS.CTA_CLICK, {
+      metadata: {
+        target: "contact",
+        source: "navbar_mobile",
+      },
+    });
+        setMenuOpen(false);
+        setOpenMobileDropdown(null);
+      }}
+      className="block mt-6 text-center px-6 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[#42b3a5] to-green-400 shadow-lg active:scale-95 transition"
+    >
+      Contact →
+    </Link>
+
+  </div>
+</div>
+  </div>
+)}
       </div>
     </header>
   );
