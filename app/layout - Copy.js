@@ -4,7 +4,6 @@ import Footer from "../components/Footer";
 import Script from "next/script";
 import GoogleAnalytics from "../components/GoogleAnalytics";
 import PageViewTracker from "../components/PageViewTracker";
-import AIEnquiryChat from "../components/AIEnquiryChat";
 
 export const metadata = {
   title: {
@@ -202,7 +201,6 @@ sameAs: [
     {children}
   </main>
   <Footer />
-  <AIEnquiryChat />
 </body>
     </html>
   );
