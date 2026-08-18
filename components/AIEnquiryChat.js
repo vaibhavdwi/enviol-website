@@ -50,6 +50,28 @@ export default function AIEnquiryChat() {
   // Structured enquiry information collected by ENY
   const [enquiryData, setEnquiryData] =
     useState({});
+	// ==========================================================================
+// 2-MINUTE ENQUIRY TIMER
+// ==========================================================================
+
+// Timer starts when the chat is opened.
+// After 2 minutes, the enquiry can be submitted if basic details exist.
+// ==========================================================================
+// 2-MINUTE ENQUIRY TIMER
+// ==========================================================================
+
+// Timer starts once when the chat session is first opened.
+// After 2 minutes, the submission button becomes eligible.
+// The customer can continue chatting after the button appears.
+
+const [chatTimerExpired, setChatTimerExpired] =
+  useState(false);
+
+const [timerStarted, setTimerStarted] =
+  useState(false);
+
+const chatTimerRef =
+  useRef(null);
 
 
   const messagesEndRef = useRef(null);
@@ -66,6 +88,26 @@ export default function AIEnquiryChat() {
     setChatId(generateChatId());
 
   }, []);
+  
+  // ==========================================================================
+// CLEAN UP CHAT TIMER
+// ==========================================================================
+
+useEffect(() => {
+
+  return () => {
+
+    if (chatTimerRef.current) {
+
+      clearTimeout(
+        chatTimerRef.current
+      );
+
+    }
+
+  };
+
+}, []);
 
 
   // ==========================================================================
@@ -296,10 +338,13 @@ export default function AIEnquiryChat() {
   // ==========================================================================
 
   const canSubmit =
-    readyForSubmission &&
-    hasBasicEnquiryDetails() &&
-    !submitted &&
-    !isSubmitting;
+  (
+    readyForSubmission ||
+    chatTimerExpired
+  ) &&
+  hasBasicEnquiryDetails() &&
+  !submitted &&
+  !isSubmitting;
 
 
   // ==========================================================================
@@ -308,7 +353,46 @@ export default function AIEnquiryChat() {
 
   const openChat = () => {
 
-    setOpen(true);
+  setOpen(true);
+
+  // ================================================================
+  // START 2-MINUTE CHAT TIMER ONLY ONCE
+  // ================================================================
+
+  if (!timerStarted) {
+
+    setTimerStarted(true);
+
+    chatTimerRef.current = setTimeout(() => {
+
+  setChatTimerExpired(true);
+
+  // ================================================================
+  // ENY AUTOMATICALLY PROMPTS CUSTOMER AFTER 2 MINUTES
+  // ================================================================
+
+  setMessages((previous) => [
+
+    ...previous,
+
+    {
+      id: Date.now(),
+
+      sender: "ai",
+
+      text:
+  "Before submitting your enquiry, may I quickly check that you have shared your company name, contact person, email address, phone number, and your product or application requirement?\n\n" +
+  "If you have already provided these details, you can click \"Confirm & Send Enquiry\" and I will send everything to the Enviol team.\n\n" +
+  "If anything is missing, please provide it here first. You can also continue chatting with me if you would like to add more details to your requirement.",
+    },
+
+  ]);
+
+  playReplySound();
+
+}, 2 * 60 * 1000);
+
+  }
 
 
     if (messages.length === 0) {
