@@ -8,37 +8,38 @@ import nodemailer from "nodemailer";
 |
 | ENY = Enviol TechSupport AI
 |
-| REQUIRED:
-| 1. Email
-| 2. Requirement / description
+| Responsibilities:
+| 1. Receive completed AI chatbot enquiry
+| 2. Generate unique 5-digit Chat ID
+| 3. Validate customer information
+| 4. Save structured enquiry into existing `contacts` table
+| 5. Send enquiry email to info@enviol.com
+| 6. Attach complete conversation transcript
+| 7. Save communication record into `contact_replies`
+| 8. Return success/failure to chatbot
 |
-| OPTIONAL:
-| - Company
-| - Contact person
-| - Phone
-| - Category
-| - Product
-| - Application
-| - Technical grade
-|
-| Missing optional values are stored as NULL.
+| IMPORTANT:
+| - Chat conversation is NOT stored in PostgreSQL.
+| - Only final enquiry details are stored in `contacts`.
+| - `contact_replies` stores only the enquiry/reply record,
+|   NOT the full transcript.
 |
 |--------------------------------------------------------------------------
 */
 
 
-// ============================================================================
+// ========================================================================
 // GENERATE RANDOM 5-DIGIT CHAT ID
-// ============================================================================
+// ========================================================================
 
 function generateChatId() {
   return Math.floor(10000 + Math.random() * 90000).toString();
 }
 
 
-// ============================================================================
+// ========================================================================
 // BASIC EMAIL VALIDATION
-// ============================================================================
+// ========================================================================
 
 function isValidEmail(email) {
   if (!email) return false;
@@ -49,9 +50,10 @@ function isValidEmail(email) {
 }
 
 
-// ============================================================================
+// ========================================================================
 // ESCAPE HTML
-// ============================================================================
+// Prevent customer-entered content from breaking email HTML
+// ========================================================================
 
 function escapeHtml(value) {
   if (value === null || value === undefined) {
@@ -67,30 +69,9 @@ function escapeHtml(value) {
 }
 
 
-// ============================================================================
-// NORMALIZE OPTIONAL VALUE
-//
-// Empty strings become NULL.
-// ============================================================================
-
-function optionalValue(value) {
-  if (
-    value === null ||
-    value === undefined
-  ) {
-    return null;
-  }
-
-  const normalized =
-    String(value).trim();
-
-  return normalized || null;
-}
-
-
-// ============================================================================
+// ========================================================================
 // NORMALIZE TRANSCRIPT
-// ============================================================================
+// ========================================================================
 
 function formatTranscript(transcript) {
 
@@ -98,10 +79,9 @@ function formatTranscript(transcript) {
     return "No transcript was provided.";
   }
 
-
-  // --------------------------------------------------------------------------
-  // Array
-  // --------------------------------------------------------------------------
+  // ------------------------------------------------------------
+  // If transcript is already an array
+  // ------------------------------------------------------------
 
   if (Array.isArray(transcript)) {
 
@@ -109,14 +89,14 @@ function formatTranscript(transcript) {
       .map((item) => {
 
         const role =
-          item?.role ||
-          item?.sender ||
+          item.role ||
+          item.sender ||
           "unknown";
 
         const content =
-          item?.content ||
-          item?.message ||
-          item?.text ||
+          item.content ||
+          item.message ||
+          item.text ||
           "";
 
         const label =
@@ -133,13 +113,11 @@ function formatTranscript(transcript) {
   }
 
 
-  // --------------------------------------------------------------------------
-  // Object
-  // --------------------------------------------------------------------------
+  // ------------------------------------------------------------
+  // If transcript is an object
+  // ------------------------------------------------------------
 
-  if (
-    typeof transcript === "object"
-  ) {
+  if (typeof transcript === "object") {
 
     return JSON.stringify(
       transcript,
@@ -149,35 +127,31 @@ function formatTranscript(transcript) {
   }
 
 
-  // --------------------------------------------------------------------------
-  // String
-  // --------------------------------------------------------------------------
+  // ------------------------------------------------------------
+  // If transcript is already text
+  // ------------------------------------------------------------
 
   return String(transcript);
 }
 
 
-// ============================================================================
-// CREATE SMTP TRANSPORTER
-// ============================================================================
+// ========================================================================
+// CREATE EMAIL TRANSPORTER
+// ========================================================================
 
 function createTransporter() {
 
   return nodemailer.createTransport({
 
-    host:
-      process.env.SMTP_HOST,
+    host: process.env.SMTP_HOST,
 
-    port:
-      parseInt(
-        process.env.SMTP_PORT || "587",
-        10
-      ),
+    port: parseInt(
+      process.env.SMTP_PORT || "587",
+      10
+    ),
 
     secure:
-      String(
-        process.env.SMTP_PORT
-      ) === "465",
+      String(process.env.SMTP_PORT) === "465",
 
     auth: {
 
@@ -191,8 +165,8 @@ function createTransporter() {
 
     tls: {
 
-      rejectUnauthorized:
-        false,
+      // Same configuration as your existing contact API
+      rejectUnauthorized: false,
 
     },
 
@@ -200,9 +174,9 @@ function createTransporter() {
 }
 
 
-// ============================================================================
+// ========================================================================
 // POST
-// ============================================================================
+// ========================================================================
 
 export async function POST(req) {
 
@@ -210,18 +184,13 @@ export async function POST(req) {
 
   try {
 
-    // ========================================================================
+    // ====================================================================
     // READ REQUEST
-    // ========================================================================
+    // ====================================================================
 
-    const body =
-      await req.json();
+    const body = await req.json();
 
-
-    if (
-      !body ||
-      typeof body !== "object"
-    ) {
+    if (!body || typeof body !== "object") {
 
       return Response.json(
         {
@@ -236,157 +205,100 @@ export async function POST(req) {
     }
 
 
-    // ========================================================================
+    // ====================================================================
     // CUSTOMER INFORMATION
-    //
-    // ONLY EMAIL IS REQUIRED.
-    //
-    // Every other field becomes NULL if not provided.
-    // ========================================================================
+    // ====================================================================
 
     const company =
-      optionalValue(
-        body.company
-      );
-
+      String(body.company || "").trim();
 
     const person =
-      optionalValue(
-        body.person
-      );
-
+      String(body.person || "").trim();
 
     const email =
-      String(
-        body.email || ""
-      )
+      String(body.email || "")
         .trim()
         .toLowerCase();
 
-
     const phone =
-      optionalValue(
-        body.phone
-      );
-
+      String(body.phone || "").trim();
 
     const category =
-      optionalValue(
-        body.category
-      );
+      String(
+        body.category ||
+        "General Enquiry"
+      ).trim();
+
+    const message =
+      String(body.message || "").trim();
 
 
-    // ========================================================================
+    // ====================================================================
     // AI / PRODUCT INFORMATION
-    // ========================================================================
+    // ====================================================================
 
     const product =
-      optionalValue(
-        body.product
-      );
-
+      String(body.product || "").trim();
 
     const application =
-      optionalValue(
-        body.application
-      );
-
+      String(body.application || "").trim();
 
     const technicalGrade =
-      optionalValue(
+      String(
         body.technicalGrade ||
-        body.grade
+        body.grade ||
+        ""
+      ).trim();
+
+
+    // ====================================================================
+    // TRANSCRIPT
+    // ====================================================================
+
+    const transcript =
+      formatTranscript(body.transcript);
+
+
+    // ====================================================================
+    // VALIDATION
+    // ====================================================================
+
+    if (!company) {
+
+      return Response.json(
+        {
+          success: false,
+          error: "Company name is required.",
+        },
+        {
+          status: 400,
+        }
       );
-
-
-    // ========================================================================
-    // REQUIREMENT / DESCRIPTION
-    //
-    // `message` is the primary mandatory requirement field.
-    //
-    // To make the backend more robust, if Gemini has placed the requirement
-    // into product/application/technicalGrade but message is empty, we build
-    // a meaningful requirement from those fields.
-    // ========================================================================
-
-    let message =
-      optionalValue(
-        body.message
-      );
-
-
-    if (!message) {
-
-      const requirementParts = [];
-
-
-      if (product) {
-
-        requirementParts.push(
-          `Product / Requirement: ${product}`
-        );
-
-      }
-
-
-      if (application) {
-
-        requirementParts.push(
-          `Application: ${application}`
-        );
-
-      }
-
-
-      if (technicalGrade) {
-
-        requirementParts.push(
-          `Technical Grade: ${technicalGrade}`
-        );
-
-      }
-
-
-      if (
-        requirementParts.length > 0
-      ) {
-
-        message =
-          requirementParts.join(
-            "\n"
-          );
-
-      }
 
     }
 
 
-    // ========================================================================
-    // TRANSCRIPT
-    // ========================================================================
+    if (!person) {
 
-    const transcript =
-      formatTranscript(
-        body.transcript
+      return Response.json(
+        {
+          success: false,
+          error: "Contact person is required.",
+        },
+        {
+          status: 400,
+        }
       );
 
+    }
 
-    // ========================================================================
-    // VALIDATION
-    //
-    // ONLY TWO THINGS ARE REQUIRED:
-    //
-    // 1. Email
-    // 2. Requirement / description
-    // ========================================================================
 
     if (!email) {
 
       return Response.json(
         {
           success: false,
-          error:
-            "Email address is required.",
+          error: "Email address is required.",
         },
         {
           status: 400,
@@ -401,8 +313,7 @@ export async function POST(req) {
       return Response.json(
         {
           success: false,
-          error:
-            "Invalid email address.",
+          error: "Invalid email address.",
         },
         {
           status: 400,
@@ -412,25 +323,9 @@ export async function POST(req) {
     }
 
 
-    if (!message) {
-
-      return Response.json(
-        {
-          success: false,
-          error:
-            "A description of your requirement is required.",
-        },
-        {
-          status: 400,
-        }
-      );
-
-    }
-
-
-    // ========================================================================
+    // ====================================================================
     // BLOCK DISPOSABLE EMAILS
-    // ========================================================================
+    // ====================================================================
 
     const blockedDomains = [
 
@@ -445,16 +340,12 @@ export async function POST(req) {
 
 
     const emailDomain =
-      email
-        .split("@")[1]
-        ?.toLowerCase();
+      email.split("@")[1]?.toLowerCase();
 
 
     if (
       emailDomain &&
-      blockedDomains.includes(
-        emailDomain
-      )
+      blockedDomains.includes(emailDomain)
     ) {
 
       return Response.json(
@@ -471,24 +362,22 @@ export async function POST(req) {
     }
 
 
-    // ========================================================================
-    // GENERATE / PRESERVE CHAT ID
-    // ========================================================================
+    // ====================================================================
+    // GENERATE 5-DIGIT CHAT ID
+    // ====================================================================
 
     const chatId =
-      String(
-        body.chatId || ""
-      ).trim() ||
-      generateChatId();
+  String(body.chatId || "").trim() ||
+  generateChatId();
 
 
-    // ========================================================================
-    // FINAL DATABASE MESSAGE
+    // ====================================================================
+    // CREATE FINAL MESSAGE
     //
-    // This is the message stored in contacts.message.
+    // This is what gets stored in contacts.message.
     //
-    // The actual requirement is always present because message is mandatory.
-    // ========================================================================
+    // The complete transcript is NOT stored here.
+    // ====================================================================
 
     const finalMessage = `AI Enquiry - Chat ID: ${chatId}
 
@@ -502,36 +391,24 @@ Technical Grade:
 ${technicalGrade || "Not specified"}
 
 Customer Requirement:
-${message}
+${message || "Not specified"}
 
 This enquiry was collected by ENY - Enviol TechSupport AI.
 
 Full conversation transcript has been sent separately by email.`;
 
 
-
-    // ========================================================================
+    // ====================================================================
     // DATABASE CONNECTION
-    // ========================================================================
+    // ====================================================================
 
     client =
       await pool.connect();
 
 
-    // ========================================================================
-    // INSERT INTO CONTACTS
-    //
-    // IMPORTANT:
-    //
-    // Optional fields are passed as NULL.
-    //
-    // company  -> NULL if unavailable
-    // person   -> NULL if unavailable
-    // phone    -> NULL if unavailable
-    // category -> NULL if unavailable
-    //
-    // email and message are guaranteed to be present.
-    // ========================================================================
+    // ====================================================================
+    // INSERT INTO EXISTING CONTACTS TABLE
+    // ====================================================================
 
     const insertResult =
       await client.query(
@@ -566,7 +443,7 @@ Full conversation transcript has been sent separately by email.`;
 
           email,
 
-          phone,
+          phone || null,
 
           category,
 
@@ -590,21 +467,21 @@ Full conversation transcript has been sent separately by email.`;
     }
 
 
-    // ========================================================================
-    // CREATE COMPLETE TRANSCRIPT
-    // ========================================================================
+    // ====================================================================
+    // CREATE TRANSCRIPT FILE
+    // ====================================================================
 
     const transcriptHeader = `ENVIOL POLYTECH SOLUTIONS
 AI ENQUIRY TRANSCRIPT
 
 Chat ID: ${chatId}
 
-Company: ${company || "Not provided"}
-Contact Person: ${person || "Not provided"}
+Company: ${company}
+Contact Person: ${person}
 Email: ${email}
 Phone: ${phone || "Not provided"}
 
-Category: ${category || "Not specified"}
+Category: ${category}
 
 Product / Requirement:
 ${product || "Not specified"}
@@ -614,9 +491,6 @@ ${application || "Not specified"}
 
 Technical Grade:
 ${technicalGrade || "Not specified"}
-
-Customer Requirement:
-${message}
 
 ============================================================
 CONVERSATION
@@ -647,17 +521,17 @@ through the Enviol website.
       transcriptFooter;
 
 
-    // ========================================================================
+    // ====================================================================
     // CREATE SMTP TRANSPORTER
-    // ========================================================================
+    // ====================================================================
 
     const transporter =
       createTransporter();
 
 
-    // ========================================================================
+    // ====================================================================
     // EMAIL SUBJECT
-    // ========================================================================
+    // ====================================================================
 
     const productSubject =
       product ||
@@ -666,18 +540,13 @@ through the Enviol website.
       "Product Requirement";
 
 
-    const companySubject =
-      company ||
-      "Website Customer";
-
-
     const subject =
-      `AI Enquiry #${chatId} - ${companySubject} - ${productSubject}`;
+      `AI Enquiry #${chatId} - ${company} - ${productSubject}`;
 
 
-    // ========================================================================
+    // ====================================================================
     // EMAIL BODY
-    // ========================================================================
+    // ====================================================================
 
     const emailHtml = `
 
@@ -714,12 +583,12 @@ through the Enviol website.
 
           <tr>
             <td><strong>Company:</strong></td>
-            <td>${escapeHtml(company || "Not provided")}</td>
+            <td>${escapeHtml(company)}</td>
           </tr>
 
           <tr>
             <td><strong>Contact Person:</strong></td>
-            <td>${escapeHtml(person || "Not provided")}</td>
+            <td>${escapeHtml(person)}</td>
           </tr>
 
           <tr>
@@ -734,7 +603,7 @@ through the Enviol website.
 
           <tr>
             <td><strong>Enquiry Type:</strong></td>
-            <td>${escapeHtml(category || "Not specified")}</td>
+            <td>${escapeHtml(category)}</td>
           </tr>
 
           <tr>
@@ -750,8 +619,7 @@ through the Enviol website.
           <tr>
             <td><strong>Technical Grade:</strong></td>
             <td>${escapeHtml(
-              technicalGrade ||
-              "Not specified"
+              technicalGrade || "Not specified"
             )}</td>
           </tr>
 
@@ -769,11 +637,9 @@ through the Enviol website.
         ">
 
           ${escapeHtml(
-            message
-          ).replace(
-            /\n/g,
-            "<br />"
-          )}
+            message ||
+            "No additional requirement provided."
+          ).replace(/\n/g, "<br />")}
 
         </div>
 
@@ -799,15 +665,16 @@ through the Enviol website.
     `;
 
 
-    // ========================================================================
+    // ====================================================================
     // SEND EMAIL
     //
-    // Email failure does NOT invalidate the database enquiry.
-    // ========================================================================
+    // IMPORTANT:
+    // We deliberately catch email failure separately.
+    // This allows us to still record the enquiry in
+    // contact_replies with email_status = "failed".
+    // ====================================================================
 
-    let emailStatus =
-      "sent";
-
+    let emailStatus = "sent";
 
     try {
 
@@ -848,9 +715,7 @@ through the Enviol website.
 
     } catch (emailError) {
 
-      emailStatus =
-        "failed";
-
+      emailStatus = "failed";
 
       console.error(
         "[AI ENQUIRY EMAIL ERROR]",
@@ -860,20 +725,25 @@ through the Enviol website.
     }
 
 
-    // ========================================================================
-    // CONTACT REPLIES RECORD
-    // ========================================================================
+    // ====================================================================
+    // INSERT INTO contact_replies
+    //
+    // IMPORTANT:
+    // The complete transcript is NOT stored here.
+    //
+    // Only the enquiry summary/details are stored.
+    // The transcript exists only as the email attachment.
+    // ====================================================================
 
     const replyMessage = `AI ENQUIRY
 
-Chat ID:
-${chatId}
+Chat ID: ${chatId}
 
 Company:
-${company || "Not provided"}
+${company}
 
 Contact Person:
-${person || "Not provided"}
+${person}
 
 Email:
 ${email}
@@ -882,7 +752,7 @@ Phone:
 ${phone || "Not provided"}
 
 Enquiry Type:
-${category || "Not specified"}
+${category}
 
 Product / Requirement:
 ${product || "Not specified"}
@@ -894,7 +764,7 @@ Technical Grade:
 ${technicalGrade || "Not specified"}
 
 AI Enquiry Summary:
-${message}
+${message || "No additional requirement provided."}
 
 Full conversation transcript has been attached to the email.
 
@@ -948,25 +818,27 @@ ENY - Enviol TechSupport AI`;
     );
 
 
-    // ========================================================================
+    // ====================================================================
     // RELEASE DB CONNECTION
-    // ========================================================================
+    // ====================================================================
 
     client.release();
 
     client = null;
 
 
-    // ========================================================================
-    // SUCCESS RESPONSE
-    // ========================================================================
+    // ====================================================================
+    // SUCCESS
+    //
+    // Even if email failed, the enquiry was successfully captured.
+    // Therefore we return success=true but expose emailStatus.
+    // ====================================================================
 
     return Response.json(
 
       {
 
-        success:
-          true,
+        success: true,
 
         message:
           emailStatus === "sent"
@@ -992,9 +864,9 @@ ENY - Enviol TechSupport AI`;
 
   } catch (error) {
 
-    // ========================================================================
-    // RELEASE CONNECTION
-    // ========================================================================
+    // ====================================================================
+    // RELEASE CONNECTION IF SOMETHING FAILED
+    // ====================================================================
 
     if (client) {
 
@@ -1014,9 +886,9 @@ ENY - Enviol TechSupport AI`;
     }
 
 
-    // ========================================================================
+    // ====================================================================
     // SERVER LOG
-    // ========================================================================
+    // ====================================================================
 
     console.error(
       "[AI ENQUIRY API ERROR]",
@@ -1024,16 +896,15 @@ ENY - Enviol TechSupport AI`;
     );
 
 
-    // ========================================================================
-    // CLIENT RESPONSE
-    // ========================================================================
+    // ====================================================================
+    // SAFE CLIENT RESPONSE
+    // ====================================================================
 
     return Response.json(
 
       {
 
-        success:
-          false,
+        success: false,
 
         error:
           "We could not submit your enquiry right now. Please try again or contact info@enviol.com.",
