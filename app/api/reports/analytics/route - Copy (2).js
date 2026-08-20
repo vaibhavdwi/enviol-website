@@ -14,18 +14,25 @@ export async function GET(req) {
       );
     }
 
-    // KPI data
-    const kpiResult = await pool.query(
+    // ----------------------------------
+    // PAGE VIEWS (NEW VIEW)
+    // ----------------------------------
+    const pagesResult = await pool.query(
       `
-      SELECT *
-      FROM analytics_daily
+      SELECT
+        page,
+        SUM(total_views) AS views
+      FROM analytics_page_views_daily
       WHERE date BETWEEN $1 AND $2
-      ORDER BY date
+      GROUP BY page
+      ORDER BY views DESC
       `,
       [from, to]
     );
 
-    // GEO country
+    // ----------------------------------
+    // GEO (KEEP YOUR EXISTING VIEW FOR NOW)
+    // ----------------------------------
     const geoCountry = await pool.query(
       `
       SELECT country, SUM(visitors) AS visitors
@@ -37,19 +44,40 @@ export async function GET(req) {
       [from, to]
     );
 
-    // Pages
-    const pages = await pool.query(
+	const geoRegion = await pool.query(
+`
+SELECT region, SUM(visitors) AS visitors
+FROM analytics_geo_region
+WHERE date BETWEEN $1 AND $2
+GROUP BY region
+ORDER BY visitors DESC
+`,
+[from, to]
+);
+
+const geoCity = await pool.query(
+`
+SELECT city, SUM(visitors) AS visitors
+FROM analytics_geo_city
+WHERE date BETWEEN $1 AND $2
+GROUP BY city
+ORDER BY visitors DESC
+`,
+[from, to]
+);
+
+    // ----------------------------------
+    // KPIs (KEEP UNTIL YOU MIGRATE LATER)
+    // ----------------------------------
+    const kpiResult = await pool.query(
       `
-      SELECT page, SUM(views) AS views
-      FROM analytics_pages
+      SELECT *
+      FROM analytics_daily
       WHERE date BETWEEN $1 AND $2
-      GROUP BY page
-      ORDER BY views DESC
       `,
       [from, to]
     );
 
-    // Aggregate KPIs (SUM across days)
     const summary = kpiResult.rows.reduce(
       (acc, row) => {
         acc.total_events += Number(row.total_events || 0);
@@ -72,12 +100,15 @@ export async function GET(req) {
 
     return Response.json({
       summary,
-      daily: kpiResult.rows,
+      topPages: pagesResult.rows,
       topCountries: geoCountry.rows,
-      topPages: pages.rows,
+	  topRegions: geoRegion.rows,
+	  topCities: geoCity.rows,
+      daily: kpiResult.rows,
     });
   } catch (err) {
-    console.error(err);
+    console.error("[ANALYTICS ERROR]", err);
+
     return Response.json(
       { error: "Analytics fetch failed" },
       { status: 500 }

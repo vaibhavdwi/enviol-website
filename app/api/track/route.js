@@ -1,120 +1,192 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
 
-
 export async function POST(req) {
-try {
-const event = await req.json();
+  try {
+    const event = await req.json();
 
-const ipRaw =
-  req.headers.get("x-forwarded-for") ||
-  req.headers.get("x-real-ip") ||
-  "";
+    // ============================================================
+    // BASIC VALIDATION
+    // ============================================================
 
-const ip = ipRaw.split(",")[0].trim();
-const country =
-  req.headers.get("x-vercel-ip-country") ||
-  "Unknown";
+    if (!event || !event.event) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid event payload",
+        },
+        { status: 400 }
+      );
+    }
 
-const region =
-  req.headers.get("x-vercel-ip-country-region") ||
-  "Unknown";
+    // ============================================================
+    // SERVER-SIDE REQUEST INFORMATION
+    // ============================================================
 
-const city =
-  req.headers.get("x-vercel-ip-city") ||
-  "Unknown";
+    const ipRaw =
+      req.headers.get("x-forwarded-for") ||
+      req.headers.get("x-real-ip") ||
+      "";
 
-const geo = null;
+    const ip = ipRaw.split(",")[0].trim();
 
-const enrichedEvent = {
-  ...event,
+    const country =
+      req.headers.get("x-vercel-ip-country") ||
+      "Unknown";
 
-  server_timestamp: new Date().toISOString(),
+    const region =
+      req.headers.get("x-vercel-ip-country-region") ||
+      "Unknown";
 
-  user_agent: req.headers.get("user-agent") || null,
+    const city =
+      req.headers.get("x-vercel-ip-city") ||
+      "Unknown";
 
-  ip,
+    const userAgent =
+      req.headers.get("user-agent") || null;
 
-  country,
-  region,
-  city
-};
-// -----------------------------
-// BASIC VALIDATION
-// -----------------------------
-if (!event || !event.event) {
-  return NextResponse.json(
-    {
-      success: false,
-      error: "Invalid event payload"
-    },
-    { status: 400 }
-  );
-}
+    // ============================================================
+    // SERVER TIMESTAMP
+    // ============================================================
 
+    const serverTimestamp = new Date().toISOString();
 
+    // ============================================================
+    // BUILD METADATA
+    //
+    // Everything specific to the event is stored here.
+    //
+    // This is especially important for ENY chat analytics:
+    //
+    // chat_id
+    // duration_seconds
+    // duration_ms
+    // extension_count
+    // extension_number
+    // extension_seconds
+    // automatic_submission
+    // message_length
+    // reason
+    // action
+    // ============================================================
 
-// -----------------------------
-// INSERT INTO POSTGRES
-// -----------------------------
-await pool.query(
-  `
-  INSERT INTO events (
-    event,
-	visitor_id,
-    session_id,
-    page,
-    full_url,
-    referrer,
-    event_timestamp,
-    server_timestamp,
-    user_agent,
-    ip,
-	country,
-	region,
-	city,
-    metadata
-  )
-  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
-  `,
-  [
-    enrichedEvent.event,
-	enrichedEvent.visitor_id || null,
-    enrichedEvent.session_id || null,
-    enrichedEvent.page || null,
-    enrichedEvent.full_url || null,
-    enrichedEvent.referrer || null,
-    enrichedEvent.timestamp || null,
-    enrichedEvent.server_timestamp,
-    enrichedEvent.user_agent,
-    enrichedEvent.ip,
-	enrichedEvent.country || "Unknown",
-	enrichedEvent.region || "Unknown",
-	enrichedEvent.city || "Unknown",
+    const {
+      event: eventName,
+      visitor_id,
+      session_id,
+      page,
+      full_url,
+      referrer,
+      timestamp,
 
-    JSON.stringify(
-      enrichedEvent.metadata || {}
-    )
-  ]
-);
+      // Existing optional metadata object
+      metadata,
 
-return NextResponse.json({
-  success: true
-});
+      // Everything else remains available
+      ...additionalEventData
+    } = event;
 
+    const eventMetadata = {
+      ...additionalEventData,
 
-} catch (error) {
-console.error("Tracking API Error:", error);
+      ...(metadata &&
+      typeof metadata === "object" &&
+      !Array.isArray(metadata)
+        ? metadata
+        : {}),
+    };
 
+    // ============================================================
+    // INSERT EVENT INTO POSTGRES
+    // ============================================================
 
-return NextResponse.json(
-  {
-    success: false,
-    error: "Internal server error"
-  },
-  { status: 500 }
-);
+    await pool.query(
+      `
+      INSERT INTO events (
+        event,
+        visitor_id,
+        session_id,
+        page,
+        full_url,
+        referrer,
+        event_timestamp,
+        server_timestamp,
+        user_agent,
+        ip,
+        country,
+        region,
+        city,
+        metadata
+      )
+      VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        $7,
+        $8,
+        $9,
+        $10,
+        $11,
+        $12,
+        $13,
+        $14
+      )
+      `,
+      [
+        eventName,
 
+        visitor_id || null,
 
-}
+        session_id || null,
+
+        page || null,
+
+        full_url || null,
+
+        referrer || null,
+
+        timestamp || null,
+
+        serverTimestamp,
+
+        userAgent,
+
+        ip || null,
+
+        country,
+
+        region,
+
+        city,
+
+        JSON.stringify(eventMetadata),
+      ]
+    );
+
+    // ============================================================
+    // SUCCESS
+    // ============================================================
+
+    return NextResponse.json({
+      success: true,
+    });
+  } catch (error) {
+    console.error(
+      "Tracking API Error:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Internal server error",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }
