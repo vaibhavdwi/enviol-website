@@ -68,7 +68,7 @@ export default function Home() {
 
         <div className="relative z-20 max-w-4xl px-6">
           
-            <AnimatedHeading title="Sustainable Polyester Polyol Manufacturers for Global Industries"/>
+            <AnimatedHeading title="Polyols & PU System for Polyurethane Industries"/>
          
 
           <p className="text-lg text-gray-200 mb-6">
@@ -204,7 +204,7 @@ export default function Home() {
           </h2>
 
           <p className="text-center max-w-3xl mx-auto text-gray-700 mb-6">
-            We specialize in chemical recycling of PET and polyurethane waste streams through controlled depolymerization and regeneration processes to produce high-performance polyols with consistent hydroxyl value and viscosity.
+            We specialize in manufacturing of Aliphatic and Aromatic polyester polyols specially developed grades from chemical recycling of PET and polyurethane waste streams through controlled depolymerization and regeneration processes to produce high-performance polyols with consistent hydroxyl value and viscosity.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 text-center">

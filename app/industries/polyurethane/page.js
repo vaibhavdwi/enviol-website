@@ -26,7 +26,7 @@ export default function Page() {
 
       <p className="mb-6 text-lg">
         <strong>Enviol Polytech Solutions</strong> is a manufacturer of
-        polyester and polyether polyols and a technology partner in
+        polyester polyols and a technology partner in
         the development of advanced polyurethane (PU) systems for
         foam, coatings, adhesives, elastomers and specialty applications.
       </p>
@@ -46,8 +46,8 @@ export default function Page() {
         />
 
         <p>
-          Polyurethane is formed by the reaction between a polyol
-          (polyester or polyether based) and an isocyanate (MDI, TDI,
+          Polyurethane is formed by the reaction between a polyester polyol
+          and an isocyanate (MDI, TDI,
           HDI, IPDI or derivatives). By modifying functionality,
           molecular weight and backbone chemistry, a wide range of
           materials can be produced — from soft flexible foam to
@@ -58,12 +58,11 @@ export default function Page() {
       {/* Polyester vs Polyether */}
       <section className="mb-16">
         <h2 className="text-2xl font-semibold mb-4">
-          Polyester vs Polyether Polyols
+          Polyester Polyols
         </h2>
 
         <ul className="list-disc pl-6 space-y-3">
-          <li><strong>Polyester Polyols:</strong> Higher mechanical strength, chemical resistance and abrasion resistance.</li>
-          <li><strong>Polyether Polyols:</strong> Improved flexibility, hydrolysis resistance and low-temperature performance.</li>
+          <li><strong>Polyester Polyols:</strong> Improved flexibility, hydrolysis resistance and low-temperature performance., chemical resistance and abrasion resistance.</li>
           <li><strong>OH Value & Functionality:</strong> Determines crosslink density and final mechanical properties.</li>
         </ul>
       </section>
@@ -180,75 +179,7 @@ export default function Page() {
     </table>
   </div>
 
-  {/* Polyether Polyols Table */}
-  <h3 className="text-2xl font-semibold mb-4">
-    Polyether Polyol Grades
-  </h3>
-
-  <div className="overflow-x-auto">
-    <table className="min-w-full border border-gray-300 text-sm">
-      <thead className="bg-gray-100">
-        <tr>
-          <th className="border px-4 py-2">Grade Type</th>
-          <th className="border px-4 py-2">Functionality</th>
-          <th className="border px-4 py-2">OH Value (mg KOH/g)</th>
-          <th className="border px-4 py-2">MW Range</th>
-          <th className="border px-4 py-2">Key Characteristics</th>
-          <th className="border px-4 py-2">Typical Applications</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td className="border px-4 py-2">Flexible Foam Polyether</td>
-          <td className="border px-4 py-2">3</td>
-          <td className="border px-4 py-2">25–60</td>
-          <td className="border px-4 py-2">3000–6000</td>
-          <td className="border px-4 py-2">Softness, resilience</td>
-          <td className="border px-4 py-2">Mattress foam</td>
-        </tr>
-        <tr>
-          <td className="border px-4 py-2">High Resilience (HR)</td>
-          <td className="border px-4 py-2">3</td>
-          <td className="border px-4 py-2">25–40</td>
-          <td className="border px-4 py-2">4500–6500</td>
-          <td className="border px-4 py-2">Improved rebound</td>
-          <td className="border px-4 py-2">Premium mattresses</td>
-        </tr>
-        <tr>
-          <td className="border px-4 py-2">Rigid Foam Polyether</td>
-          <td className="border px-4 py-2">3–8</td>
-          <td className="border px-4 py-2">300–800</td>
-          <td className="border px-4 py-2">300–700</td>
-          <td className="border px-4 py-2">High crosslink density</td>
-          <td className="border px-4 py-2">Insulation panels</td>
-        </tr>
-        <tr>
-          <td className="border px-4 py-2">CASE Polyether</td>
-          <td className="border px-4 py-2">2–3</td>
-          <td className="border px-4 py-2">50–200</td>
-          <td className="border px-4 py-2">1000–4000</td>
-          <td className="border px-4 py-2">Flexibility & toughness</td>
-          <td className="border px-4 py-2">Adhesives, sealants</td>
-        </tr>
-        <tr>
-          <td className="border px-4 py-2">Graft Polyol (POP)</td>
-          <td className="border px-4 py-2">3</td>
-          <td className="border px-4 py-2">20–35</td>
-          <td className="border px-4 py-2">4000–6000</td>
-          <td className="border px-4 py-2">Load-bearing improvement</td>
-          <td className="border px-4 py-2">HR foam</td>
-        </tr>
-        <tr>
-          <td className="border px-4 py-2">PTMG / Low MW Diol</td>
-          <td className="border px-4 py-2">2</td>
-          <td className="border px-4 py-2">50–120</td>
-          <td className="border px-4 py-2">1000–2000</td>
-          <td className="border px-4 py-2">High elasticity</td>
-          <td className="border px-4 py-2">PU elastomers</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  
 </section>
 
       {/* System Capability */}
@@ -258,7 +189,7 @@ export default function Page() {
         </h2>
 
         <p>
-          With deep expertise in polyester and polyether chemistry,
+          With deep expertise in polyester polyol chemistry,
           Enviol Polytech Solutions can engineer customized polyurethane
           systems tailored for industrial processing requirements,
           mechanical performance and environmental compliance.

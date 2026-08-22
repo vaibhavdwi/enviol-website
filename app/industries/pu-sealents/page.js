@@ -21,8 +21,7 @@ export default function Page() {
   return (
     <main className="container mx-auto px-6 pt-20 pb-12 bg-yellow-50">
 	<p className="mb-6 text-lg">
-  <strong>Enviol Polytech Solutions</strong> provides advanced polyester and 
-  polyether polyols tailored for polyurethane sealant manufacturing. Our 
+  <strong>Enviol Polytech Solutions</strong> provides advanced polyester polyols tailored for polyurethane sealant manufacturing. Our 
   chemistry supports optimized crosslink density, controlled reactivity and 
   enhanced movement capability in MDI, TDI and aliphatic isocyanate-based 
   sealant systems used across construction, glazing and automotive applications.
@@ -32,8 +31,7 @@ export default function Page() {
       </h1>
 
       <p className="mb-6 text-lg">
-        Polyurethane (PU) sealants are formulated by reacting polyester or
-        polyether polyols with diisocyanates such as MDI, TDI, HDI or IPDI.
+        Polyurethane (PU) sealants are formulated by reacting polyester polyols with diisocyanates such as MDI, TDI, HDI or IPDI.
         Sealant performance depends on polyol molecular weight, OH value,
         functionality, and isocyanate selection. Key parameters for sealant
         manufacturers include modulus, elongation, movement capability,
@@ -62,7 +60,7 @@ export default function Page() {
         </p>
 
         <ul className="list-disc pl-6 mt-3 space-y-2">
-          <li><strong>Preferred Polyol:</strong> High MW polyether (low modulus systems)</li>
+          <li><strong>Preferred Polyol:</strong> High MW polyester (low modulus systems)</li>
           <li><strong>Alternative:</strong> Polyester for improved chemical and abrasion resistance</li>
           <li><strong>Key Properties:</strong> High elongation, flexibility, sag resistance</li>
           <li><strong>Applications:</strong> Expansion joints, façade sealing, flooring joints</li>
@@ -91,7 +89,7 @@ export default function Page() {
         </p>
 
         <ul className="list-disc pl-6 mt-3 space-y-2">
-          <li><strong>Preferred Polyol:</strong> Polyether (high elongation) or Polyester (higher modulus)</li>
+          <li><strong>Preferred Polyol:</strong> Polyester (higher modulus)</li>
           <li><strong>Key Properties:</strong> Controlled cure, structural stability</li>
           <li><strong>Applications:</strong> Industrial flooring, tank joints, heavy construction</li>
         </ul>
@@ -111,7 +109,7 @@ export default function Page() {
         <ul className="list-disc pl-6 mt-4 space-y-3">
           <li>
             <strong>Low Modulus Sealants:</strong> Typically based on high
-            molecular weight polyether polyols. Provide movement capability
+            molecular weight polyester polyols. Provide movement capability
             above ±25%, excellent flexibility and crack resistance.
           </li>
           <li>
@@ -139,8 +137,7 @@ export default function Page() {
         <p>
           Automotive sealants are typically MDI-based systems formulated for
           vibration resistance, adhesion to coated metals, and paint shop
-          compatibility. Polyether polyols enhance flexibility, while polyester
-          systems improve mechanical durability.
+          compatibility. Polyester polyol systems improve mechanical durability.
         </p>
 
         <ul className="list-disc pl-6 mt-3 space-y-2">
@@ -158,7 +155,7 @@ export default function Page() {
         <p>
           Aliphatic isocyanate systems are selected for UV stability and
           non-yellowing performance in exterior applications. These systems are
-          commonly combined with polyether polyols for long-term weather
+          commonly combined with polyester polyols for long-term weather
           resistance.
         </p>
 
@@ -171,12 +168,11 @@ export default function Page() {
       {/* Polyol Selection Guide */}
       <section className="mt-16">
         <h2 className="text-2xl font-semibold mb-4">
-          Polyester vs Polyether Polyol Selection in PU Sealants
+          Polyester Polyol Selection in PU Sealants
         </h2>
 
         <ul className="list-disc pl-6 space-y-3">
-          <li><strong>Polyether Polyols:</strong> Superior hydrolysis resistance, high elongation, ideal for movement joints.</li>
-          <li><strong>Polyester Polyols:</strong> Higher mechanical strength, better chemical and abrasion resistance.</li>
+          <li><strong>Polyester Polyols:</strong> Higher mechanical strength, better chemical and abrasion resistance , with additonal changes it gets hydrolysis resistance, high elongation properties.</li>
           <li><strong>Higher Molecular Weight:</strong> Lower modulus, improved flexibility.</li>
           <li><strong>Higher Functionality:</strong> Increased crosslink density and hardness.</li>
           <li><strong>Aromatic Isocyanates (MDI/TDI):</strong> Cost-efficient and mechanically strong.</li>

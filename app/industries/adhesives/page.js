@@ -22,8 +22,7 @@ export default function Page() {
   return (
     <main className="container mx-auto px-6 pt-20 pb-12 bg-yellow-50">
 	<p className="mb-6 text-lg">
-  <strong>Enviol Polytech Solutions</strong> provides advanced polyester and 
-  polyether polyols tailored for industrial polyurethane adhesive manufacturing. 
+  <strong>Enviol Polytech Solutions</strong> provides advanced polyester polyols tailored for industrial polyurethane adhesive manufacturing. 
   Our chemistry supports optimized NCO/OH balance, controlled molecular weight 
   distribution, and enhanced adhesion performance in MDI, TDI and aliphatic 
   isocyanate-based systems used across construction, automotive, footwear and 
@@ -34,8 +33,7 @@ export default function Page() {
       </h1>
 
       <p className="mb-6 text-lg">
-        Polyurethane (PU) adhesives are produced by reacting polyester or
-        polyether polyols with diisocyanates such as MDI, TDI, HDI or IPDI.
+        Polyurethane (PU) adhesives are produced by reacting polyester polyols with diisocyanates such as MDI, TDI, HDI or IPDI.
         Polyol structure, molecular weight, and OH value determine crosslink
         density, green strength, flexibility, hydrolysis resistance and long-term
         adhesion performance. Below is a formulation-focused overview tailored
@@ -122,7 +120,6 @@ export default function Page() {
 
         <ul className="list-disc pl-6 mt-3 space-y-2">
           <li><strong>Preferred Polyol:</strong> Linear polyester, medium MW</li>
-          <li><strong>Alternative:</strong> Polyether for improved hydrolysis resistance</li>
           <li><strong>Key Performance:</strong> Flexibility with strong bond retention</li>
           <li><strong>Applications:</strong> Footwear, artificial leather, flexible laminates</li>
         </ul>
@@ -143,14 +140,12 @@ export default function Page() {
         />
 
         <p>
-          PU dispersions are produced from internally emulsified polyester or
-          polyether polyols with MDI or IPDI. Choice of polyol determines balance
+          PU dispersions are produced from internally emulsified polyester polyols with MDI or IPDI. Choice of polyol determines balance
           between mechanical strength and hydrolysis resistance.
         </p>
 
         <ul className="list-disc pl-6 mt-3 space-y-2">
           <li><strong>Polyester PUD:</strong> Higher strength and chemical resistance</li>
-          <li><strong>Polyether PUD:</strong> Better moisture resistance and flexibility</li>
           <li><strong>Applications:</strong> Textile lamination, flexible packaging, low-VOC systems</li>
         </ul>
       </section>
@@ -186,12 +181,11 @@ export default function Page() {
       {/* Selection Guide */}
       <section className="mt-16">
         <h2 className="text-2xl font-semibold mb-4">
-          Polyester vs Polyether Polyol Selection Guide
+          Polyester Polyol Selection Guide
         </h2>
 
         <ul className="list-disc pl-6 space-y-3">
           <li><strong>Polyester Polyols:</strong> Higher tensile strength, superior solvent resistance, improved adhesion to polar substrates.</li>
-          <li><strong>Polyether Polyols:</strong> Enhanced hydrolysis resistance, better flexibility, superior low-temperature performance.</li>
           <li><strong>High OH Value:</strong> Increased crosslink density and structural strength.</li>
           <li><strong>Lower MW:</strong> Faster cure and higher hardness.</li>
           <li><strong>Aromatic Isocyanates (MDI/TDI):</strong> High strength and cost efficiency.</li>

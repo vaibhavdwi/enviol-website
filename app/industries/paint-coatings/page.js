@@ -27,7 +27,7 @@ export default function Page() {
       {/* Brand Introduction */}
       <p className="mb-6 text-lg">
         <strong>Enviol Polytech Solutions</strong> manufactures sustainable
-        polyester and polyether polyols designed for high-performance
+        polyester polyols designed for high-performance
         polyurethane paints, enamels, primers and emulsion systems.
         Our polyols are engineered to control crosslink density,
         hardness, flexibility, chemical resistance and weather stability
@@ -163,7 +163,7 @@ export default function Page() {
 
         <p>
           Water-based polyurethane dispersions are developed using modified
-          polyester or polyether polyols to meet environmental regulations.
+          polyester polyols to meet environmental regulations.
           These systems deliver low VOC emissions while maintaining flexibility,
           adhesion and abrasion resistance.
         </p>
@@ -185,7 +185,7 @@ export default function Page() {
           <li><strong>OH Value:</strong> Controls crosslink density and hardness</li>
           <li><strong>Molecular Weight:</strong> Influences leveling and flexibility</li>
           <li><strong>Polyester Backbone:</strong> Enhances chemical & abrasion resistance</li>
-          <li><strong>Polyether Backbone:</strong> Improves flexibility & hydrolysis resistance</li>
+          /*<li><strong>Polyether Backbone:</strong> Improves flexibility & hydrolysis resistance</li>*/
           <li><strong>Isocyanate Selection:</strong> Determines UV stability and cure profile</li>
         </ul>
       </section>
@@ -197,7 +197,7 @@ export default function Page() {
   <p>
     Polyurethane coating systems are selected based on substrate,
     environmental exposure and performance requirements. Polyester
-    and polyether polyols are engineered accordingly to balance
+    polyols are engineered accordingly to balance
     hardness, flexibility, chemical resistance and weather durability.
   </p>
 

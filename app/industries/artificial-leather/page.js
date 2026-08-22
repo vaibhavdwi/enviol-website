@@ -27,8 +27,7 @@ export default function Page() {
 
       {/* Brand Positioned Introduction */}
       <p className="mb-6 text-lg">
-        <strong>Enviol Polytech Solutions</strong> provides sustainable polyester
-        and polyether polyols optimized for artificial leather production. Our
+        <strong>Enviol Polytech Solutions</strong> provides sustainable polyester polyols optimized for artificial leather production. Our
         materials are engineered to support wet process, dry process, and
         microfiber PU manufacturing lines with controlled viscosity, consistent
         molecular weight distribution, and enhanced hydrolysis resistance. By
@@ -112,8 +111,7 @@ export default function Page() {
         <p>
           Microfiber synthetic leather requires uniform pore formation,
           excellent flex crack resistance, and long-term hydrolysis stability.
-          Polyester polyols ensure high mechanical integrity, while polyether
-          segments may be introduced to enhance moisture resistance in demanding
+          Polyester polyols ensure high mechanical integrity, and enhance moisture resistance in demanding
           environments such as automotive interiors.
         </p>
 
@@ -149,12 +147,11 @@ export default function Page() {
       {/* Polyester vs Polyether */}
       <section className="mt-16">
         <h2 className="text-2xl font-semibold mb-4">
-          Polyester vs Polyether Selection in Artificial Leather
+          Polyester Polyol Selection in Artificial Leather
         </h2>
 
         <ul className="list-disc pl-6 space-y-3">
           <li><strong>Polyester Polyols:</strong> Higher mechanical strength, superior abrasion resistance, better solvent stability.</li>
-          <li><strong>Polyether Polyols:</strong> Enhanced hydrolysis resistance and low-temperature flexibility.</li>
           <li><strong>Aromatic Systems (MDI/TDI):</strong> Cost-effective and mechanically robust.</li>
           <li><strong>Aliphatic Systems (HDI/IPDI):</strong> UV stable and non-yellowing for premium segments.</li>
         </ul>

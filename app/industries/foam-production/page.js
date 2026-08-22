@@ -2,18 +2,22 @@ import Image from "next/image";
 
 export const metadata = {
   title:
-    "Polyester & Polyether Polyols for Flexible and Rigid PU Foam | Enviol Polytech Solutions",
+    "Polyester Polyols for Rigid PU & PIR Foam Insulation | Enviol Polytech Solutions",
   description:
-    "Enviol Polytech Solutions supplies polyester and polyether polyols for flexible slabstock, HR foam, memory foam, molded foam, rigid insulation foam, PIR and spray systems.",
+    "Enviol Polytech Solutions develops polyester polyols for rigid polyurethane and PIR insulation systems used in sandwich panels, cold storage, refrigeration, pipe insulation, spray foam and industrial insulation applications.",
   keywords: [
-    "flexible PU foam polyol",
-    "rigid PU foam polyol",
-    "HR foam polyol",
-    "memory foam polyol",
-    "polyester polyol for foam",
-    "polyether polyol for mattress",
-    "PIR foam polyol",
-    "spray foam system"
+    "polyester polyol for rigid foam",
+    "polyester polyol for PIR foam",
+    "rigid PU foam polyester polyol",
+    "PIR polyester polyol",
+    "polyester polyol for sandwich panels",
+    "polyester polyol for insulation",
+    "polyester polyol for cold storage",
+    "polyester polyol for refrigeration",
+    "polyester polyol for pipe insulation",
+    "PET based polyester polyol",
+    "recycled polyester polyol",
+    "rigid polyurethane insulation",
   ],
 };
 
@@ -21,116 +25,39 @@ export default function Page() {
   return (
     <main className="container mx-auto px-6 pt-20 pb-12 bg-yellow-50">
 
+      {/* ================================================================
+          HERO
+      ================================================================ */}
+
       <h1 className="text-3xl font-bold mb-6">
-        Advanced Polyol Solutions for Flexible & Rigid Polyurethane Foam
+        Polyester Polyols for Rigid PU & PIR Foam Insulation
       </h1>
 
       <p className="mb-6 text-lg">
-        <strong>Enviol Polytech Solutions</strong> manufactures sustainable
-        polyester and polyether polyols engineered for high-volume flexible
-        and rigid polyurethane foam production. Our portfolio supports slabstock,
-        molded, HR, viscoelastic, rebonded and insulation-grade systems with
-        controlled functionality, optimized OH values and consistent reactivity
-        profiles for industrial processing stability.
+        <strong>Enviol Polytech Solutions</strong> develops polyester polyols
+        designed for rigid polyurethane and polyisocyanurate (PIR) insulation
+        systems. Our focus is on polyester-polyol solutions for applications
+        requiring thermal insulation, dimensional stability, compressive
+        strength and controlled processing characteristics.
       </p>
 
-      {/* FLEXIBLE FOAM SECTION */}
+      <p className="mb-10">
+        Our polyester polyol platform is particularly focused on
+        <strong> PET-derived and recycled polyester polyols</strong>, providing
+        polyurethane manufacturers with an opportunity to incorporate recycled
+        feedstock into rigid insulation systems while developing application-
+        specific performance characteristics.
+      </p>
+
+
+      {/* ================================================================
+          RIGID PU FOAM
+      ================================================================ */}
+
       <section className="mb-16">
+
         <h2 className="text-2xl font-semibold mb-4">
-          Flexible Polyurethane Foam Systems
-        </h2>
-
-        <Image
-          src="/images/flexible-foam-production.jpg"
-          alt="Flexible slabstock polyurethane foam production line"
-          width={900}
-          height={500}
-          className="rounded-lg mb-4"
-        />
-
-        <p>
-          Flexible foams are primarily produced using polyether polyols reacted
-          with TDI or MDI systems. Polyester polyols are introduced where higher
-          mechanical strength and improved compression set resistance are required.
-        </p>
-
-        <ul className="list-disc pl-6 mt-3 space-y-2">
-          <li><strong>Conventional Slabstock Foam:</strong> Polyether polyols (OH 40–60 mg KOH/g), TDI-based systems</li>
-          <li><strong>High Resilience (HR) Foam:</strong> High functionality polyether polyols (functionality 3–6), MDI systems</li>
-          <li><strong>Viscoelastic / Memory Foam:</strong> Modified polyether systems with controlled crosslink density</li>
-          <li><strong>Molded Foam:</strong> Automotive seating, dual hardness systems</li>
-          <li><strong>Rebonded Foam:</strong> Scrap foam bonded using PU binders</li>
-        </ul>
-
-        <p className="mt-4">
-          Mattress and bedding applications demand precise control over density,
-          airflow, recovery rate and compression set — parameters directly
-          influenced by polyol molecular weight and functionality.
-        </p>
-		<section className="mt-10">
-  <h3 className="text-xl font-semibold mb-4">
-    Flexible Foam Classification in Mattress Applications
-  </h3>
-
-  <p>
-    Mattress-grade flexible polyurethane foam is classified based on density,
-    resilience, recovery behavior and load-bearing capacity. Polyether polyols
-    are predominantly used, while polyester polyols are introduced where
-    enhanced compression set resistance and structural durability are required.
-  </p>
-
-  <ul className="list-disc pl-6 mt-4 space-y-3">
-    <li>
-      <strong>Conventional Foam (Low to Medium Density – 18–28 kg/m³):</strong>
-      Standard slabstock foam used in entry-level mattresses and quilting layers.
-      Based on polyether polyols (OH 45–60 mg KOH/g) with TDI systems.
-    </li>
-
-    <li>
-      <strong>High Density Foam (28–40 kg/m³):</strong>
-      Improved durability and load-bearing performance for support cores.
-      Modified polyether systems with controlled crosslinking.
-    </li>
-
-    <li>
-      <strong>High Resilience (HR) Foam:</strong>
-      Higher functionality polyether polyols (3–6 functionality) combined with MDI
-      systems. Offers superior rebound, breathability and comfort performance.
-      Used in premium mattress segments.
-    </li>
-
-    <li>
-      <strong>Viscoelastic / Memory Foam:</strong>
-      Low resilience, slow recovery foam engineered through precise
-      crosslink density control. Used in comfort layers for pressure
-      redistribution and orthopedic support.
-    </li>
-
-    <li>
-      <strong>Orthopedic / Firm Support Foam:</strong>
-      Higher crosslink density systems with increased load-bearing capacity.
-      Polyester-modified systems improve compression set resistance.
-    </li>
-
-    <li>
-      <strong>Hybrid Layer Systems:</strong>
-      Multi-layer constructions combining conventional, HR and viscoelastic
-      grades to achieve targeted comfort and durability profiles.
-    </li>
-  </ul>
-
-  <p className="mt-4">
-    Precise control of molecular weight, functionality and OH value enables
-    optimization of density, airflow, indentation force deflection (IFD)
-    and long-term compression set behavior in mattress-grade foams.
-  </p>
-</section>
-      </section>
-
-      {/* RIGID FOAM SECTION */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-semibold mb-4">
-          Rigid Polyurethane & PIR Foam Systems
+          Rigid Polyurethane Foam Systems
         </h2>
 
         <Image
@@ -142,113 +69,528 @@ export default function Page() {
         />
 
         <p>
-          Rigid foam systems utilize high functionality polyester or aromatic
-          polyols combined with polymeric MDI (pMDI) to achieve high crosslink
-          density and low thermal conductivity.
+          Rigid polyurethane (PU) foam is widely used where lightweight
+          construction and thermal insulation are required. Polyester polyols
+          can be incorporated into rigid PU formulations to provide the
+          chemical functionality required for reaction with polymeric
+          isocyanates and development of a highly crosslinked polyurethane
+          structure.
         </p>
 
-        <ul className="list-disc pl-6 mt-3 space-y-2">
-          <li><strong>Continuous Panel Systems:</strong> Sandwich panels, insulation boards</li>
-          <li><strong>Refrigeration & Cold Storage:</strong> Low lambda value formulations</li>
-          <li><strong>Spray Foam Systems:</strong> Controlled cream and gel time profiles</li>
-          <li><strong>Block Rigid Foam:</strong> Structural core materials</li>
-          <li><strong>PIR Systems:</strong> Modified isocyanurate structures for enhanced fire performance</li>
+        <p className="mt-4">
+          The selection of polyester polyol characteristics such as hydroxyl
+          value, functionality, viscosity and molecular structure influences
+          processing behavior and the resulting properties of the foam.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-2">
+
+          <li>
+            <strong>Thermal insulation:</strong> Suitable for applications where
+            low thermal conductivity is required.
+          </li>
+
+          <li>
+            <strong>Dimensional stability:</strong> Crosslinked PU structures
+            provide structural stability over the service life of the insulation.
+          </li>
+
+          <li>
+            <strong>Compressive strength:</strong> Polyester-based systems can
+            contribute to rigid foam structures with useful mechanical strength.
+          </li>
+
+          <li>
+            <strong>Controlled reactivity:</strong> Polyol characteristics can
+            be optimized according to the processing system and application.
+          </li>
+
+          <li>
+            <strong>Formulation flexibility:</strong> Polyester polyols can be
+            developed for different rigid PU processing requirements.
+          </li>
+
+        </ul>
+
+      </section>
+
+
+      {/* ================================================================
+          PIR FOAM
+      ================================================================ */}
+
+      <section className="mb-16">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Polyisocyanurate (PIR) Foam Systems
+        </h2>
+
+        <p>
+          PIR insulation systems are closely related to rigid polyurethane
+          systems but use an isocyanate-rich formulation to promote
+          polyisocyanurate structures. They are widely used in insulation
+          applications where thermal performance and improved fire-performance
+          characteristics are important.
+        </p>
+
+        <p className="mt-4">
+          Polyester polyols are important formulation components in many rigid
+          PU and PIR systems. Selection of the appropriate polyol structure,
+          hydroxyl value and functionality helps formulators balance processing,
+          crosslink density and final foam properties.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-3">
+
+          <li>
+            <strong>PIR sandwich panels:</strong> Insulated building and
+            industrial panels for walls and roofs.
+          </li>
+
+          <li>
+            <strong>Rigid PIR boards:</strong> Insulation boards used in
+            construction and industrial applications.
+          </li>
+
+          <li>
+            <strong>Industrial insulation:</strong> Systems designed for
+            equipment, tanks and process environments.
+          </li>
+
+          <li>
+            <strong>Pipe insulation:</strong> Rigid insulation for pipelines
+            and other cylindrical structures.
+          </li>
+
+        </ul>
+
+      </section>
+
+
+      {/* ================================================================
+          SANDWICH PANELS
+      ================================================================ */}
+
+      <section className="mb-16">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Sandwich Panel Insulation
+        </h2>
+
+        <p>
+          Polyurethane and PIR sandwich panels are widely used in industrial
+          buildings, warehouses, cold rooms and commercial infrastructure.
+          The foam core provides thermal insulation between the external
+          facing materials.
+        </p>
+
+        <p className="mt-4">
+          Polyester polyols used in these systems must be selected according
+          to the processing technology, required reactivity, foam density,
+          dimensional stability and target mechanical properties.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-3">
+
+          <li>
+            <strong>Continuous sandwich panels:</strong> High-volume panel
+            production for walls and roofing systems.
+          </li>
+
+          <li>
+            <strong>Discontinuous panels:</strong> Insulated panels produced
+            for customized construction and industrial applications.
+          </li>
+
+          <li>
+            <strong>Cold-room panels:</strong> Insulated structures designed
+            to minimize heat transfer.
+          </li>
+
+          <li>
+            <strong>Industrial building panels:</strong> Insulation solutions
+            for warehouses, factories and controlled environments.
+          </li>
+
+        </ul>
+
+      </section>
+
+
+      {/* ================================================================
+          REFRIGERATION & COLD STORAGE
+      ================================================================ */}
+
+      <section className="mb-16">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Refrigeration & Cold Storage Insulation
+        </h2>
+
+        <p>
+          Rigid PU and PIR foams are extensively used as thermal insulation
+          materials in refrigeration and temperature-controlled environments.
+          The insulation core must maintain its structure while minimizing
+          heat transfer through the system.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-3">
+
+          <li>
+            <strong>Cold storage rooms:</strong> Wall, roof and floor insulation
+            for temperature-controlled facilities.
+          </li>
+
+          <li>
+            <strong>Refrigeration equipment:</strong> Insulation for
+            refrigerators, freezers and related equipment.
+          </li>
+
+          <li>
+            <strong>Industrial refrigeration:</strong> Thermal insulation for
+            large-scale refrigeration infrastructure.
+          </li>
+
+          <li>
+            <strong>Temperature-controlled facilities:</strong> Insulated
+            panels and structures for food, pharmaceutical and industrial
+            environments.
+          </li>
+
         </ul>
 
         <p className="mt-4">
-          High OH value polyester polyols (200–450 mg KOH/g) enable increased
-          crosslink density, dimensional stability and compressive strength in
-          insulation-grade systems.
+          Polyester polyol selection can influence foam reaction behavior,
+          crosslink density and dimensional stability, making polyol design an
+          important part of insulation-system development.
         </p>
-		<section className="mt-10">
-  <h3 className="text-xl font-semibold mb-4">
-    Industrial Rigid Foam Application Segmentation
-  </h3>
 
-  <p>
-    Rigid polyurethane and PIR foam systems are classified based on application
-    environment, processing method and thermal performance requirements.
-    High functionality polyester and aromatic polyols are typically combined
-    with polymeric MDI (pMDI) to achieve superior crosslink density and
-    structural integrity.
-  </p>
-
-  <ul className="list-disc pl-6 mt-4 space-y-3">
-
-    <li>
-      <strong>Continuous Sandwich Panel Systems:</strong>
-      High reactivity systems designed for steel-faced insulation panels.
-      Requires dimensional stability, compressive strength and low lambda value.
-    </li>
-
-    <li>
-      <strong>Discontinuous Panel / Block Foam:</strong>
-      Used for custom insulation boards and fabrication industries.
-      Controlled cream time and uniform cell structure are critical.
-    </li>
-
-    <li>
-      <strong>Refrigeration & Cold Storage Insulation:</strong>
-      Ultra-low thermal conductivity systems with enhanced moisture resistance.
-      High crosslink density polyester polyols preferred.
-    </li>
-
-    <li>
-      <strong>Spray Polyurethane Foam (SPF):</strong>
-      On-site insulation systems requiring balanced gel time,
-      flow characteristics and adhesion to substrates.
-    </li>
-
-    <li>
-      <strong>Appliance Insulation (OEM Systems):</strong>
-      Refrigerator and freezer cavity filling with precise expansion control
-      and dimensional stability.
-    </li>
-
-    <li>
-      <strong>PIR (Polyisocyanurate) Systems:</strong>
-      Modified isocyanate-rich systems for enhanced fire performance
-      and improved thermal stability in building insulation.
-    </li>
-
-    <li>
-      <strong>Pipe & Tank Insulation:</strong>
-      High compressive strength foam for industrial pipelines,
-      LNG tanks and petrochemical installations.
-    </li>
-
-  </ul>
-
-  <p className="mt-4">
-    Selection of OH value (200–500 mg KOH/g), functionality (3–6+),
-    and aromatic content directly influences compressive strength,
-    fire behavior, dimensional stability and long-term insulation efficiency.
-  </p>
-</section>
       </section>
 
-      {/* TECHNICAL DIFFERENTIATION */}
-      <section className="mt-16">
+
+      {/* ================================================================
+          PIPE & TANK INSULATION
+      ================================================================ */}
+
+      <section className="mb-16">
+
         <h2 className="text-2xl font-semibold mb-4">
-          Polyether vs Polyester in Foam Applications
+          Pipe, Tank & Industrial Insulation
         </h2>
 
-        <ul className="list-disc pl-6 space-y-3">
-          <li><strong>Polyether Polyols:</strong> Preferred for flexible foam softness, hydrolysis resistance and resilience.</li>
-          <li><strong>Polyester Polyols:</strong> Higher tensile strength, improved dimensional stability and better fire performance potential.</li>
-          <li><strong>Functionality Control:</strong> Direct impact on hardness, resilience and cell structure.</li>
-          <li><strong>OH Value Optimization:</strong> Determines density, reactivity and crosslink density.</li>
-          <li><strong>Isocyanate Pairing:</strong> TDI for slabstock; MDI/pMDI for HR and rigid systems.</li>
+        <p>
+          Rigid polyurethane and PIR foams are also used to insulate pipes,
+          tanks and industrial equipment where maintaining temperature and
+          reducing heat loss are important.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-3">
+
+          <li>
+            <strong>Process pipelines:</strong> Thermal insulation for
+            industrial process lines.
+          </li>
+
+          <li>
+            <strong>District heating and cooling:</strong> Insulated pipe
+            systems designed to reduce thermal losses.
+          </li>
+
+          <li>
+            <strong>Oil & gas infrastructure:</strong> Insulation applications
+            where temperature management is required.
+          </li>
+
+          <li>
+            <strong>Storage tanks:</strong> Thermal insulation for industrial
+            tanks and equipment.
+          </li>
+
+          <li>
+            <strong>Industrial equipment:</strong> Custom rigid foam insulation
+            solutions for process and utility systems.
+          </li>
+
         </ul>
+
       </section>
 
-      <section className="mt-16">
-        <p className="text-lg">
-          With scalable manufacturing capacity and strict quality control,
-          Enviol Polytech Solutions partners with foam producers to supply
-          consistent polyol grades for mattress manufacturers, automotive
-          seating producers, insulation panel lines and spray foam contractors.
+
+      {/* ================================================================
+          SPRAY PU FOAM
+      ================================================================ */}
+
+      <section className="mb-16">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Spray Polyurethane Foam
+        </h2>
+
+        <p>
+          Spray polyurethane foam systems are applied directly onto substrates
+          to create continuous thermal insulation layers. The formulation must
+          provide appropriate reaction behavior, flow, expansion and adhesion
+          characteristics for the intended application.
         </p>
+
+        <p className="mt-4">
+          Polyester polyols can be selected or developed according to the
+          required processing profile and final foam characteristics.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-2">
+
+          <li>Building and roof insulation</li>
+
+          <li>Industrial equipment insulation</li>
+
+          <li>Pipe and tank insulation</li>
+
+          <li>HVAC and duct insulation</li>
+
+          <li>Industrial maintenance and retrofit insulation</li>
+
+        </ul>
+
+      </section>
+
+
+      {/* ================================================================
+          OTHER INSULATION APPLICATIONS
+      ================================================================ */}
+
+      <section className="mb-16">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Other Rigid PU & PIR Insulation Applications
+        </h2>
+
+        <p>
+          Beyond conventional panels and cold-storage applications, rigid
+          polyurethane and PIR systems are used across a broad range of
+          construction and industrial insulation applications.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-3">
+
+          <li>
+            <strong>Insulation boards:</strong> Rigid boards for walls, roofs
+            and floors.
+          </li>
+
+          <li>
+            <strong>Roofing insulation:</strong> Thermal insulation systems
+            for commercial and industrial buildings.
+          </li>
+
+          <li>
+            <strong>HVAC insulation:</strong> Insulation for ducts and
+            temperature-control systems.
+          </li>
+
+          <li>
+            <strong>Industrial equipment:</strong> Thermal protection of
+            machinery, vessels and process equipment.
+          </li>
+
+          <li>
+            <strong>Construction insulation:</strong> Wall, roof and structural
+            insulation systems.
+          </li>
+
+          <li>
+            <strong>Specialty insulation:</strong> Application-specific rigid
+            foam systems developed around particular processing and performance
+            requirements.
+          </li>
+
+        </ul>
+
+      </section>
+
+
+      {/* ================================================================
+          POLYESTER POLYOL PARAMETERS
+      ================================================================ */}
+
+      <section className="mb-16">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Polyester Polyol Selection for Rigid Foam
+        </h2>
+
+        <p>
+          The polyester polyol is an important component of the rigid
+          polyurethane formulation. Its chemical structure and physical
+          properties influence reaction behavior, crosslink density and the
+          resulting foam structure.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-3">
+
+          <li>
+            <strong>Hydroxyl value:</strong> Influences the amount of reactive
+            hydroxyl groups available for polyurethane formation.
+          </li>
+
+          <li>
+            <strong>Functionality:</strong> Influences crosslink density and
+            rigid foam structure.
+          </li>
+
+          <li>
+            <strong>Viscosity:</strong> Important for handling, mixing and
+            processing characteristics.
+          </li>
+
+          <li>
+            <strong>Acid value:</strong> An important quality parameter when
+            evaluating polyester polyols for polyurethane applications.
+          </li>
+
+          <li>
+            <strong>Water content:</strong> Important because moisture can
+            participate in the polyurethane reaction and influence foam
+            processing.
+          </li>
+
+          <li>
+            <strong>Polyol structure:</strong> Aromatic and aliphatic
+            polyester structures can provide different performance
+            characteristics depending on the formulation.
+          </li>
+
+        </ul>
+
+      </section>
+
+
+      {/* ================================================================
+          WHY ENVIOL
+      ================================================================ */}
+
+      <section className="mb-16">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Why Polyester Polyols from Enviol?
+        </h2>
+
+        <p>
+          Enviol Polytech Solutions is focused on developing polyester polyol
+          solutions for polyurethane applications with a strong emphasis on
+          sustainability and recycled feedstock.
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-3">
+
+          <li>
+            <strong>PET-derived polyester polyols:</strong> Polyester polyols
+            developed using recycled PET-based feedstock.
+          </li>
+
+          <li>
+            <strong>Recycled-content solutions:</strong> Potential to introduce
+            recycled raw material into polyurethane formulations.
+          </li>
+
+          <li>
+            <strong>Application-oriented development:</strong> Polyol
+            characteristics can be developed around the requirements of
+            specific polyurethane applications.
+          </li>
+
+          <li>
+            <strong>OH-value flexibility:</strong> Development across a broad
+            range of hydroxyl values for different polyurethane applications.
+          </li>
+
+          <li>
+            <strong>Technical collaboration:</strong> Enviol works with
+            polyurethane manufacturers to understand their existing system
+            and identify suitable polyol solutions.
+          </li>
+
+          <li>
+            <strong>Sustainable chemistry:</strong> Our technology focuses on
+            converting post-consumer and post-industrial PET feedstock into
+            useful polyester polyol intermediates.
+          </li>
+
+        </ul>
+
+      </section>
+
+
+      {/* ================================================================
+          APPLICATION DEVELOPMENT
+      ================================================================ */}
+
+      <section className="mb-16">
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Application-Specific Polyester Polyol Development
+        </h2>
+
+        <p>
+          Polyester polyol selection should be based on the complete
+          polyurethane formulation rather than hydroxyl value alone. Enviol
+          therefore approaches polyol development around the customer's
+          application, processing conditions and required final properties.
+        </p>
+
+        <p className="mt-4">
+          For rigid PU and PIR insulation systems, relevant parameters may
+          include:
+        </p>
+
+        <ul className="list-disc pl-6 mt-4 space-y-2">
+
+          <li>Target foam density</li>
+
+          <li>Required thermal conductivity</li>
+
+          <li>Compressive strength</li>
+
+          <li>Dimensional stability</li>
+
+          <li>Reaction profile</li>
+
+          <li>Processing temperature</li>
+
+          <li>Blowing-agent system</li>
+
+          <li>Isocyanate system</li>
+
+          <li>Required fire-performance characteristics</li>
+
+          <li>Existing polyol formulation</li>
+
+        </ul>
+
+      </section>
+
+
+      {/* ================================================================
+          FINAL CTA
+      ================================================================ */}
+
+      <section className="mt-16">
+
+        <p className="text-lg">
+          Whether you are manufacturing sandwich panels, cold-storage
+          insulation, refrigeration systems, rigid insulation boards, spray
+          foam, pipe insulation or other PU/PIR insulation products,
+          <strong> Enviol Polytech Solutions</strong> can work with your team
+          to evaluate polyester polyol requirements and develop an
+          application-oriented solution.
+        </p>
+
+        <p className="mt-4 text-lg">
+          Share your current polyol grade, OH value, application, processing
+          system and approximate consumption with us, and our technical team
+          can help identify a suitable polyester polyol approach.
+        </p>
+
       </section>
 
     </main>

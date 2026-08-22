@@ -90,12 +90,11 @@ export default function Page() {
       {/* Selection Guide */}
       <section className="mt-16">
         <h2 className="text-2xl font-semibold mb-4">
-          Polyester vs Polyether in Elastomers
+          Polyester Polyols Elastomers
         </h2>
 
         <ul className="list-disc pl-6 space-y-3">
           <li><strong>Polyester Polyols:</strong> Higher mechanical strength, better oil and solvent resistance.</li>
-          <li><strong>Polyether Polyols:</strong> Improved hydrolysis resistance and low-temperature flexibility.</li>
           <li><strong>Aromatic Systems (MDI):</strong> High strength and cost efficiency.</li>
           <li><strong>Aliphatic Systems:</strong> UV-stable specialty elastomers.</li>
         </ul>
