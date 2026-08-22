@@ -11,15 +11,13 @@ export default function AnalyticsDashboard() {
   const [error, setError] = useState("");
 
   // ================================================================
-  // PAGE VISITOR MODAL
+  // VISITOR LIST MODAL
   // ================================================================
 
-  const [selectedPage, setSelectedPage] = useState(null);
-  const [pageVisitors, setPageVisitors] = useState([]);
-  const [pageVisitorsLoading, setPageVisitorsLoading] =
-    useState(false);
-  const [pageVisitorsError, setPageVisitorsError] =
-    useState("");
+  const [visitorModal, setVisitorModal] = useState(null);
+  const [visitors, setVisitors] = useState([]);
+  const [visitorsLoading, setVisitorsLoading] = useState(false);
+  const [visitorsError, setVisitorsError] = useState("");
 
   // ================================================================
   // VISITOR JOURNEY MODAL
@@ -74,24 +72,41 @@ export default function AnalyticsDashboard() {
   };
 
   // ================================================================
-  // OPEN PAGE VISITOR MODAL
+  // OPEN VISITOR LIST
+  //
+  // type:
+  // page
+  // country
+  // region
+  // city
   // ================================================================
 
-  const openPageVisitors = async (page) => {
+  const openVisitors = async (type, value, title) => {
     if (!fromDate || !toDate) {
       setError("Please select a date range first");
       return;
     }
 
-    setSelectedPage(page);
-    setPageVisitors([]);
-    setPageVisitorsError("");
-    setPageVisitorsLoading(true);
+    if (!value) {
+      return;
+    }
+
+    setVisitorModal({
+      type,
+      value,
+      title,
+    });
+
+    setVisitors([]);
+    setVisitorsError("");
+    setVisitorsLoading(true);
 
     try {
       const res = await fetch(
-        `/api/reports/page-visitors?page=${encodeURIComponent(
-          page
+        `/api/reports/visitors?type=${encodeURIComponent(
+          type
+        )}&value=${encodeURIComponent(
+          value
         )}&from=${encodeURIComponent(
           fromDate
         )}&to=${encodeURIComponent(toDate)}`
@@ -103,34 +118,40 @@ export default function AnalyticsDashboard() {
 
       const json = await res.json();
 
-      setPageVisitors(json.visitors || []);
+      setVisitors(json.visitors || []);
     } catch (err) {
       console.error(err);
 
-      setPageVisitorsError(
-        "Failed to load page visitor details"
+      setVisitorsError(
+        "Failed to load visitor details"
       );
     }
 
-    setPageVisitorsLoading(false);
+    setVisitorsLoading(false);
   };
 
   // ================================================================
-  // CLOSE PAGE VISITOR MODAL
+  // CLOSE VISITOR LIST
   // ================================================================
 
-  const closePageVisitors = () => {
-    setSelectedPage(null);
-    setPageVisitors([]);
-    setPageVisitorsError("");
+  const closeVisitors = () => {
+    setVisitorModal(null);
+    setVisitors([]);
+    setVisitorsError("");
   };
 
   // ================================================================
   // OPEN VISITOR JOURNEY
+  //
+  // Uses the SAME visitors API.
   // ================================================================
 
   const openVisitorJourney = async (visitorId) => {
     if (!visitorId) {
+      return;
+    }
+
+    if (!fromDate || !toDate) {
       return;
     }
 
@@ -141,7 +162,7 @@ export default function AnalyticsDashboard() {
 
     try {
       const res = await fetch(
-        `/api/reports/visitor-journey?visitorId=${encodeURIComponent(
+        `/api/reports/visitors?type=visitor&visitor_id=${encodeURIComponent(
           visitorId
         )}&from=${encodeURIComponent(
           fromDate
@@ -283,6 +304,8 @@ export default function AnalyticsDashboard() {
             </p>
           </div>
 
+          {/* CHAT KPI CARDS */}
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <ChatCard
               title="Chat Opens"
@@ -304,6 +327,8 @@ export default function AnalyticsDashboard() {
               value={data.chat?.chat_extensions}
             />
           </div>
+
+          {/* SECONDARY CHAT METRICS */}
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <ChatCard
@@ -329,6 +354,8 @@ export default function AnalyticsDashboard() {
             />
           </div>
 
+          {/* TOTAL ACTIVE CHAT TIME */}
+
           <div className="bg-white border rounded p-5">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
@@ -348,6 +375,8 @@ export default function AnalyticsDashboard() {
               </div>
             </div>
           </div>
+
+          {/* CHAT CONVERSION */}
 
           <div className="bg-white border rounded p-5">
             <h3 className="font-semibold text-[#1F524F] mb-4">
@@ -393,18 +422,24 @@ export default function AnalyticsDashboard() {
             title="Top Countries"
             items={data.topCountries || []}
             labelKey="country"
+            type="country"
+            onClick={openVisitors}
           />
 
           <GeoCard
             title="Top Regions"
             items={data.topRegions || []}
             labelKey="region"
+            type="region"
+            onClick={openVisitors}
           />
 
           <GeoCard
             title="Top Cities"
             items={data.topCities || []}
             labelKey="city"
+            type="city"
+            onClick={openVisitors}
           />
         </div>
       )}
@@ -454,7 +489,11 @@ export default function AnalyticsDashboard() {
                     <td className="py-2 text-right">
                       <button
                         onClick={() =>
-                          openPageVisitors(p.page)
+                          openVisitors(
+                            "page",
+                            p.page,
+                            "Page Visitor Log"
+                          )
                         }
                         className="font-semibold text-[#1F524F] underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
                         title="View individual visitors"
@@ -471,16 +510,18 @@ export default function AnalyticsDashboard() {
       )}
 
       {/* ============================================================ */}
-      {/* PAGE VISITOR MODAL */}
+      {/* VISITOR LIST MODAL */}
       {/* ============================================================ */}
 
-      {selectedPage && (
-        <PageVisitorsModal
-          page={selectedPage}
-          visitors={pageVisitors}
-          loading={pageVisitorsLoading}
-          error={pageVisitorsError}
-          onClose={closePageVisitors}
+      {visitorModal && (
+        <VisitorsModal
+          type={visitorModal.type}
+          value={visitorModal.value}
+          title={visitorModal.title}
+          visitors={visitors}
+          loading={visitorsLoading}
+          error={visitorsError}
+          onClose={closeVisitors}
           onVisitorClick={openVisitorJourney}
         />
       )}
@@ -503,17 +544,21 @@ export default function AnalyticsDashboard() {
 }
 
 /* ====================================================================== */
-/* PAGE VISITORS MODAL */
+/* VISITORS MODAL */
 /* ====================================================================== */
 
-function PageVisitorsModal({
-  page,
+function VisitorsModal({
+  type,
+  value,
+  title,
   visitors,
   loading,
   error,
   onClose,
   onVisitorClick,
 }) {
+  const isPage = type === "page";
+
   return (
     <ModalOverlay onClose={onClose}>
       <div
@@ -525,15 +570,17 @@ function PageVisitorsModal({
         <div className="border-b p-5 flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 className="text-xl font-bold text-[#1F524F]">
-              Page Visitor Log
+              {title}
             </h2>
 
-            <p className="text-sm text-gray-500 mt-1 break-all">
-              {page}
+            <p className="text-sm text-gray-600 mt-1 break-all">
+              {value}
             </p>
 
             <p className="text-xs text-gray-400 mt-1">
-              Individual page_view events for the selected date range
+              {isPage
+                ? "Unique visitors who viewed this page during the selected date range"
+                : "Unique visitors from this location during the selected date range"}
             </p>
           </div>
 
@@ -564,7 +611,7 @@ function PageVisitorsModal({
             !error &&
             visitors.length === 0 && (
               <div className="py-10 text-center text-gray-500">
-                No individual page-view events found.
+                No visitors found.
               </div>
             )}
 
@@ -576,10 +623,6 @@ function PageVisitorsModal({
                   <thead>
                     <tr className="border-b text-gray-500">
                       <th className="text-left p-3 whitespace-nowrap">
-                        Date & Time
-                      </th>
-
-                      <th className="text-left p-3">
                         Visitor
                       </th>
 
@@ -587,16 +630,18 @@ function PageVisitorsModal({
                         Location
                       </th>
 
-                      <th className="text-left p-3">
-                        Device
+                      <th className="text-left p-3 whitespace-nowrap">
+                        First Seen
                       </th>
 
-                      <th className="text-left p-3">
-                        Referrer
+                      <th className="text-left p-3 whitespace-nowrap">
+                        Last Seen
                       </th>
 
-                      <th className="text-left p-3">
-                        Session
+                      <th className="text-right p-3">
+                        {isPage
+                          ? "Page Views"
+                          : "Events"}
                       </th>
                     </tr>
                   </thead>
@@ -604,14 +649,13 @@ function PageVisitorsModal({
                   <tbody>
                     {visitors.map((visitor) => (
                       <tr
-                        key={visitor.id}
+                        key={
+                          visitor.visitor_id ||
+                          `${visitor.first_seen}-${visitor.last_seen}`
+                        }
                         className="border-b hover:bg-gray-50"
                       >
-                        <td className="p-3 whitespace-nowrap">
-                          {formatDateTime(
-                            visitor.server_timestamp
-                          )}
-                        </td>
+                        {/* VISITOR */}
 
                         <td className="p-3">
                           {visitor.visitor_id ? (
@@ -622,7 +666,7 @@ function PageVisitorsModal({
                                 )
                               }
                               className="text-[#1F524F] font-medium underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
-                              title="View visitor journey"
+                              title="View complete visitor journey"
                             >
                               {shortId(
                                 visitor.visitor_id
@@ -635,39 +679,34 @@ function PageVisitorsModal({
                           )}
                         </td>
 
+                        {/* LOCATION */}
+
                         <td className="p-3 whitespace-nowrap">
                           {formatLocation(visitor)}
                         </td>
 
-                        <td className="p-3">
-                          {visitor.device || "Unknown"}
+                        {/* FIRST SEEN */}
+
+                        <td className="p-3 whitespace-nowrap">
+                          {formatDateTime(
+                            visitor.first_seen
+                          )}
                         </td>
 
-                        <td className="p-3 max-w-[220px]">
-                          <span
-                            className="block truncate"
-                            title={
-                              visitor.referrer ||
-                              "Direct"
-                            }
-                          >
-                            {getReferrerName(
-                              visitor.referrer
-                            )}
-                          </span>
+                        {/* LAST SEEN */}
+
+                        <td className="p-3 whitespace-nowrap">
+                          {formatDateTime(
+                            visitor.last_seen
+                          )}
                         </td>
 
-                        <td className="p-3">
-                          <span
-                            className="text-xs text-gray-500"
-                            title={
-                              visitor.session_id || ""
-                            }
-                          >
-                            {shortId(
-                              visitor.session_id
-                            )}
-                          </span>
+                        {/* COUNT */}
+
+                        <td className="p-3 text-right">
+                          {isPage
+                            ? visitor.page_views || 0
+                            : visitor.event_count || 0}
                         </td>
                       </tr>
                     ))}
@@ -682,7 +721,8 @@ function PageVisitorsModal({
         {!loading && (
           <div className="border-t p-4 flex justify-between items-center text-sm">
             <span className="text-gray-500">
-              {visitors.length} individual page-view events
+              {visitors.length} unique visitor
+              {visitors.length === 1 ? "" : "s"}
             </span>
 
             <button
@@ -720,14 +760,14 @@ function VisitorJourneyModal({
         {/* HEADER */}
 
         <div className="border-b p-5 flex items-start justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             <h2 className="text-xl font-bold text-[#1F524F]">
               Visitor Journey
             </h2>
 
             <p className="text-sm text-gray-500 mt-1">
               Visitor ID:{" "}
-              <span className="font-mono">
+              <span className="font-mono break-all">
                 {visitorId}
               </span>
             </p>
@@ -860,6 +900,12 @@ function JourneyEvent({ event, isLast }) {
           </p>
         )}
 
+        {event.full_url && (
+          <p className="text-xs text-gray-400 mt-1 break-all">
+            {event.full_url}
+          </p>
+        )}
+
         {event.session_id && (
           <p className="text-xs text-gray-400 mt-1">
             Session:{" "}
@@ -871,6 +917,15 @@ function JourneyEvent({ event, isLast }) {
           <p className="text-xs text-gray-400 mt-1 truncate">
             Referrer:{" "}
             {getReferrerName(event.referrer)}
+          </p>
+        )}
+
+        {event.user_agent && (
+          <p
+            className="text-xs text-gray-400 mt-1 truncate"
+            title={event.user_agent}
+          >
+            Browser: {getBrowserName(event.user_agent)}
           </p>
         )}
       </div>
@@ -901,27 +956,60 @@ function GeoCard({
   title,
   items,
   labelKey,
+  type,
+  onClick,
 }) {
   return (
     <div className="bg-white border p-4 rounded">
-      <h2 className="font-semibold mb-2">
-        {title}
-      </h2>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="font-semibold">
+          {title}
+        </h2>
 
-      {items.map((item, i) => (
-        <div
-          key={`${item[labelKey]}-${i}`}
-          className="flex justify-between border-b py-1"
-        >
-          <span>
-            {item[labelKey] || "Unknown"}
-          </span>
+        <span className="text-xs text-gray-400">
+          Click visitors
+        </span>
+      </div>
 
-          <span>
-            {item.visitors || 0}
-          </span>
-        </div>
-      ))}
+      {items.length === 0 && (
+        <p className="text-sm text-gray-400 py-2">
+          No data
+        </p>
+      )}
+
+      {items.map((item, i) => {
+        const label =
+          item[labelKey] || "Unknown";
+
+        const count = item.visitors || 0;
+
+        return (
+          <div
+            key={`${label}-${i}`}
+            className="flex justify-between items-center border-b last:border-b-0 py-2"
+          >
+            <span className="truncate pr-3">
+              {label}
+            </span>
+
+            <button
+              onClick={() =>
+                onClick(
+                  type,
+                  label,
+                  `${title.slice(
+                    4
+                  )} Visitor Log`
+                )
+              }
+              className="font-semibold text-[#1F524F] underline decoration-dotted underline-offset-4 hover:text-[#42B3A5] shrink-0"
+              title="View visitors"
+            >
+              {count}
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -1119,10 +1207,50 @@ function getReferrerName(referrer) {
   try {
     const url = new URL(referrer);
 
-    return url.hostname.replace(/^www\./, "");
+    return url.hostname.replace(
+      /^www\./,
+      ""
+    );
   } catch {
     return referrer;
   }
+}
+
+/* ====================================================================== */
+/* BROWSER NAME */
+/* ====================================================================== */
+
+function getBrowserName(userAgent) {
+  if (!userAgent) {
+    return "Unknown";
+  }
+
+  const ua = userAgent.toLowerCase();
+
+  if (ua.includes("edg/")) {
+    return "Microsoft Edge";
+  }
+
+  if (ua.includes("chrome/") && !ua.includes("edg/")) {
+    return "Chrome";
+  }
+
+  if (ua.includes("firefox/")) {
+    return "Firefox";
+  }
+
+  if (
+    ua.includes("safari/") &&
+    !ua.includes("chrome/")
+  ) {
+    return "Safari";
+  }
+
+  if (ua.includes("opera") || ua.includes("opr/")) {
+    return "Opera";
+  }
+
+  return "Unknown";
 }
 
 /* ====================================================================== */
