@@ -42,7 +42,11 @@ const CHAT_ACTIVE_HEARTBEAT_SECONDS = 10;
 // ============================================================================
 
 export default function AIEnquiryChat() {
-  const [open, setOpen] = useState(false);
+  // ============================================================
+  // CHAT NOW OPENS BY DEFAULT
+  // ============================================================
+
+  const [open, setOpen] = useState(true);
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -170,31 +174,16 @@ export default function AIEnquiryChat() {
   // CHAT ANALYTICS HELPERS
   // ==========================================================================
 
-  /*
-   * Returns the current accumulated active duration.
-   *
-   * If the chat is currently active, the time since the current active
-   * period started is also included.
-   */
   const getCurrentChatActiveDurationMs = () => {
     let duration = chatActiveDurationRef.current;
 
     if (chatActiveStartedAtRef.current !== null) {
-      duration +=
-        Date.now() - chatActiveStartedAtRef.current;
+      duration += Date.now() - chatActiveStartedAtRef.current;
     }
 
     return Math.max(0, duration);
   };
 
-  /*
-   * Start counting active chat time.
-   *
-   * We only count time when:
-   * 1. Chat window is open
-   * 2. Browser tab is visible
-   * 3. Chat session has not ended
-   */
   const startChatActiveTracking = () => {
     if (
       chatDurationFinalizedRef.current ||
@@ -212,7 +201,6 @@ export default function AIEnquiryChat() {
       chatActiveStartedAtRef.current = Date.now();
     }
 
-    // Do not create duplicate heartbeat intervals.
     if (chatActiveHeartbeatRef.current) {
       return;
     }
@@ -234,58 +222,31 @@ export default function AIEnquiryChat() {
         return;
       }
 
-      /*
-       * We don't reset the start timestamp here.
-       * This allows the accumulated duration to remain accurate.
-       *
-       * The heartbeat event records the current total active duration.
-       */
-      const durationMs =
-        getCurrentChatActiveDurationMs();
+      const durationMs = getCurrentChatActiveDurationMs();
 
       track("chat_window_active", {
         chat_id: chatId,
-        duration_seconds: Math.floor(
-          durationMs / 1000
-        ),
+        duration_seconds: Math.floor(durationMs / 1000),
       });
     }, CHAT_ACTIVE_HEARTBEAT_SECONDS * 1000);
   };
 
-  /*
-   * Pause the current active period.
-   *
-   * This is called when:
-   * - chat is minimized
-   * - browser tab becomes hidden
-   * - session ends
-   */
   const pauseChatActiveTracking = () => {
     if (chatActiveStartedAtRef.current !== null) {
       chatActiveDurationRef.current +=
-        Date.now() -
-        chatActiveStartedAtRef.current;
+        Date.now() - chatActiveStartedAtRef.current;
 
       chatActiveStartedAtRef.current = null;
     }
 
     if (chatActiveHeartbeatRef.current) {
-      clearInterval(
-        chatActiveHeartbeatRef.current
-      );
+      clearInterval(chatActiveHeartbeatRef.current);
 
       chatActiveHeartbeatRef.current = null;
     }
   };
 
-  /*
-   * Finalize chat duration.
-   *
-   * This sends one authoritative duration event.
-   */
-  const finalizeChatDuration = (
-    reason = "unknown"
-  ) => {
+  const finalizeChatDuration = (reason = "unknown") => {
     if (
       chatDurationFinalizedRef.current ||
       !chatId
@@ -297,20 +258,16 @@ export default function AIEnquiryChat() {
 
     chatDurationFinalizedRef.current = true;
 
-    const durationMs =
-      chatActiveDurationRef.current;
+    const durationMs = chatActiveDurationRef.current;
 
-    const durationSeconds = Math.floor(
-      durationMs / 1000
-    );
+    const durationSeconds = Math.floor(durationMs / 1000);
 
     track("chat_window_duration", {
       chat_id: chatId,
       duration_seconds: durationSeconds,
       duration_ms: durationMs,
       reason,
-      extension_count:
-        extensionCountRef.current,
+      extension_count: extensionCountRef.current,
     });
   };
 
@@ -338,8 +295,7 @@ export default function AIEnquiryChat() {
             chat_id: chatId,
             reason: "page_hidden",
             duration_seconds: Math.floor(
-              getCurrentChatActiveDurationMs() /
-                1000
+              getCurrentChatActiveDurationMs() / 1000
             ),
           });
         }
@@ -437,9 +393,7 @@ export default function AIEnquiryChat() {
       );
 
       oscillator.connect(gain);
-      gain.connect(
-        audioContext.destination
-      );
+      gain.connect(audioContext.destination);
 
       oscillator.start();
 
@@ -491,9 +445,7 @@ export default function AIEnquiryChat() {
       );
 
       oscillator.connect(gain);
-      gain.connect(
-        audioContext.destination
-      );
+      gain.connect(audioContext.destination);
 
       oscillator.start();
 
@@ -1342,59 +1294,18 @@ export default function AIEnquiryChat() {
 
     // ========================================================================
     // INITIAL ENY GREETING
+    //
+    // IMPORTANT:
+    // The full ENY introduction is no longer automatically inserted here.
+    //
+    // The visitor initially sees the lightweight:
+    //
+    // "Dear Visitor,
+    //  Need help? Chat with Eny."
+    //
+    // Once the visitor sends a message, the normal /api/ai-chat
+    // flow handles ENY's response.
     // ========================================================================
-
-    if (
-      messagesRef.current.length === 0
-    ) {
-      setTimeout(() => {
-        if (
-          sessionEndedRef.current ||
-          submittedRef.current
-        ) {
-          return;
-        }
-
-        const timestamp =
-          Date.now();
-
-        const initialMessages = [
-          {
-            id: timestamp,
-            sender: "ai",
-            text:
-              "🙏 Namaste! Welcome to Enviol Polytech Solutions.",
-          },
-          {
-            id: timestamp + 1,
-            sender: "ai",
-            text:
-              "I am ENY from the Enviol TechSupport AI team. I am grateful for your visit.",
-          },
-          {
-            id: timestamp + 2,
-            sender: "ai",
-            text:
-              "I would be happy to understand your requirement and help identify the right polyol or polyurethane solution for your application.",
-          },
-          {
-            id: timestamp + 3,
-            sender: "ai",
-            text:
-              "May I know what you are looking for today?",
-          },
-        ];
-
-        messagesRef.current =
-          initialMessages;
-
-        setMessages(
-          initialMessages
-        );
-
-        playReplySound();
-      }, 400);
-    }
 
     setTimeout(() => {
       if (
@@ -1719,9 +1630,11 @@ export default function AIEnquiryChat() {
             right-5
             z-[100]
             w-[calc(100vw-2rem)]
-            sm:w-[390px]
-            h-[600px]
+            sm:w-[360px]
+            h-[400px]
+			min-h-[400px]
             max-h-[calc(100vh-2rem)]
+			resize-y
             bg-white
             rounded-2xl
             shadow-2xl
@@ -1817,9 +1730,38 @@ export default function AIEnquiryChat() {
               overflow-y-auto
               p-4
               space-y-3
-              bg-gray-50
+              bg-yellow-50
             "
           >
+            {/* ============================================================ */}
+            {/* INITIAL VISITOR PROMPT */}
+            {/* ============================================================ */}
+
+            {messages.length === 0 && (
+              <div className="flex justify-start">
+                <div
+                  className="
+                    max-w-[82%]
+                    px-4
+                    py-3
+                    rounded-2xl
+                    rounded-bl-md
+                    text-sm
+                    leading-relaxed
+                    bg-white
+                    text-gray-800
+                    shadow-sm
+                    border
+                    border-gray-100
+                  "
+                >
+                  Dear Visitor,
+                  <br />
+                  Need help? Chat with Eny.
+                </div>
+              </div>
+            )}
+
             {messages.map(
               (message) => (
                 <div
