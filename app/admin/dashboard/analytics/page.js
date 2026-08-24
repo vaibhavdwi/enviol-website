@@ -931,7 +931,21 @@ function VisitorsModal({
                   </thead>
 
                   <tbody>
-                    {visitors.map((visitor) => (
+                    {[...visitors]
+  .sort((a, b) => {
+    if (isPage) {
+      return (
+        (Number(b.page_views) || 0) -
+        (Number(a.page_views) || 0)
+      );
+    }
+
+    return (
+      (Number(b.event_count) || 0) -
+      (Number(a.event_count) || 0)
+    );
+  })
+  .map((visitor) => (
                       <tr
                         key={
                           visitor.visitor_id ||
