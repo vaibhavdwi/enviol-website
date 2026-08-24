@@ -31,6 +31,13 @@ export default function AnalyticsDashboard() {
     useState("");
 
   // ================================================================
+  // ENY CHAT INTERACTION MODAL
+  // ================================================================
+
+  const [chatInteractionModal, setChatInteractionModal] =
+    useState(false);
+
+  // ================================================================
   // FETCH MAIN ANALYTICS
   // ================================================================
 
@@ -142,8 +149,6 @@ export default function AnalyticsDashboard() {
 
   // ================================================================
   // OPEN VISITOR JOURNEY
-  //
-  // Uses the SAME visitors API.
   // ================================================================
 
   const openVisitorJourney = async (visitorId) => {
@@ -197,6 +202,22 @@ export default function AnalyticsDashboard() {
     setVisitorJourneyError("");
   };
 
+  // ================================================================
+  // OPEN CHAT INTERACTION MODAL
+  // ================================================================
+
+  const openChatInteractions = () => {
+    setChatInteractionModal(true);
+  };
+
+  // ================================================================
+  // CLOSE CHAT INTERACTION MODAL
+  // ================================================================
+
+  const closeChatInteractions = () => {
+    setChatInteractionModal(false);
+  };
+
   return (
     <div className="p-6 space-y-6">
       {/* ============================================================ */}
@@ -221,14 +242,18 @@ export default function AnalyticsDashboard() {
         <input
           type="date"
           value={fromDate}
-          onChange={(e) => setFromDate(e.target.value)}
+          onChange={(e) =>
+            setFromDate(e.target.value)
+          }
           className="border p-2 rounded"
         />
 
         <input
           type="date"
           value={toDate}
-          onChange={(e) => setToDate(e.target.value)}
+          onChange={(e) =>
+            setToDate(e.target.value)
+          }
           className="border p-2 rounded"
         />
 
@@ -304,7 +329,9 @@ export default function AnalyticsDashboard() {
             </p>
           </div>
 
-          {/* CHAT KPI CARDS */}
+          {/* ======================================================== */}
+          {/* MAIN CHAT KPI CARDS */}
+          {/* ======================================================== */}
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <ChatCard
@@ -312,14 +339,20 @@ export default function AnalyticsDashboard() {
               value={data.chat?.chat_opens}
             />
 
-            <ChatCard
-              title="Messages Sent"
-              value={data.chat?.chat_messages}
+            <ClickableChatCard
+              title="Chat Interacted"
+              value={
+                data.chat?.interacted_user_count
+              }
+              subtitle="Unique users who sent at least one message"
+              onClick={openChatInteractions}
             />
 
-            <ChatCard
+            <ClickableChatCard
               title="Enquiries Submitted"
               value={data.chat?.chat_enquiries}
+              subtitle="Successfully submitted enquiries"
+              onClick={openChatInteractions}
             />
 
             <ChatCard
@@ -328,33 +361,71 @@ export default function AnalyticsDashboard() {
             />
           </div>
 
+          {/* ======================================================== */}
           {/* SECONDARY CHAT METRICS */}
+          {/* ======================================================== */}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <ChatCard
+              title="Messages Sent"
+              value={data.chat?.chat_messages}
+            />
+
             <ChatCard
               title="Minimized Chats"
               value={data.chat?.chat_minimizations}
             />
 
             <ChatCard
-              title="Sessions Ended"
-              value={data.chat?.chat_sessions_ended}
-            />
-
-            <ChatCard
-              title="Duration Events"
-              value={data.chat?.duration_events}
-            />
-
-            <ChatCard
               title="Avg. Chat Duration"
               value={formatDuration(
-                data.chat?.average_chat_duration_seconds
+                data.chat
+                  ?.average_chat_duration_seconds
               )}
             />
           </div>
 
+          {/* ======================================================== */}
+          {/* CHAT CONVERSION */}
+          {/* ======================================================== */}
+
+          <div className="bg-white border rounded p-5">
+            <h3 className="font-semibold text-[#1F524F] mb-4">
+              Chat Conversion
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <ConversionCard
+                title="Chat → Interaction"
+                value={calculatePercentage(
+                  data.chat
+                    ?.interacted_user_count,
+                  data.chat?.chat_opens
+                )}
+              />
+
+              <ConversionCard
+                title="Chat → Enquiry"
+                value={calculatePercentage(
+                  data.chat?.chat_enquiries,
+                  data.chat?.chat_opens
+                )}
+              />
+
+              <ConversionCard
+                title="Interaction → Enquiry"
+                value={calculatePercentage(
+                  data.chat?.chat_enquiries,
+                  data.chat
+                    ?.interacted_user_count
+                )}
+              />
+            </div>
+          </div>
+
+          {/* ======================================================== */}
           {/* TOTAL ACTIVE CHAT TIME */}
+          {/* ======================================================== */}
 
           <div className="bg-white border rounded p-5">
             <div className="flex items-center justify-between flex-wrap gap-3">
@@ -365,7 +436,8 @@ export default function AnalyticsDashboard() {
 
                 <p className="text-3xl font-bold text-[#1F524F]">
                   {formatDuration(
-                    data.chat?.total_chat_active_seconds
+                    data.chat
+                      ?.total_chat_active_seconds
                   )}
                 </p>
               </div>
@@ -373,40 +445,6 @@ export default function AnalyticsDashboard() {
               <div className="text-sm text-gray-400">
                 Based on ENY active chat duration events
               </div>
-            </div>
-          </div>
-
-          {/* CHAT CONVERSION */}
-
-          <div className="bg-white border rounded p-5">
-            <h3 className="font-semibold text-[#1F524F] mb-4">
-              Chat Conversion
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <ConversionCard
-                title="Chat → Enquiry"
-                value={calculatePercentage(
-                  data.chat?.chat_enquiries,
-                  data.chat?.chat_opens
-                )}
-              />
-
-              <ConversionCard
-                title="Messages / Chat"
-                value={calculateAverage(
-                  data.chat?.chat_messages,
-                  data.chat?.chat_opens
-                )}
-              />
-
-              <ConversionCard
-                title="Extensions / Chat"
-                value={calculateAverage(
-                  data.chat?.chat_extensions,
-                  data.chat?.chat_opens
-                )}
-              />
             </div>
           </div>
         </div>
@@ -417,141 +455,133 @@ export default function AnalyticsDashboard() {
       {/* ============================================================ */}
 
       {data && (
-  <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-    <GeoBarChart
-      title="Top Countries"
-      items={data.topCountries || []}
-      labelKey="country"
-      type="country"
-      onClick={openVisitors}
-    />
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <GeoBarChart
+            title="Top Countries"
+            items={data.topCountries || []}
+            labelKey="country"
+            type="country"
+            onClick={openVisitors}
+          />
 
-    <GeoBarChart
-      title="Top Regions"
-      items={data.topRegions || []}
-      labelKey="region"
-      type="region"
-      onClick={openVisitors}
-    />
+          <GeoBarChart
+            title="Top Regions"
+            items={data.topRegions || []}
+            labelKey="region"
+            type="region"
+            onClick={openVisitors}
+          />
 
-    <GeoBarChart
-      title="Top Cities"
-      items={data.topCities || []}
-      labelKey="city"
-      type="city"
-      onClick={openVisitors}
-    />
-  </div>
-)}
+          <GeoBarChart
+            title="Top Cities"
+            items={data.topCities || []}
+            labelKey="city"
+            type="city"
+            onClick={openVisitors}
+          />
+        </div>
+      )}
 
       {/* ============================================================ */}
-{/* TOP 20 PAGES */}
-{/* ============================================================ */}
+      {/* TOP 20 PAGES */}
+      {/* ============================================================ */}
 
-{data && (
-  <div className="bg-white border p-5 rounded">
-    <div className="flex items-center justify-between mb-5">
-      <div>
-        <h2 className="font-semibold text-[#1F524F] text-lg">
-          Top 20 Pages
-        </h2>
+      {data && (
+        <div className="bg-white border p-5 rounded">
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h2 className="font-semibold text-[#1F524F] text-lg">
+                Top 20 Pages
+              </h2>
 
-        <p className="text-xs text-gray-500 mt-1">
-          Click any bar to see individual visitors for that page
-        </p>
-      </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Click any bar to see individual visitors for that page
+              </p>
+            </div>
 
-      <span className="text-xs text-gray-400">
-        {Math.min(data.topPages?.length || 0, 20)} pages
-      </span>
-    </div>
+            <span className="text-xs text-gray-400">
+              {Math.min(
+                data.topPages?.length || 0,
+                20
+              )}{" "}
+              pages
+            </span>
+          </div>
 
-    {(!data.topPages || data.topPages.length === 0) ? (
-      <p className="text-sm text-gray-400 py-6 text-center">
-        No page data available
-      </p>
-    ) : (
-      <div className="space-y-3">
+          {!data.topPages ||
+          data.topPages.length === 0 ? (
+            <p className="text-sm text-gray-400 py-6 text-center">
+              No page data available
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {(data.topPages || [])
+                .slice(0, 20)
+                .map((p, i) => {
+                  const page =
+                    p.page || "Unknown";
 
-        {(data.topPages || [])
-          .slice(0, 20)
-          .map((p, i) => {
+                  const views =
+                    Number(p.views) || 0;
 
-            const page =
-              p.page || "Unknown";
+                  const maxViews =
+                    Number(
+                      data.topPages?.[0]
+                        ?.views
+                    ) || 1;
 
-            const views =
-              Number(p.views) || 0;
+                  const width =
+                    Math.max(
+                      2,
+                      (views / maxViews) * 100
+                    );
 
-            const maxViews =
-              Number(data.topPages?.[0]?.views) || 1;
+                  return (
+                    <button
+                      key={`${page}-${i}`}
+                      onClick={() =>
+                        openVisitors(
+                          "page",
+                          page,
+                          "Page Visitor Log"
+                        )
+                      }
+                      className="w-full text-left group"
+                      title={`View visitors for ${page}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 text-xs text-gray-400 text-right shrink-0">
+                          {i + 1}
+                        </div>
 
-            const width =
-              Math.max(
-                2,
-                (views / maxViews) * 100
-              );
+                        <div
+                          className="w-52 md:w-72 lg:w-80 text-sm text-gray-700 truncate shrink-0"
+                          title={page}
+                        >
+                          {page}
+                        </div>
 
-            return (
-              <button
-                key={`${page}-${i}`}
-                onClick={() =>
-                  openVisitors(
-                    "page",
-                    page,
-                    "Page Visitor Log"
-                  )
-                }
-                className="w-full text-left group"
-                title={`View visitors for ${page}`}
-              >
+                        <div className="flex-1 bg-gray-100 rounded-md h-8 overflow-hidden">
+                          <div
+                            className="h-full bg-[#42B3A5] rounded-md transition-all duration-300 group-hover:bg-[#1F524F]"
+                            style={{
+                              width: `${width}%`,
+                            }}
+                          />
+                        </div>
 
-                <div className="flex items-center gap-3">
+                        <div className="w-16 text-right font-semibold text-[#1F524F] shrink-0">
+                          {views}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+            </div>
+          )}
+        </div>
+      )}
 
-                  {/* RANK */}
-
-                  <div className="w-7 text-xs text-gray-400 text-right shrink-0">
-                    {i + 1}
-                  </div>
-
-                  {/* PAGE */}
-
-                  <div
-                    className="w-52 md:w-72 lg:w-80 text-sm text-gray-700 truncate shrink-0"
-                    title={page}
-                  >
-                    {page}
-                  </div>
-
-                  {/* BAR */}
-
-                  <div className="flex-1 bg-gray-100 rounded-md h-8 overflow-hidden">
-
-                    <div
-                      className="h-full bg-[#42B3A5] rounded-md transition-all duration-300 group-hover:bg-[#1F524F]"
-                      style={{
-                        width: `${width}%`,
-                      }}
-                    />
-
-                  </div>
-
-                  {/* VIEW COUNT */}
-
-                  <div className="w-16 text-right font-semibold text-[#1F524F] shrink-0">
-                    {views}
-                  </div>
-
-                </div>
-
-              </button>
-            );
-          })}
-
-      </div>
-    )}
-  </div>
-)}
       {/* ============================================================ */}
       {/* VISITOR LIST MODAL */}
       {/* ============================================================ */}
@@ -570,6 +600,20 @@ export default function AnalyticsDashboard() {
       )}
 
       {/* ============================================================ */}
+      {/* ENY CHAT INTERACTIONS MODAL */}
+      {/* ============================================================ */}
+
+      {chatInteractionModal && (
+        <ChatInteractionsModal
+          users={
+            data?.chat?.interacted_users || []
+          }
+          onClose={closeChatInteractions}
+          onVisitorClick={openVisitorJourney}
+        />
+      )}
+
+      {/* ============================================================ */}
       {/* VISITOR JOURNEY MODAL */}
       {/* ============================================================ */}
 
@@ -583,6 +627,203 @@ export default function AnalyticsDashboard() {
         />
       )}
     </div>
+  );
+}
+
+/* ====================================================================== */
+/* CHAT INTERACTIONS MODAL */
+/* ====================================================================== */
+
+function ChatInteractionsModal({
+  users,
+  onClose,
+  onVisitorClick,
+}) {
+  return (
+    <ModalOverlay onClose={onClose}>
+      <div
+        className="bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* HEADER */}
+
+        <div className="border-b p-5 flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-bold text-[#1F524F]">
+              ENY Chat Interactions
+            </h2>
+
+            <p className="text-sm text-gray-500 mt-1">
+              Visitors who opened ENY and sent at least one message
+            </p>
+
+            <p className="text-xs text-gray-400 mt-1">
+              {users.length} unique visitor
+              {users.length === 1 ? "" : "s"}
+            </p>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-700 text-2xl leading-none"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* BODY */}
+
+        <div className="p-5 overflow-auto max-h-[72vh]">
+          {users.length === 0 ? (
+            <div className="py-10 text-center text-gray-500">
+              No chat interactions found.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b text-gray-500">
+                    <th className="text-left p-3 whitespace-nowrap">
+                      Visitor
+                    </th>
+
+                    <th className="text-left p-3">
+                      Location
+                    </th>
+
+                    <th className="text-left p-3 whitespace-nowrap">
+                      First Interaction
+                    </th>
+
+                    <th className="text-right p-3">
+                      Chat Time
+                    </th>
+
+                    <th className="text-right p-3">
+                      Messages
+                    </th>
+
+                    <th className="text-right p-3">
+                      Extensions
+                    </th>
+
+                    <th className="text-center p-3">
+                      Submitted
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {users.map((user) => (
+                    <tr
+                      key={
+                        user.visitor_id ||
+                        `${user.first_interaction}-${user.last_interaction}`
+                      }
+                      className="border-b hover:bg-gray-50"
+                    >
+                      {/* VISITOR */}
+
+                      <td className="p-3">
+                        {user.visitor_id ? (
+                          <button
+                            onClick={() =>
+                              onVisitorClick(
+                                user.visitor_id
+                              )
+                            }
+                            className="text-[#1F524F] font-medium underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
+                            title="View complete visitor journey"
+                          >
+                            {shortId(
+                              user.visitor_id
+                            )}
+                          </button>
+                        ) : (
+                          <span className="text-gray-400">
+                            Unknown
+                          </span>
+                        )}
+                      </td>
+
+                      {/* LOCATION */}
+
+                      <td className="p-3 whitespace-nowrap">
+                        {formatLocation(user)}
+                      </td>
+
+                      {/* FIRST INTERACTION */}
+
+                      <td className="p-3 whitespace-nowrap">
+                        {formatDateTime(
+                          user.first_interaction
+                        )}
+                      </td>
+
+                      {/* CHAT TIME */}
+
+                      <td className="p-3 text-right font-medium text-[#1F524F] whitespace-nowrap">
+                        {formatDuration(
+                          user.chat_duration_seconds
+                        )}
+                      </td>
+
+                      {/* MESSAGES */}
+
+                      <td className="p-3 text-right">
+                        {user.messages || 0}
+                      </td>
+
+                      {/* EXTENSIONS */}
+
+                      <td className="p-3 text-right">
+                        {user.extensions || 0}
+                      </td>
+
+                      {/* SUBMITTED */}
+
+                      <td className="p-3 text-center">
+                        {user.submitted ? (
+                          <span
+                            className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700 font-bold"
+                            title="Successfully submitted"
+                          >
+                            ✓
+                          </span>
+                        ) : (
+                          <span
+                            className="text-gray-300"
+                            title="Not submitted"
+                          >
+                            —
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* FOOTER */}
+
+        <div className="border-t p-4 flex justify-between items-center text-sm">
+          <span className="text-gray-500">
+            {users.length} unique interacted visitor
+            {users.length === 1 ? "" : "s"}
+          </span>
+
+          <button
+            onClick={onClose}
+            className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </ModalOverlay>
   );
 }
 
@@ -698,8 +939,6 @@ function VisitorsModal({
                         }
                         className="border-b hover:bg-gray-50"
                       >
-                        {/* VISITOR */}
-
                         <td className="p-3">
                           {visitor.visitor_id ? (
                             <button
@@ -722,13 +961,9 @@ function VisitorsModal({
                           )}
                         </td>
 
-                        {/* LOCATION */}
-
                         <td className="p-3 whitespace-nowrap">
                           {formatLocation(visitor)}
                         </td>
-
-                        {/* FIRST SEEN */}
 
                         <td className="p-3 whitespace-nowrap">
                           {formatDateTime(
@@ -736,15 +971,11 @@ function VisitorsModal({
                           )}
                         </td>
 
-                        {/* LAST SEEN */}
-
                         <td className="p-3 whitespace-nowrap">
                           {formatDateTime(
                             visitor.last_seen
                           )}
                         </td>
-
-                        {/* COUNT */}
 
                         <td className="p-3 text-right">
                           {isPage
@@ -859,10 +1090,14 @@ function VisitorJourneyModal({
               <div className="space-y-0">
                 {events.map((event, index) => (
                   <JourneyEvent
-                    key={event.id}
+                    key={
+                      event.id ||
+                      `${event.event}-${event.event_timestamp}-${index}`
+                    }
                     event={event}
                     isLast={
-                      index === events.length - 1
+                      index ===
+                      events.length - 1
                     }
                   />
                 ))}
@@ -899,14 +1134,11 @@ function JourneyEvent({ event, isLast }) {
   const isPageView =
     event.event === "page_view";
 
-  const eventLabel = formatEventName(
-    event.event
-  );
+  const eventLabel =
+    formatEventName(event.event);
 
   return (
     <div className="flex gap-4">
-      {/* TIMELINE */}
-
       <div className="flex flex-col items-center">
         <div
           className={`w-3 h-3 rounded-full mt-2 ${
@@ -920,8 +1152,6 @@ function JourneyEvent({ event, isLast }) {
           <div className="w-px bg-gray-200 flex-1 min-h-[70px]" />
         )}
       </div>
-
-      {/* EVENT */}
 
       <div className="pb-7 flex-1 min-w-0">
         <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -968,7 +1198,10 @@ function JourneyEvent({ event, isLast }) {
             className="text-xs text-gray-400 mt-1 truncate"
             title={event.user_agent}
           >
-            Browser: {getBrowserName(event.user_agent)}
+            Browser:{" "}
+            {getBrowserName(
+              event.user_agent
+            )}
           </p>
         )}
       </div>
@@ -980,7 +1213,10 @@ function JourneyEvent({ event, isLast }) {
 /* MODAL OVERLAY */
 /* ====================================================================== */
 
-function ModalOverlay({ children, onClose }) {
+function ModalOverlay({
+  children,
+  onClose,
+}) {
   return (
     <div
       className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
@@ -1002,19 +1238,19 @@ function GeoBarChart({
   type,
   onClick,
 }) {
-  const visibleItems = items.slice(0, 20);
+  const visibleItems =
+    items.slice(0, 10);
 
   const maxVisitors = Math.max(
-    ...visibleItems.map((item) =>
-      Number(item.visitors) || 0
+    ...visibleItems.map(
+      (item) =>
+        Number(item.visitors) || 0
     ),
     1
   );
 
   return (
     <div className="bg-white border rounded-xl p-5">
-      {/* HEADER */}
-
       <div className="flex items-start justify-between mb-5">
         <div>
           <h2 className="font-semibold text-[#1F524F] text-lg">
@@ -1031,76 +1267,77 @@ function GeoBarChart({
         </span>
       </div>
 
-      {/* NO DATA */}
-
       {visibleItems.length === 0 ? (
         <p className="text-sm text-gray-400 py-8 text-center">
           No data available
         </p>
       ) : (
         <div className="space-y-3">
-          {visibleItems.map((item, index) => {
-            const label =
-              item[labelKey] || "Unknown";
+          {visibleItems.map(
+            (item, index) => {
+              const label =
+                item[labelKey] ||
+                "Unknown";
 
-            const visitors =
-              Number(item.visitors) || 0;
+              const visitors =
+                Number(item.visitors) ||
+                0;
 
-            const width =
-              maxVisitors > 0
-                ? (visitors / maxVisitors) * 100
-                : 0;
+              const width =
+                maxVisitors > 0
+                  ? (visitors /
+                      maxVisitors) *
+                    100
+                  : 0;
 
-            return (
-              <button
-                key={`${label}-${index}`}
-                type="button"
-                onClick={() =>
-                  onClick(
-                    type,
-                    label,
-                    `${title} Visitor Log`
-                  )
-                }
-                className="w-full text-left group"
-                title={`View visitors for ${label}`}
-              >
-                {/* TOP LINE */}
+              return (
+                <button
+                  key={`${label}-${index}`}
+                  type="button"
+                  onClick={() =>
+                    onClick(
+                      type,
+                      label,
+                      `${title} Visitor Log`
+                    )
+                  }
+                  className="w-full text-left group"
+                  title={`View visitors for ${label}`}
+                >
+                  <div className="flex items-center justify-between gap-3 mb-1">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-xs text-gray-400 w-5 text-right shrink-0">
+                        {index + 1}
+                      </span>
 
-                <div className="flex items-center justify-between gap-3 mb-1">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-xs text-gray-400 w-5 text-right shrink-0">
-                      {index + 1}
-                    </span>
+                      <span
+                        className="text-sm text-gray-700 truncate"
+                        title={label}
+                      >
+                        {label}
+                      </span>
+                    </div>
 
-                    <span
-                      className="text-sm text-gray-700 truncate"
-                      title={label}
-                    >
-                      {label}
+                    <span className="text-sm font-semibold text-[#1F524F] shrink-0">
+                      {visitors}
                     </span>
                   </div>
 
-                  <span className="text-sm font-semibold text-[#1F524F] shrink-0">
-                    {visitors}
-                  </span>
-                </div>
-
-                {/* BAR TRACK */}
-
-                <div className="ml-7 w-[calc(100%-1.75rem)] h-7 bg-gray-100 rounded-md overflow-hidden">
-                  {/* ACTUAL BAR */}
-
-                  <div
-                    className="h-full bg-[#42B3A5] rounded-md transition-all duration-300 group-hover:bg-[#1F524F]"
-                    style={{
-                      width: `${Math.max(width, 1)}%`,
-                    }}
-                  />
-                </div>
-              </button>
-            );
-          })}
+                  <div className="ml-7 w-[calc(100%-1.75rem)] h-7 bg-gray-100 rounded-md overflow-hidden">
+                    <div
+                      className="h-full bg-[#42B3A5] rounded-md transition-all duration-300 group-hover:bg-[#1F524F]"
+                      style={{
+                        width: `${Math.max(
+                          width,
+                          1
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                </button>
+              );
+            }
+          )}
         </div>
       )}
     </div>
@@ -1111,7 +1348,10 @@ function GeoBarChart({
 /* SUMMARY CARD */
 /* ====================================================================== */
 
-function Card({ title, value }) {
+function Card({
+  title,
+  value,
+}) {
   return (
     <div className="bg-white border p-4 rounded">
       <p className="text-gray-500 text-sm">
@@ -1126,10 +1366,13 @@ function Card({ title, value }) {
 }
 
 /* ====================================================================== */
-/* CHAT KPI CARD */
+/* CHAT CARD */
 /* ====================================================================== */
 
-function ChatCard({ title, value }) {
+function ChatCard({
+  title,
+  value,
+}) {
   return (
     <div className="bg-white border rounded p-4">
       <p className="text-gray-500 text-sm">
@@ -1144,10 +1387,53 @@ function ChatCard({ title, value }) {
 }
 
 /* ====================================================================== */
+/* CLICKABLE CHAT CARD */
+/* ====================================================================== */
+
+function ClickableChatCard({
+  title,
+  value,
+  subtitle,
+  onClick,
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="bg-white border rounded p-4 text-left hover:border-[#42B3A5] hover:shadow-sm transition-all group"
+      title={`View ${title.toLowerCase()} details`}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-gray-500 text-sm">
+          {title}
+        </p>
+
+        <span className="text-xs text-[#42B3A5] opacity-0 group-hover:opacity-100 transition-opacity">
+          View →
+        </span>
+      </div>
+
+      <p className="text-2xl font-bold text-[#1F524F] mt-1">
+        {value || 0}
+      </p>
+
+      {subtitle && (
+        <p className="text-xs text-gray-400 mt-1">
+          {subtitle}
+        </p>
+      )}
+    </button>
+  );
+}
+
+/* ====================================================================== */
 /* CONVERSION CARD */
 /* ====================================================================== */
 
-function ConversionCard({ title, value }) {
+function ConversionCard({
+  title,
+  value,
+}) {
   return (
     <div className="border rounded-lg p-4 bg-gray-50">
       <p className="text-sm text-gray-500">
@@ -1168,7 +1454,9 @@ function ConversionCard({ title, value }) {
 function formatDuration(seconds) {
   const totalSeconds = Math.max(
     0,
-    Math.round(Number(seconds) || 0)
+    Math.round(
+      Number(seconds) || 0
+    )
   );
 
   const hours = Math.floor(
@@ -1201,14 +1489,20 @@ function calculatePercentage(
   numerator,
   denominator
 ) {
-  const num = Number(numerator) || 0;
-  const den = Number(denominator) || 0;
+  const num =
+    Number(numerator) || 0;
+
+  const den =
+    Number(denominator) || 0;
 
   if (den === 0) {
     return "0%";
   }
 
-  return `${((num / den) * 100).toFixed(1)}%`;
+  return `${(
+    (num / den) *
+    100
+  ).toFixed(1)}%`;
 }
 
 /* ====================================================================== */
@@ -1219,14 +1513,19 @@ function calculateAverage(
   numerator,
   denominator
 ) {
-  const num = Number(numerator) || 0;
-  const den = Number(denominator) || 0;
+  const num =
+    Number(numerator) || 0;
+
+  const den =
+    Number(denominator) || 0;
 
   if (den === 0) {
     return "0";
   }
 
-  return (num / den).toFixed(1);
+  return (
+    num / den
+  ).toFixed(1);
 }
 
 /* ====================================================================== */
@@ -1246,7 +1545,9 @@ function formatDateTime(value) {
         timeStyle: "medium",
         timeZone: "Asia/Kolkata",
       }
-    ).format(new Date(value));
+    ).format(
+      new Date(value)
+    );
   } catch {
     return String(value);
   }
@@ -1285,20 +1586,27 @@ function shortId(value) {
     return text;
   }
 
-  return `${text.slice(0, 8)}...${text.slice(-4)}`;
+  return `${text.slice(
+    0,
+    8
+  )}...${text.slice(-4)}`;
 }
 
 /* ====================================================================== */
 /* REFERRER */
 /* ====================================================================== */
 
-function getReferrerName(referrer) {
+function getReferrerName(
+  referrer
+) {
   if (!referrer) {
     return "Direct";
   }
 
   try {
-    const url = new URL(referrer);
+    const url = new URL(
+      referrer
+    );
 
     return url.hostname.replace(
       /^www\./,
@@ -1313,18 +1621,24 @@ function getReferrerName(referrer) {
 /* BROWSER NAME */
 /* ====================================================================== */
 
-function getBrowserName(userAgent) {
+function getBrowserName(
+  userAgent
+) {
   if (!userAgent) {
     return "Unknown";
   }
 
-  const ua = userAgent.toLowerCase();
+  const ua =
+    userAgent.toLowerCase();
 
   if (ua.includes("edg/")) {
     return "Microsoft Edge";
   }
 
-  if (ua.includes("chrome/") && !ua.includes("edg/")) {
+  if (
+    ua.includes("chrome/") &&
+    !ua.includes("edg/")
+  ) {
     return "Chrome";
   }
 
@@ -1339,7 +1653,10 @@ function getBrowserName(userAgent) {
     return "Safari";
   }
 
-  if (ua.includes("opera") || ua.includes("opr/")) {
+  if (
+    ua.includes("opera") ||
+    ua.includes("opr/")
+  ) {
     return "Opera";
   }
 
@@ -1357,7 +1674,9 @@ function formatEventName(event) {
 
   return event
     .replace(/_/g, " ")
-    .replace(/\b\w/g, (char) =>
-      char.toUpperCase()
+    .replace(
+      /\b\w/g,
+      (char) =>
+        char.toUpperCase()
     );
 }

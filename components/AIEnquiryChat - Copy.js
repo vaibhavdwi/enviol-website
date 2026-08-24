@@ -31,11 +31,22 @@ const SUBMIT_BUTTON_AFTER_SECONDS = 3 * 60 + 30;
 const WARNING_SECONDS = 30;
 
 // ============================================================================
+// CHAT ANALYTICS CONFIGURATION
+// ============================================================================
+
+// Send an active-time heartbeat every 10 seconds.
+const CHAT_ACTIVE_HEARTBEAT_SECONDS = 10;
+
+// ============================================================================
 // AI ENQUIRY CHAT
 // ============================================================================
 
 export default function AIEnquiryChat() {
-  const [open, setOpen] = useState(false);
+  // ============================================================
+  // CHAT NOW OPENS BY DEFAULT
+  // ============================================================
+
+  const [open, setOpen] = useState(true);
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -86,6 +97,7 @@ export default function AIEnquiryChat() {
 
   const enquiryDataRef = useRef({});
   const messagesRef = useRef([]);
+  const chatWindowOpenedAtRef = useRef(null);
 
   const isSubmittingRef = useRef(false);
   const submittedRef = useRef(false);
@@ -105,6 +117,25 @@ export default function AIEnquiryChat() {
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  // ==========================================================================
+  // CHAT ANALYTICS REFS
+  // ==========================================================================
+
+  // Total active chat time in milliseconds.
+  const chatActiveDurationRef = useRef(0);
+
+  // Timestamp when the current active period started.
+  const chatActiveStartedAtRef = useRef(null);
+
+  // Heartbeat interval.
+  const chatActiveHeartbeatRef = useRef(null);
+
+  // Prevent duplicate final duration events.
+  const chatDurationFinalizedRef = useRef(false);
+
+  // Track whether the current browser tab is visible.
+  const pageVisibleRef = useRef(true);
 
   // ==========================================================================
   // KEEP REFS SYNCHRONIZED WITH STATE
@@ -140,18 +171,204 @@ export default function AIEnquiryChat() {
   }, []);
 
   // ==========================================================================
+  // CHAT ANALYTICS HELPERS
+  // ==========================================================================
+
+  const getCurrentChatActiveDurationMs = () => {
+    let duration = chatActiveDurationRef.current;
+
+    if (chatActiveStartedAtRef.current !== null) {
+      duration += Date.now() - chatActiveStartedAtRef.current;
+    }
+
+    return Math.max(0, duration);
+  };
+
+  const startChatActiveTracking = () => {
+    if (
+      chatDurationFinalizedRef.current ||
+      sessionEndedRef.current ||
+      submittedRef.current
+    ) {
+      return;
+    }
+
+    if (!open || !pageVisibleRef.current) {
+      return;
+    }
+
+    if (chatActiveStartedAtRef.current === null) {
+      chatActiveStartedAtRef.current = Date.now();
+    }
+
+    if (chatActiveHeartbeatRef.current) {
+      return;
+    }
+
+    chatActiveHeartbeatRef.current = setInterval(() => {
+      if (
+        chatDurationFinalizedRef.current ||
+        sessionEndedRef.current ||
+        submittedRef.current
+      ) {
+        return;
+      }
+
+      if (
+        !open ||
+        !pageVisibleRef.current ||
+        chatActiveStartedAtRef.current === null
+      ) {
+        return;
+      }
+
+      const durationMs = getCurrentChatActiveDurationMs();
+
+      track("chat_window_active", {
+        chat_id: chatId,
+        duration_seconds: Math.floor(durationMs / 1000),
+      });
+    }, CHAT_ACTIVE_HEARTBEAT_SECONDS * 1000);
+  };
+
+  const pauseChatActiveTracking = () => {
+    if (chatActiveStartedAtRef.current !== null) {
+      chatActiveDurationRef.current +=
+        Date.now() - chatActiveStartedAtRef.current;
+
+      chatActiveStartedAtRef.current = null;
+    }
+
+    if (chatActiveHeartbeatRef.current) {
+      clearInterval(chatActiveHeartbeatRef.current);
+
+      chatActiveHeartbeatRef.current = null;
+    }
+  };
+
+  const finalizeChatDuration = (reason = "unknown") => {
+    if (
+      chatDurationFinalizedRef.current ||
+      !chatId
+    ) {
+      return;
+    }
+
+    pauseChatActiveTracking();
+
+    chatDurationFinalizedRef.current = true;
+
+    const durationMs = chatActiveDurationRef.current;
+
+    const durationSeconds = Math.floor(durationMs / 1000);
+
+    track("chat_window_duration", {
+      chat_id: chatId,
+      duration_seconds: durationSeconds,
+      duration_ms: durationMs,
+      reason,
+      extension_count: extensionCountRef.current,
+    });
+  };
+
+  // ==========================================================================
+  // PAGE VISIBILITY TRACKING
+  // ==========================================================================
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      const visible =
+        document.visibilityState === "visible";
+
+      pageVisibleRef.current = visible;
+
+      if (!visible) {
+        pauseChatActiveTracking();
+
+        if (
+          open &&
+          !submittedRef.current &&
+          !sessionEndedRef.current &&
+          chatId
+        ) {
+          track("chat_window_minimized", {
+            chat_id: chatId,
+            reason: "page_hidden",
+            duration_seconds: Math.floor(
+              getCurrentChatActiveDurationMs() / 1000
+            ),
+          });
+        }
+      } else {
+        if (
+          open &&
+          !submittedRef.current &&
+          !sessionEndedRef.current
+        ) {
+          startChatActiveTracking();
+        }
+      }
+    };
+
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+
+    return () => {
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
+    };
+  }, [open, chatId]);
+
+  // ==========================================================================
+  // FINAL CHAT ANALYTICS ON PAGE EXIT
+  // ==========================================================================
+
+  useEffect(() => {
+    const handlePageExit = () => {
+      if (
+        chatId &&
+        sessionStartedRef.current &&
+        !chatDurationFinalizedRef.current
+      ) {
+        finalizeChatDuration("page_exit");
+      }
+    };
+
+    window.addEventListener(
+      "pagehide",
+      handlePageExit
+    );
+
+    return () => {
+      window.removeEventListener(
+        "pagehide",
+        handlePageExit
+      );
+    };
+  }, [chatId]);
+
+  // ==========================================================================
   // SOUNDS
   // ==========================================================================
 
   const playSendSound = () => {
     try {
       const AudioContext =
-        window.AudioContext || window.webkitAudioContext;
+        window.AudioContext ||
+        window.webkitAudioContext;
 
-      const audioContext = new AudioContext();
+      const audioContext =
+        new AudioContext();
 
-      const oscillator = audioContext.createOscillator();
-      const gain = audioContext.createGain();
+      const oscillator =
+        audioContext.createOscillator();
+
+      const gain =
+        audioContext.createGain();
 
       oscillator.type = "sine";
 
@@ -184,19 +401,26 @@ export default function AIEnquiryChat() {
         audioContext.currentTime + 0.12
       );
     } catch (error) {
-      console.log("Send sound unavailable");
+      console.log(
+        "Send sound unavailable"
+      );
     }
   };
 
   const playReplySound = () => {
     try {
       const AudioContext =
-        window.AudioContext || window.webkitAudioContext;
+        window.AudioContext ||
+        window.webkitAudioContext;
 
-      const audioContext = new AudioContext();
+      const audioContext =
+        new AudioContext();
 
-      const oscillator = audioContext.createOscillator();
-      const gain = audioContext.createGain();
+      const oscillator =
+        audioContext.createOscillator();
+
+      const gain =
+        audioContext.createGain();
 
       oscillator.type = "sine";
 
@@ -229,7 +453,9 @@ export default function AIEnquiryChat() {
         audioContext.currentTime + 0.18
       );
     } catch (error) {
-      console.log("Reply sound unavailable");
+      console.log(
+        "Reply sound unavailable"
+      );
     }
   };
 
@@ -251,10 +477,6 @@ export default function AIEnquiryChat() {
 
   // ==========================================================================
   // NORMALIZE OPTIONAL VALUE
-  //
-  // IMPORTANT:
-  // Missing optional fields become NULL.
-  // We do NOT send "Not provided".
   // ==========================================================================
 
   const optionalValue = (value) => {
@@ -265,26 +487,14 @@ export default function AIEnquiryChat() {
       return null;
     }
 
-    const normalized = String(value).trim();
+    const normalized =
+      String(value).trim();
 
     return normalized || null;
   };
 
   // ==========================================================================
   // GET REQUIREMENT DESCRIPTION
-  //
-  // Email + requirement are the ONLY mandatory fields.
-  //
-  // Gemini may place the requirement in:
-  // message
-  // summary
-  // product
-  // application
-  // technicalGrade
-  // grade
-  //
-  // If message/summary is unavailable, construct a useful description from
-  // the structured information instead of incorrectly rejecting the enquiry.
   // ==========================================================================
 
   const getRequirementDescription = (
@@ -310,11 +520,12 @@ export default function AIEnquiryChat() {
       data.application || ""
     ).trim();
 
-    const technicalGrade = String(
-      data.technicalGrade ||
-        data.grade ||
-        ""
-    ).trim();
+    const technicalGrade =
+      String(
+        data.technicalGrade ||
+          data.grade ||
+          ""
+      ).trim();
 
     const quantity = String(
       data.quantity ||
@@ -323,30 +534,41 @@ export default function AIEnquiryChat() {
         ""
     ).trim();
 
-    const specifications = String(
-      data.specifications ||
-        data.technicalSpecifications ||
-        ""
-    ).trim();
+    const specifications =
+      String(
+        data.specifications ||
+          data.technicalSpecifications ||
+          ""
+      ).trim();
 
     if (product) {
-      parts.push(`Product: ${product}`);
+      parts.push(
+        `Product: ${product}`
+      );
     }
 
     if (application) {
-      parts.push(`Application: ${application}`);
+      parts.push(
+        `Application: ${application}`
+      );
     }
 
     if (technicalGrade) {
-      parts.push(`Grade: ${technicalGrade}`);
+      parts.push(
+        `Grade: ${technicalGrade}`
+      );
     }
 
     if (quantity) {
-      parts.push(`Quantity: ${quantity}`);
+      parts.push(
+        `Quantity: ${quantity}`
+      );
     }
 
     if (specifications) {
-      parts.push(`Specifications: ${specifications}`);
+      parts.push(
+        `Specifications: ${specifications}`
+      );
     }
 
     return parts.join(" | ").trim();
@@ -354,13 +576,6 @@ export default function AIEnquiryChat() {
 
   // ==========================================================================
   // BASIC ENQUIRY VALIDATION
-  //
-  // ONLY TWO THINGS ARE REQUIRED:
-  //
-  // 1. Email
-  // 2. Requirement / description
-  //
-  // Everything else is optional.
   // ==========================================================================
 
   const hasBasicEnquiryDetails = () => {
@@ -392,21 +607,18 @@ export default function AIEnquiryChat() {
       safeSeconds / 60
     );
 
-    const remaining = safeSeconds % 60;
+    const remaining =
+      safeSeconds % 60;
 
-    return `${String(minutes).padStart(
-      2,
-      "0"
-    )}:${String(remaining).padStart(2, "0")}`;
+    return `${String(
+      minutes
+    ).padStart(2, "0")}:${String(
+      remaining
+    ).padStart(2, "0")}`;
   };
 
   // ==========================================================================
   // SHOW SUBMIT PROMPT ONCE
-  //
-  // Gemini can indicate readiness at any point.
-  // The timer can also force it at 3:30.
-  //
-  // This function guarantees the prompt is added only ONCE.
   // ==========================================================================
 
   const showSubmitPromptOnce = () => {
@@ -418,16 +630,19 @@ export default function AIEnquiryChat() {
       return;
     }
 
-    submitPromptShownRef.current = true;
+    submitPromptShownRef.current =
+      true;
 
     setReadyForSubmission(true);
     setSubmitButtonForced(true);
 
     setMessages((previous) => {
-      const alreadyExists = previous.some(
-        (message) =>
-          message.type === "submit-prompt"
-      );
+      const alreadyExists =
+        previous.some(
+          (message) =>
+            message.type ===
+            "submit-prompt"
+        );
 
       if (alreadyExists) {
         return previous;
@@ -446,7 +661,8 @@ export default function AIEnquiryChat() {
         newMessage,
       ];
 
-      messagesRef.current = updated;
+      messagesRef.current =
+        updated;
 
       return updated;
     });
@@ -467,17 +683,20 @@ export default function AIEnquiryChat() {
       return;
     }
 
-    expiryWarningShownRef.current = true;
+    expiryWarningShownRef.current =
+      true;
 
     setShowExpiryWarning(true);
 
     setMessages((previous) => {
-      const alreadyExists = previous.some(
-        (message) =>
-          message.type === "expiry-warning" &&
-          message.sessionEndMarker ===
-            sessionEndTimeRef.current
-      );
+      const alreadyExists =
+        previous.some(
+          (message) =>
+            message.type ===
+              "expiry-warning" &&
+            message.sessionEndMarker ===
+              sessionEndTimeRef.current
+        );
 
       if (alreadyExists) {
         return previous;
@@ -498,7 +717,8 @@ export default function AIEnquiryChat() {
         newMessage,
       ];
 
-      messagesRef.current = updated;
+      messagesRef.current =
+        updated;
 
       return updated;
     });
@@ -508,13 +728,6 @@ export default function AIEnquiryChat() {
 
   // ==========================================================================
   // FINAL ENQUIRY SUBMISSION
-  //
-  // Called by:
-  //
-  // 1. Customer clicking Confirm & Send Enquiry
-  // 2. Session timer expiring
-  //
-  // Always reads the latest refs.
   // ==========================================================================
 
   const submitEnquiry = async (
@@ -526,10 +739,6 @@ export default function AIEnquiryChat() {
     ) {
       return false;
     }
-
-    // ========================================================================
-    // FINAL VALIDATION
-    // ========================================================================
 
     if (
       !hasBasicEnquiryDetails()
@@ -560,7 +769,8 @@ export default function AIEnquiryChat() {
             validationMessage,
           ];
 
-          messagesRef.current = updated;
+          messagesRef.current =
+            updated;
 
           return updated;
         });
@@ -576,10 +786,6 @@ export default function AIEnquiryChat() {
     setIsSubmitting(true);
 
     try {
-      // ======================================================================
-      // ALWAYS USE LATEST DATA
-      // ======================================================================
-
       const currentEnquiryData = {
         ...enquiryDataRef.current,
       };
@@ -588,28 +794,17 @@ export default function AIEnquiryChat() {
         ...messagesRef.current,
       ];
 
-      // ======================================================================
-      // COMPLETE TRANSCRIPT
-      // ======================================================================
-
       const transcript =
         currentMessages.map(
           (message) => ({
             role:
-              message.sender === "ai"
+              message.sender ===
+              "ai"
                 ? "assistant"
                 : "user",
             text: message.text,
           })
         );
-
-      // ======================================================================
-      // NORMALIZE DATA
-      //
-      // ONLY EMAIL + MESSAGE ARE REQUIRED.
-      //
-      // EVERY OTHER FIELD IS NULL WHEN NOT PROVIDED.
-      // ======================================================================
 
       const company =
         optionalValue(
@@ -660,8 +855,21 @@ export default function AIEnquiryChat() {
         );
 
       // ======================================================================
-      // FINAL API PAYLOAD
+      // CHAT ANALYTICS — SUBMISSION EVENT
       // ======================================================================
+
+      track("chat_enquiry_submitted", {
+        chat_id: chatId,
+        automatic_submission:
+          automatic,
+        extension_count:
+          extensionCountRef.current,
+        duration_seconds:
+          Math.floor(
+            getCurrentChatActiveDurationMs() /
+              1000
+          ),
+      });
 
       const response =
         await fetch(
@@ -713,12 +921,29 @@ export default function AIEnquiryChat() {
         );
       }
 
-      // ======================================================================
-      // SUCCESS
-      // ======================================================================
-
       submittedRef.current = true;
-      sessionEndedRef.current = true;
+      sessionEndedRef.current =
+        true;
+
+      pauseChatActiveTracking();
+
+      track("chat_session_ended", {
+        chat_id: chatId,
+        reason: "enquiry_submitted",
+        automatic_submission:
+          automatic,
+        duration_seconds:
+          Math.floor(
+            chatActiveDurationRef.current /
+              1000
+          ),
+        extension_count:
+          extensionCountRef.current,
+      });
+
+      finalizeChatDuration(
+        "enquiry_submitted"
+      );
 
       setSubmitted(true);
       setSessionEnded(true);
@@ -771,7 +996,9 @@ export default function AIEnquiryChat() {
         error
       );
 
-      isSubmittingRef.current = false;
+      isSubmittingRef.current =
+        false;
+
       setIsSubmitting(false);
 
       const errorMessage = {
@@ -867,10 +1094,6 @@ export default function AIEnquiryChat() {
           secondsLeft
         );
 
-        // ================================================================
-        // SHOW SUBMIT BUTTON AT 3:30 DURING INITIAL SESSION
-        // ================================================================
-
         const elapsedSeconds =
           durationSeconds -
           secondsLeft;
@@ -884,10 +1107,6 @@ export default function AIEnquiryChat() {
           showSubmitPromptOnce();
         }
 
-        // ================================================================
-        // 30 SECOND WARNING
-        // ================================================================
-
         if (
           secondsLeft <=
             WARNING_SECONDS &&
@@ -895,10 +1114,6 @@ export default function AIEnquiryChat() {
         ) {
           showExpiryWarningMessage();
         }
-
-        // ================================================================
-        // SESSION EXPIRY
-        // ================================================================
 
         if (
           secondsLeft <= 0
@@ -911,13 +1126,6 @@ export default function AIEnquiryChat() {
             null;
 
           setRemainingSeconds(0);
-
-          // ============================================================
-          // AUTOMATIC SUBMISSION
-          //
-          // Do NOT mark session as ended before submitEnquiry().
-          // Otherwise submitEnquiry() would refuse to run.
-          // ============================================================
 
           submitEnquiry(true);
         }
@@ -982,7 +1190,17 @@ export default function AIEnquiryChat() {
     expiryWarningShownRef.current =
       false;
 
-    // Keep submit button available if it was already shown.
+    // ========================================================================
+    // CHAT ANALYTICS — EXTENSION
+    // ========================================================================
+
+    track("chat_session_extended", {
+      chat_id: chatId,
+      extension_number: newCount,
+      extension_seconds:
+        EXTENSION_SECONDS,
+    });
+
     if (
       submitPromptShownRef.current
     ) {
@@ -1036,9 +1254,37 @@ export default function AIEnquiryChat() {
 
     setOpen(true);
 
-    // ================================================================
+    pageVisibleRef.current =
+      document.visibilityState ===
+      "visible";
+
+    // ========================================================================
+    // CHAT ANALYTICS — CHAT WINDOW OPEN
+    // ========================================================================
+
+    if (!chatWindowOpenedAtRef.current) {
+      chatWindowOpenedAtRef.current =
+        Date.now();
+    }
+
+    if (!sessionStartedRef.current) {
+      track("chat_window_hit", {
+        chat_id: chatId,
+        action: "open",
+      });
+    } else {
+      track("chat_window_hit", {
+        chat_id: chatId,
+        action: "reopen",
+      });
+    }
+
+    // Start/resume active-time tracking.
+    startChatActiveTracking();
+
+    // ========================================================================
     // START SESSION ONLY ON FIRST OPEN
-    // ================================================================
+    // ========================================================================
 
     if (
       !sessionStartedRef.current
@@ -1046,61 +1292,20 @@ export default function AIEnquiryChat() {
       startChatSession();
     }
 
-    // ================================================================
+    // ========================================================================
     // INITIAL ENY GREETING
-    // ================================================================
-
-    if (
-      messagesRef.current.length === 0
-    ) {
-      setTimeout(() => {
-        if (
-          sessionEndedRef.current ||
-          submittedRef.current
-        ) {
-          return;
-        }
-
-        const timestamp =
-          Date.now();
-
-        const initialMessages = [
-          {
-            id: timestamp,
-            sender: "ai",
-            text:
-              "🙏 Namaste! Welcome to Enviol Polytech Solutions.",
-          },
-          {
-            id: timestamp + 1,
-            sender: "ai",
-            text:
-              "I am ENY from the Enviol TechSupport AI team. I am grateful for your visit.",
-          },
-          {
-            id: timestamp + 2,
-            sender: "ai",
-            text:
-              "I would be happy to understand your requirement and help identify the right polyol or polyurethane solution for your application.",
-          },
-          {
-            id: timestamp + 3,
-            sender: "ai",
-            text:
-              "May I know what you are looking for today?",
-          },
-        ];
-
-        messagesRef.current =
-          initialMessages;
-
-        setMessages(
-          initialMessages
-        );
-
-        playReplySound();
-      }, 400);
-    }
+    //
+    // IMPORTANT:
+    // The full ENY introduction is no longer automatically inserted here.
+    //
+    // The visitor initially sees the lightweight:
+    //
+    // "Dear Visitor,
+    //  Need help? Chat with Eny."
+    //
+    // Once the visitor sends a message, the normal /api/ai-chat
+    // flow handles ENY's response.
+    // ========================================================================
 
     setTimeout(() => {
       if (
@@ -1110,6 +1315,36 @@ export default function AIEnquiryChat() {
         inputRef.current?.focus();
       }
     }, 500);
+  };
+
+  // ==========================================================================
+  // CLOSE / MINIMIZE CHAT
+  // ==========================================================================
+
+  const closeChatWindow = (
+    reason = "minimized"
+  ) => {
+    // Record the active time up to this exact moment.
+    pauseChatActiveTracking();
+
+    if (
+      chatId &&
+      sessionStartedRef.current &&
+      !submittedRef.current &&
+      !sessionEndedRef.current
+    ) {
+      track("chat_window_minimized", {
+        chat_id: chatId,
+        reason,
+        duration_seconds:
+          Math.floor(
+            chatActiveDurationRef.current /
+              1000
+          ),
+      });
+    }
+
+    setOpen(false);
   };
 
   // ==========================================================================
@@ -1130,6 +1365,15 @@ export default function AIEnquiryChat() {
     }
 
     playSendSound();
+
+    // ========================================================================
+    // CHAT ANALYTICS — USER MESSAGE
+    // ========================================================================
+
+    track("chat_message_sent", {
+      chat_id: chatId,
+      message_length: text.length,
+    });
 
     const userMessage = {
       id: Date.now(),
@@ -1183,9 +1427,6 @@ export default function AIEnquiryChat() {
 
       // ======================================================================
       // STORE STRUCTURED ENQUIRY DATA
-      //
-      // Every field Gemini returns is merged.
-      // Existing fields are preserved unless Gemini supplies a newer value.
       // ======================================================================
 
       if (
@@ -1201,8 +1442,6 @@ export default function AIEnquiryChat() {
           ...data.enquiryData,
         };
 
-        // IMPORTANT:
-        // Update ref immediately, not only through React state.
         enquiryDataRef.current =
           mergedData;
 
@@ -1213,8 +1452,6 @@ export default function AIEnquiryChat() {
 
       // ======================================================================
       // GEMINI READINESS
-      //
-      // Once the button has appeared, Gemini can NEVER hide it.
       // ======================================================================
 
       if (
@@ -1309,10 +1546,6 @@ export default function AIEnquiryChat() {
 
   // ==========================================================================
   // EFFECTIVE SUBMISSION BUTTON
-  //
-  // Gemini OR 3:30 timer can activate it.
-  //
-  // Once activated, it remains available.
   // ==========================================================================
 
   const canSubmit =
@@ -1397,9 +1630,11 @@ export default function AIEnquiryChat() {
             right-5
             z-[100]
             w-[calc(100vw-2rem)]
-            sm:w-[390px]
-            h-[600px]
+            sm:w-[360px]
+            h-[400px]
+			min-h-[400px]
             max-h-[calc(100vh-2rem)]
+			resize-y
             bg-white
             rounded-2xl
             shadow-2xl
@@ -1453,7 +1688,9 @@ export default function AIEnquiryChat() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() =>
-                  setOpen(false)
+                  closeChatWindow(
+                    "minimized"
+                  )
                 }
                 className="
                   p-2
@@ -1467,7 +1704,9 @@ export default function AIEnquiryChat() {
 
               <button
                 onClick={() =>
-                  setOpen(false)
+                  closeChatWindow(
+                    "closed"
+                  )
                 }
                 className="
                   p-2
@@ -1491,9 +1730,38 @@ export default function AIEnquiryChat() {
               overflow-y-auto
               p-4
               space-y-3
-              bg-gray-50
+              bg-yellow-50
             "
           >
+            {/* ============================================================ */}
+            {/* INITIAL VISITOR PROMPT */}
+            {/* ============================================================ */}
+
+            {messages.length === 0 && (
+              <div className="flex justify-start">
+                <div
+                  className="
+                    max-w-[82%]
+                    px-4
+                    py-3
+                    rounded-2xl
+                    rounded-bl-md
+                    text-sm
+                    leading-relaxed
+                    bg-white
+                    text-gray-800
+                    shadow-sm
+                    border
+                    border-gray-100
+                  "
+                >
+                  Dear Visitor,
+                  <br />
+                  Need help? Chat with Eny.
+                </div>
+              </div>
+            )}
+
             {messages.map(
               (message) => (
                 <div
@@ -1729,6 +1997,13 @@ export default function AIEnquiryChat() {
               >
                 <button
                   onClick={() => {
+                    track(
+                      "chat_quick_enquiry_click",
+                      {
+                        chat_id: chatId,
+                      }
+                    );
+
                     window.location.href =
                       "/contact";
                   }}

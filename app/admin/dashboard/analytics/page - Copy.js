@@ -417,98 +417,141 @@ export default function AnalyticsDashboard() {
       {/* ============================================================ */}
 
       {data && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <GeoCard
-            title="Top Countries"
-            items={data.topCountries || []}
-            labelKey="country"
-            type="country"
-            onClick={openVisitors}
-          />
+  <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <GeoBarChart
+      title="Top Countries"
+      items={data.topCountries || []}
+      labelKey="country"
+      type="country"
+      onClick={openVisitors}
+    />
 
-          <GeoCard
-            title="Top Regions"
-            items={data.topRegions || []}
-            labelKey="region"
-            type="region"
-            onClick={openVisitors}
-          />
+    <GeoBarChart
+      title="Top Regions"
+      items={data.topRegions || []}
+      labelKey="region"
+      type="region"
+      onClick={openVisitors}
+    />
 
-          <GeoCard
-            title="Top Cities"
-            items={data.topCities || []}
-            labelKey="city"
-            type="city"
-            onClick={openVisitors}
-          />
-        </div>
-      )}
+    <GeoBarChart
+      title="Top Cities"
+      items={data.topCities || []}
+      labelKey="city"
+      type="city"
+      onClick={openVisitors}
+    />
+  </div>
+)}
 
       {/* ============================================================ */}
-      {/* TOP PAGES */}
-      {/* ============================================================ */}
+{/* TOP 20 PAGES */}
+{/* ============================================================ */}
 
-      {data && (
-        <div className="bg-white border p-4 rounded">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h2 className="font-semibold text-[#1F524F]">
-                Top Pages
-              </h2>
+{data && (
+  <div className="bg-white border p-5 rounded">
+    <div className="flex items-center justify-between mb-5">
+      <div>
+        <h2 className="font-semibold text-[#1F524F] text-lg">
+          Top 20 Pages
+        </h2>
 
-              <p className="text-xs text-gray-500 mt-1">
-                Click the view count to see individual visitors
-              </p>
-            </div>
-          </div>
+        <p className="text-xs text-gray-500 mt-1">
+          Click any bar to see individual visitors for that page
+        </p>
+      </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-gray-500">
-                  <th className="text-left py-2">
-                    Page
-                  </th>
+      <span className="text-xs text-gray-400">
+        {Math.min(data.topPages?.length || 0, 20)} pages
+      </span>
+    </div>
 
-                  <th className="text-right py-2">
-                    Views
-                  </th>
-                </tr>
-              </thead>
+    {(!data.topPages || data.topPages.length === 0) ? (
+      <p className="text-sm text-gray-400 py-6 text-center">
+        No page data available
+      </p>
+    ) : (
+      <div className="space-y-3">
 
-              <tbody>
-                {(data.topPages || []).map((p, i) => (
-                  <tr
-                    key={`${p.page}-${i}`}
-                    className="border-b last:border-b-0"
+        {(data.topPages || [])
+          .slice(0, 20)
+          .map((p, i) => {
+
+            const page =
+              p.page || "Unknown";
+
+            const views =
+              Number(p.views) || 0;
+
+            const maxViews =
+              Number(data.topPages?.[0]?.views) || 1;
+
+            const width =
+              Math.max(
+                2,
+                (views / maxViews) * 100
+              );
+
+            return (
+              <button
+                key={`${page}-${i}`}
+                onClick={() =>
+                  openVisitors(
+                    "page",
+                    page,
+                    "Page Visitor Log"
+                  )
+                }
+                className="w-full text-left group"
+                title={`View visitors for ${page}`}
+              >
+
+                <div className="flex items-center gap-3">
+
+                  {/* RANK */}
+
+                  <div className="w-7 text-xs text-gray-400 text-right shrink-0">
+                    {i + 1}
+                  </div>
+
+                  {/* PAGE */}
+
+                  <div
+                    className="w-52 md:w-72 lg:w-80 text-sm text-gray-700 truncate shrink-0"
+                    title={page}
                   >
-                    <td className="py-2 pr-4 break-all">
-                      {p.page}
-                    </td>
+                    {page}
+                  </div>
 
-                    <td className="py-2 text-right">
-                      <button
-                        onClick={() =>
-                          openVisitors(
-                            "page",
-                            p.page,
-                            "Page Visitor Log"
-                          )
-                        }
-                        className="font-semibold text-[#1F524F] underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
-                        title="View individual visitors"
-                      >
-                        {p.views || 0}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+                  {/* BAR */}
 
+                  <div className="flex-1 bg-gray-100 rounded-md h-8 overflow-hidden">
+
+                    <div
+                      className="h-full bg-[#42B3A5] rounded-md transition-all duration-300 group-hover:bg-[#1F524F]"
+                      style={{
+                        width: `${width}%`,
+                      }}
+                    />
+
+                  </div>
+
+                  {/* VIEW COUNT */}
+
+                  <div className="w-16 text-right font-semibold text-[#1F524F] shrink-0">
+                    {views}
+                  </div>
+
+                </div>
+
+              </button>
+            );
+          })}
+
+      </div>
+    )}
+  </div>
+)}
       {/* ============================================================ */}
       {/* VISITOR LIST MODAL */}
       {/* ============================================================ */}
@@ -949,67 +992,117 @@ function ModalOverlay({ children, onClose }) {
 }
 
 /* ====================================================================== */
-/* GEO CARD */
+/* GEO HORIZONTAL BAR CHART */
 /* ====================================================================== */
 
-function GeoCard({
+function GeoBarChart({
   title,
-  items,
+  items = [],
   labelKey,
   type,
   onClick,
 }) {
+  const visibleItems = items.slice(0, 20);
+
+  const maxVisitors = Math.max(
+    ...visibleItems.map((item) =>
+      Number(item.visitors) || 0
+    ),
+    1
+  );
+
   return (
-    <div className="bg-white border p-4 rounded">
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="font-semibold">
-          {title}
-        </h2>
+    <div className="bg-white border rounded-xl p-5">
+      {/* HEADER */}
+
+      <div className="flex items-start justify-between mb-5">
+        <div>
+          <h2 className="font-semibold text-[#1F524F] text-lg">
+            {title}
+          </h2>
+
+          <p className="text-xs text-gray-500 mt-1">
+            Top {visibleItems.length} by visitors
+          </p>
+        </div>
 
         <span className="text-xs text-gray-400">
-          Click visitors
+          Click bar
         </span>
       </div>
 
-      {items.length === 0 && (
-        <p className="text-sm text-gray-400 py-2">
-          No data
+      {/* NO DATA */}
+
+      {visibleItems.length === 0 ? (
+        <p className="text-sm text-gray-400 py-8 text-center">
+          No data available
         </p>
+      ) : (
+        <div className="space-y-3">
+          {visibleItems.map((item, index) => {
+            const label =
+              item[labelKey] || "Unknown";
+
+            const visitors =
+              Number(item.visitors) || 0;
+
+            const width =
+              maxVisitors > 0
+                ? (visitors / maxVisitors) * 100
+                : 0;
+
+            return (
+              <button
+                key={`${label}-${index}`}
+                type="button"
+                onClick={() =>
+                  onClick(
+                    type,
+                    label,
+                    `${title} Visitor Log`
+                  )
+                }
+                className="w-full text-left group"
+                title={`View visitors for ${label}`}
+              >
+                {/* TOP LINE */}
+
+                <div className="flex items-center justify-between gap-3 mb-1">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-xs text-gray-400 w-5 text-right shrink-0">
+                      {index + 1}
+                    </span>
+
+                    <span
+                      className="text-sm text-gray-700 truncate"
+                      title={label}
+                    >
+                      {label}
+                    </span>
+                  </div>
+
+                  <span className="text-sm font-semibold text-[#1F524F] shrink-0">
+                    {visitors}
+                  </span>
+                </div>
+
+                {/* BAR TRACK */}
+
+                <div className="ml-7 w-[calc(100%-1.75rem)] h-7 bg-gray-100 rounded-md overflow-hidden">
+                  {/* ACTUAL BAR */}
+
+                  <div
+                    className="h-full bg-[#42B3A5] rounded-md transition-all duration-300 group-hover:bg-[#1F524F]"
+                    style={{
+                      width: `${Math.max(width, 1)}%`,
+                    }}
+                  />
+                </div>
+              </button>
+            );
+          })}
+        </div>
       )}
-
-      {items.map((item, i) => {
-        const label =
-          item[labelKey] || "Unknown";
-
-        const count = item.visitors || 0;
-
-        return (
-          <div
-            key={`${label}-${i}`}
-            className="flex justify-between items-center border-b last:border-b-0 py-2"
-          >
-            <span className="truncate pr-3">
-              {label}
-            </span>
-
-            <button
-              onClick={() =>
-                onClick(
-                  type,
-                  label,
-                  `${title.slice(
-                    4
-                  )} Visitor Log`
-                )
-              }
-              className="font-semibold text-[#1F524F] underline decoration-dotted underline-offset-4 hover:text-[#42B3A5] shrink-0"
-              title="View visitors"
-            >
-              {count}
-            </button>
-          </div>
-        );
-      })}
     </div>
   );
 }

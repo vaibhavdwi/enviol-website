@@ -138,6 +138,20 @@ export default function AIEnquiryChat() {
   const pageVisibleRef = useRef(true);
 
   // ==========================================================================
+  // NEW CHAT WINDOW ANALYTICS REFS
+  // ==========================================================================
+
+  // Prevent duplicate "opened" event.
+  const chatWindowOpenedEventTrackedRef = useRef(false);
+
+  // Track whether this chat window has previously been opened.
+  const chatWindowHasBeenOpenedRef = useRef(false);
+
+  // Track whether the window was previously minimized/closed.
+  // This lets us distinguish "opened" from "reopened".
+  const chatWindowWasClosedOrMinimizedRef = useRef(false);
+
+  // ==========================================================================
   // KEEP REFS SYNCHRONIZED WITH STATE
   // ==========================================================================
 
@@ -158,7 +172,7 @@ export default function AIEnquiryChat() {
   }, []);
 
   // ==========================================================================
-  // CLEAN UP TIMER
+  // CLEAN UP TIMER / ANALYTICS INTERVALS
   // ==========================================================================
 
   useEffect(() => {
@@ -166,6 +180,11 @@ export default function AIEnquiryChat() {
       if (timerIntervalRef.current) {
         clearInterval(timerIntervalRef.current);
         timerIntervalRef.current = null;
+      }
+
+      if (chatActiveHeartbeatRef.current) {
+        clearInterval(chatActiveHeartbeatRef.current);
+        chatActiveHeartbeatRef.current = null;
       }
     };
   }, []);
@@ -184,6 +203,10 @@ export default function AIEnquiryChat() {
     return Math.max(0, duration);
   };
 
+  // ==========================================================================
+  // START ACTIVE CHAT TRACKING
+  // ==========================================================================
+
   const startChatActiveTracking = () => {
     if (
       chatDurationFinalizedRef.current ||
@@ -197,10 +220,12 @@ export default function AIEnquiryChat() {
       return;
     }
 
+    // Start a new active period only if one isn't already running.
     if (chatActiveStartedAtRef.current === null) {
       chatActiveStartedAtRef.current = Date.now();
     }
 
+    // Do not create multiple heartbeat intervals.
     if (chatActiveHeartbeatRef.current) {
       return;
     }
@@ -231,6 +256,10 @@ export default function AIEnquiryChat() {
     }, CHAT_ACTIVE_HEARTBEAT_SECONDS * 1000);
   };
 
+  // ==========================================================================
+  // PAUSE ACTIVE CHAT TRACKING
+  // ==========================================================================
+
   const pauseChatActiveTracking = () => {
     if (chatActiveStartedAtRef.current !== null) {
       chatActiveDurationRef.current +=
@@ -241,16 +270,16 @@ export default function AIEnquiryChat() {
 
     if (chatActiveHeartbeatRef.current) {
       clearInterval(chatActiveHeartbeatRef.current);
-
       chatActiveHeartbeatRef.current = null;
     }
   };
 
+  // ==========================================================================
+  // FINALIZE CHAT DURATION
+  // ==========================================================================
+
   const finalizeChatDuration = (reason = "unknown") => {
-    if (
-      chatDurationFinalizedRef.current ||
-      !chatId
-    ) {
+    if (chatDurationFinalizedRef.current || !chatId) {
       return;
     }
 
@@ -259,7 +288,6 @@ export default function AIEnquiryChat() {
     chatDurationFinalizedRef.current = true;
 
     const durationMs = chatActiveDurationRef.current;
-
     const durationSeconds = Math.floor(durationMs / 1000);
 
     track("chat_window_duration", {
@@ -273,33 +301,31 @@ export default function AIEnquiryChat() {
 
   // ==========================================================================
   // PAGE VISIBILITY TRACKING
+  //
+  // IMPORTANT:
+  //
+  // Page/tab becoming hidden is NOT a chat minimize.
+  //
+  // Therefore we only pause/resume active-time tracking here.
+  // We DO NOT fire chat_window_minimized.
   // ==========================================================================
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      const visible =
-        document.visibilityState === "visible";
+      const visible = document.visibilityState === "visible";
 
       pageVisibleRef.current = visible;
 
       if (!visible) {
+        // Browser/tab hidden.
+        //
+        // This is NOT a chat minimize.
+        // Just pause active-time measurement.
         pauseChatActiveTracking();
-
-        if (
-          open &&
-          !submittedRef.current &&
-          !sessionEndedRef.current &&
-          chatId
-        ) {
-          track("chat_window_minimized", {
-            chat_id: chatId,
-            reason: "page_hidden",
-            duration_seconds: Math.floor(
-              getCurrentChatActiveDurationMs() / 1000
-            ),
-          });
-        }
       } else {
+        // Browser/tab visible again.
+        //
+        // Resume active-time measurement only if chat is still open.
         if (
           open &&
           !submittedRef.current &&
@@ -338,16 +364,10 @@ export default function AIEnquiryChat() {
       }
     };
 
-    window.addEventListener(
-      "pagehide",
-      handlePageExit
-    );
+    window.addEventListener("pagehide", handlePageExit);
 
     return () => {
-      window.removeEventListener(
-        "pagehide",
-        handlePageExit
-      );
+      window.removeEventListener("pagehide", handlePageExit);
     };
   }, [chatId]);
 
@@ -358,17 +378,13 @@ export default function AIEnquiryChat() {
   const playSendSound = () => {
     try {
       const AudioContext =
-        window.AudioContext ||
-        window.webkitAudioContext;
+        window.AudioContext || window.webkitAudioContext;
 
-      const audioContext =
-        new AudioContext();
+      const audioContext = new AudioContext();
 
-      const oscillator =
-        audioContext.createOscillator();
+      const oscillator = audioContext.createOscillator();
 
-      const gain =
-        audioContext.createGain();
+      const gain = audioContext.createGain();
 
       oscillator.type = "sine";
 
@@ -397,30 +413,22 @@ export default function AIEnquiryChat() {
 
       oscillator.start();
 
-      oscillator.stop(
-        audioContext.currentTime + 0.12
-      );
+      oscillator.stop(audioContext.currentTime + 0.12);
     } catch (error) {
-      console.log(
-        "Send sound unavailable"
-      );
+      console.log("Send sound unavailable");
     }
   };
 
   const playReplySound = () => {
     try {
       const AudioContext =
-        window.AudioContext ||
-        window.webkitAudioContext;
+        window.AudioContext || window.webkitAudioContext;
 
-      const audioContext =
-        new AudioContext();
+      const audioContext = new AudioContext();
 
-      const oscillator =
-        audioContext.createOscillator();
+      const oscillator = audioContext.createOscillator();
 
-      const gain =
-        audioContext.createGain();
+      const gain = audioContext.createGain();
 
       oscillator.type = "sine";
 
@@ -449,13 +457,9 @@ export default function AIEnquiryChat() {
 
       oscillator.start();
 
-      oscillator.stop(
-        audioContext.currentTime + 0.18
-      );
+      oscillator.stop(audioContext.currentTime + 0.18);
     } catch (error) {
-      console.log(
-        "Reply sound unavailable"
-      );
+      console.log("Reply sound unavailable");
     }
   };
 
@@ -480,15 +484,11 @@ export default function AIEnquiryChat() {
   // ==========================================================================
 
   const optionalValue = (value) => {
-    if (
-      value === undefined ||
-      value === null
-    ) {
+    if (value === undefined || value === null) {
       return null;
     }
 
-    const normalized =
-      String(value).trim();
+    const normalized = String(value).trim();
 
     return normalized || null;
   };
@@ -501,9 +501,7 @@ export default function AIEnquiryChat() {
     data = enquiryDataRef.current
   ) => {
     const directMessage = String(
-      data.message ||
-        data.summary ||
-        ""
+      data.message || data.summary || ""
     ).trim();
 
     if (directMessage) {
@@ -512,20 +510,13 @@ export default function AIEnquiryChat() {
 
     const parts = [];
 
-    const product = String(
-      data.product || ""
-    ).trim();
+    const product = String(data.product || "").trim();
 
-    const application = String(
-      data.application || ""
-    ).trim();
+    const application = String(data.application || "").trim();
 
-    const technicalGrade =
-      String(
-        data.technicalGrade ||
-          data.grade ||
-          ""
-      ).trim();
+    const technicalGrade = String(
+      data.technicalGrade || data.grade || ""
+    ).trim();
 
     const quantity = String(
       data.quantity ||
@@ -534,41 +525,30 @@ export default function AIEnquiryChat() {
         ""
     ).trim();
 
-    const specifications =
-      String(
-        data.specifications ||
-          data.technicalSpecifications ||
-          ""
-      ).trim();
+    const specifications = String(
+      data.specifications ||
+        data.technicalSpecifications ||
+        ""
+    ).trim();
 
     if (product) {
-      parts.push(
-        `Product: ${product}`
-      );
+      parts.push(`Product: ${product}`);
     }
 
     if (application) {
-      parts.push(
-        `Application: ${application}`
-      );
+      parts.push(`Application: ${application}`);
     }
 
     if (technicalGrade) {
-      parts.push(
-        `Grade: ${technicalGrade}`
-      );
+      parts.push(`Grade: ${technicalGrade}`);
     }
 
     if (quantity) {
-      parts.push(
-        `Quantity: ${quantity}`
-      );
+      parts.push(`Quantity: ${quantity}`);
     }
 
     if (specifications) {
-      parts.push(
-        `Specifications: ${specifications}`
-      );
+      parts.push(`Specifications: ${specifications}`);
     }
 
     return parts.join(" | ").trim();
@@ -583,14 +563,11 @@ export default function AIEnquiryChat() {
       enquiryDataRef.current.email || ""
     ).trim();
 
-    const requirement =
-      getRequirementDescription(
-        enquiryDataRef.current
-      );
-
-    return Boolean(
-      email && requirement
+    const requirement = getRequirementDescription(
+      enquiryDataRef.current
     );
+
+    return Boolean(email && requirement);
   };
 
   // ==========================================================================
@@ -603,16 +580,11 @@ export default function AIEnquiryChat() {
       Number(seconds) || 0
     );
 
-    const minutes = Math.floor(
-      safeSeconds / 60
-    );
+    const minutes = Math.floor(safeSeconds / 60);
 
-    const remaining =
-      safeSeconds % 60;
+    const remaining = safeSeconds % 60;
 
-    return `${String(
-      minutes
-    ).padStart(2, "0")}:${String(
+    return `${String(minutes).padStart(2, "0")}:${String(
       remaining
     ).padStart(2, "0")}`;
   };
@@ -630,19 +602,15 @@ export default function AIEnquiryChat() {
       return;
     }
 
-    submitPromptShownRef.current =
-      true;
+    submitPromptShownRef.current = true;
 
     setReadyForSubmission(true);
     setSubmitButtonForced(true);
 
     setMessages((previous) => {
-      const alreadyExists =
-        previous.some(
-          (message) =>
-            message.type ===
-            "submit-prompt"
-        );
+      const alreadyExists = previous.some(
+        (message) => message.type === "submit-prompt"
+      );
 
       if (alreadyExists) {
         return previous;
@@ -656,13 +624,9 @@ export default function AIEnquiryChat() {
           'Before we finish, you can submit your enquiry to the Enviol team now. If you have already shared your contact details and requirement, simply click "Confirm & Send Enquiry" below. You can also add anything else you would like us to know.',
       };
 
-      const updated = [
-        ...previous,
-        newMessage,
-      ];
+      const updated = [...previous, newMessage];
 
-      messagesRef.current =
-        updated;
+      messagesRef.current = updated;
 
       return updated;
     });
@@ -683,20 +647,16 @@ export default function AIEnquiryChat() {
       return;
     }
 
-    expiryWarningShownRef.current =
-      true;
+    expiryWarningShownRef.current = true;
 
     setShowExpiryWarning(true);
 
     setMessages((previous) => {
-      const alreadyExists =
-        previous.some(
-          (message) =>
-            message.type ===
-              "expiry-warning" &&
-            message.sessionEndMarker ===
-              sessionEndTimeRef.current
-        );
+      const alreadyExists = previous.some(
+        (message) =>
+          message.type === "expiry-warning" &&
+          message.sessionEndMarker === sessionEndTimeRef.current
+      );
 
       if (alreadyExists) {
         return previous;
@@ -706,19 +666,14 @@ export default function AIEnquiryChat() {
         id: `expiry-warning-${Date.now()}`,
         sender: "ai",
         type: "expiry-warning",
-        sessionEndMarker:
-          sessionEndTimeRef.current,
+        sessionEndMarker: sessionEndTimeRef.current,
         text:
           "⏳ Your chat session will end in 30 seconds. If you need more time, you can extend the chat by 2 minutes. Otherwise, your enquiry will be submitted automatically when this session ends.",
       };
 
-      const updated = [
-        ...previous,
-        newMessage,
-      ];
+      const updated = [...previous, newMessage];
 
-      messagesRef.current =
-        updated;
+      messagesRef.current = updated;
 
       return updated;
     });
@@ -728,11 +683,19 @@ export default function AIEnquiryChat() {
 
   // ==========================================================================
   // FINAL ENQUIRY SUBMISSION
+  //
+  // IMPORTANT:
+  //
+  // chat_enquiry_submitted is recorded ONLY after the API successfully
+  // accepts the enquiry.
+  //
+  // This applies to BOTH:
+  //
+  // 1. Manual "Confirm & Send Enquiry"
+  // 2. Automatic session-expiry submission
   // ==========================================================================
 
-  const submitEnquiry = async (
-    automatic = false
-  ) => {
+  const submitEnquiry = async (automatic = false) => {
     if (
       isSubmittingRef.current ||
       submittedRef.current
@@ -740,17 +703,12 @@ export default function AIEnquiryChat() {
       return false;
     }
 
-    if (
-      !hasBasicEnquiryDetails()
-    ) {
+    if (!hasBasicEnquiryDetails()) {
       if (!automatic) {
         setMessages((previous) => {
-          const validationAlreadyShown =
-            previous.some(
-              (message) =>
-                message.type ===
-                "validation-error"
-            );
+          const validationAlreadyShown = previous.some(
+            (message) => message.type === "validation-error"
+          );
 
           if (validationAlreadyShown) {
             return previous;
@@ -764,13 +722,9 @@ export default function AIEnquiryChat() {
               "Before I submit this enquiry, I still need your email address and a clear description of your requirement. Other details such as company name, phone number, contact person, quantity, grade and delivery location are optional.",
           };
 
-          const updated = [
-            ...previous,
-            validationMessage,
-          ];
+          const updated = [...previous, validationMessage];
 
-          messagesRef.current =
-            updated;
+          messagesRef.current = updated;
 
           return updated;
         });
@@ -790,129 +744,95 @@ export default function AIEnquiryChat() {
         ...enquiryDataRef.current,
       };
 
-      const currentMessages = [
-        ...messagesRef.current,
-      ];
+      const currentMessages = [...messagesRef.current];
 
-      const transcript =
-        currentMessages.map(
-          (message) => ({
-            role:
-              message.sender ===
-              "ai"
-                ? "assistant"
-                : "user",
-            text: message.text,
-          })
-        );
+      const transcript = currentMessages.map((message) => ({
+        role:
+          message.sender === "ai"
+            ? "assistant"
+            : "user",
+        text: message.text,
+      }));
 
-      const company =
-        optionalValue(
-          currentEnquiryData.company
-        );
+      const company = optionalValue(
+        currentEnquiryData.company
+      );
 
-      const person =
-        optionalValue(
-          currentEnquiryData.person ||
-            currentEnquiryData.contactPerson
-        );
+      const person = optionalValue(
+        currentEnquiryData.person ||
+          currentEnquiryData.contactPerson
+      );
 
-      const email =
-        String(
-          currentEnquiryData.email ||
-            ""
-        ).trim();
+      const email = String(
+        currentEnquiryData.email || ""
+      ).trim();
 
-      const phone =
-        optionalValue(
-          currentEnquiryData.phone
-        );
+      const phone = optionalValue(
+        currentEnquiryData.phone
+      );
 
-      const category =
-        optionalValue(
-          currentEnquiryData.category
-        );
+      const category = optionalValue(
+        currentEnquiryData.category
+      );
 
-      const product =
-        optionalValue(
-          currentEnquiryData.product
-        );
+      const product = optionalValue(
+        currentEnquiryData.product
+      );
 
-      const application =
-        optionalValue(
-          currentEnquiryData.application
-        );
+      const application = optionalValue(
+        currentEnquiryData.application
+      );
 
-      const technicalGrade =
-        optionalValue(
-          currentEnquiryData.technicalGrade ||
-            currentEnquiryData.grade
-        );
+      const technicalGrade = optionalValue(
+        currentEnquiryData.technicalGrade ||
+          currentEnquiryData.grade
+      );
 
-      const message =
-        getRequirementDescription(
-          currentEnquiryData
-        );
+      const message = getRequirementDescription(
+        currentEnquiryData
+      );
 
       // ======================================================================
-      // CHAT ANALYTICS — SUBMISSION EVENT
+      // SUBMIT TO API
       // ======================================================================
 
-      track("chat_enquiry_submitted", {
-        chat_id: chatId,
-        automatic_submission:
-          automatic,
-        extension_count:
-          extensionCountRef.current,
-        duration_seconds:
-          Math.floor(
-            getCurrentChatActiveDurationMs() /
-              1000
-          ),
-      });
+      const response = await fetch(
+        "/api/ai-enquiry",
+        {
+          method: "POST",
 
-      const response =
-        await fetch(
-          "/api/ai-enquiry",
-          {
-            method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
+          body: JSON.stringify({
+            chatId,
 
-            body: JSON.stringify({
-              chatId,
+            company,
+            person,
+            email,
+            phone,
+            category,
 
-              company,
-              person,
-              email,
-              phone,
-              category,
+            product,
+            application,
+            technicalGrade,
 
-              product,
-              application,
-              technicalGrade,
+            message,
 
-              message,
+            enquiryData: currentEnquiryData,
 
-              enquiryData:
-                currentEnquiryData,
+            transcript,
 
-              transcript,
+            automaticSubmission: automatic,
 
-              automaticSubmission:
-                automatic,
+            extensionCount:
+              extensionCountRef.current,
+          }),
+        }
+      );
 
-              extensionCount:
-                extensionCountRef.current,
-            }),
-          }
-        );
-
-      const data =
-        await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -921,25 +841,59 @@ export default function AIEnquiryChat() {
         );
       }
 
+      // ======================================================================
+      // IMPORTANT:
+      //
+      // ONLY NOW do we mark the enquiry as successfully submitted.
+      //
+      // This means analytics ✓ always represents a genuine successful
+      // submission.
+      // ======================================================================
+
+      const successfulChatId =
+        data.chatId || chatId;
+
+      const finalDurationSeconds = Math.floor(
+        getCurrentChatActiveDurationMs() / 1000
+      );
+
+      track("chat_enquiry_submitted", {
+        chat_id: successfulChatId,
+        automatic_submission: automatic,
+        extension_count:
+          extensionCountRef.current,
+        duration_seconds:
+          finalDurationSeconds,
+      });
+
+      // ======================================================================
+      // MARK SESSION AS SUCCESSFULLY SUBMITTED
+      // ======================================================================
+
       submittedRef.current = true;
-      sessionEndedRef.current =
-        true;
+
+      sessionEndedRef.current = true;
 
       pauseChatActiveTracking();
 
+      // ======================================================================
+      // SESSION ENDED EVENT
+      // ======================================================================
+
       track("chat_session_ended", {
-        chat_id: chatId,
+        chat_id: successfulChatId,
         reason: "enquiry_submitted",
-        automatic_submission:
-          automatic,
-        duration_seconds:
-          Math.floor(
-            chatActiveDurationRef.current /
-              1000
-          ),
+        automatic_submission: automatic,
+        duration_seconds: Math.floor(
+          chatActiveDurationRef.current / 1000
+        ),
         extension_count:
           extensionCountRef.current,
       });
+
+      // ======================================================================
+      // FINAL DURATION EVENT
+      // ======================================================================
 
       finalizeChatDuration(
         "enquiry_submitted"
@@ -953,12 +907,9 @@ export default function AIEnquiryChat() {
       setShowExpiryWarning(false);
 
       if (timerIntervalRef.current) {
-        clearInterval(
-          timerIntervalRef.current
-        );
+        clearInterval(timerIntervalRef.current);
 
-        timerIntervalRef.current =
-          null;
+        timerIntervalRef.current = null;
       }
 
       setRemainingSeconds(0);
@@ -996,10 +947,14 @@ export default function AIEnquiryChat() {
         error
       );
 
-      isSubmittingRef.current =
-        false;
+      isSubmittingRef.current = false;
 
       setIsSubmitting(false);
+
+      // IMPORTANT:
+      //
+      // No chat_enquiry_submitted event is sent here because the enquiry
+      // was NOT successfully submitted.
 
       const errorMessage = {
         id: `submission-error-${Date.now()}`,
@@ -1031,9 +986,7 @@ export default function AIEnquiryChat() {
   // START / RESET SESSION TIMER
   // ==========================================================================
 
-  const startSessionTimer = (
-    durationSeconds
-  ) => {
+  const startSessionTimer = (durationSeconds) => {
     if (
       submittedRef.current ||
       sessionEndedRef.current
@@ -1051,11 +1004,9 @@ export default function AIEnquiryChat() {
       Date.now() +
       durationSeconds * 1000;
 
-    sessionEndTimeRef.current =
-      endTime;
+    sessionEndTimeRef.current = endTime;
 
-    expiryWarningShownRef.current =
-      false;
+    expiryWarningShownRef.current = false;
 
     setShowExpiryWarning(false);
 
@@ -1073,22 +1024,20 @@ export default function AIEnquiryChat() {
             timerIntervalRef.current
           );
 
-          timerIntervalRef.current =
-            null;
+          timerIntervalRef.current = null;
 
           return;
         }
 
-        const secondsLeft =
-          Math.max(
-            0,
-            Math.ceil(
-              (
-                sessionEndTimeRef.current -
-                Date.now()
-              ) / 1000
-            )
-          );
+        const secondsLeft = Math.max(
+          0,
+          Math.ceil(
+            (
+              sessionEndTimeRef.current -
+              Date.now()
+            ) / 1000
+          )
+        );
 
         setRemainingSeconds(
           secondsLeft
@@ -1115,18 +1064,24 @@ export default function AIEnquiryChat() {
           showExpiryWarningMessage();
         }
 
-        if (
-          secondsLeft <= 0
-        ) {
+        if (secondsLeft <= 0) {
           clearInterval(
             timerIntervalRef.current
           );
 
-          timerIntervalRef.current =
-            null;
+          timerIntervalRef.current = null;
 
           setRemainingSeconds(0);
 
+          // Automatic submission.
+          //
+          // If successful, submitEnquiry(true) records:
+          //
+          // chat_enquiry_submitted
+          //
+          // with:
+          //
+          // automatic_submission: true
           submitEnquiry(true);
         }
       }, 1000);
@@ -1145,8 +1100,7 @@ export default function AIEnquiryChat() {
       return;
     }
 
-    sessionStartedRef.current =
-      true;
+    sessionStartedRef.current = true;
 
     setSessionStarted(true);
 
@@ -1187,11 +1141,12 @@ export default function AIEnquiryChat() {
 
     setShowExpiryWarning(false);
 
-    expiryWarningShownRef.current =
-      false;
+    expiryWarningShownRef.current = false;
 
     // ========================================================================
-    // CHAT ANALYTICS — EXTENSION
+    // CHAT ANALYTICS — EXTENSION CLICK
+    //
+    // This event is recorded when the visitor actually clicks Extend.
     // ========================================================================
 
     track("chat_session_extended", {
@@ -1241,7 +1196,7 @@ export default function AIEnquiryChat() {
   };
 
   // ==========================================================================
-  // OPEN CHAT
+  // OPEN / REOPEN CHAT
   // ==========================================================================
 
   const openChat = () => {
@@ -1252,6 +1207,13 @@ export default function AIEnquiryChat() {
       return;
     }
 
+    const isFirstOpen =
+      !chatWindowHasBeenOpenedRef.current;
+
+    const isReopen =
+      chatWindowHasBeenOpenedRef.current &&
+      chatWindowWasClosedOrMinimizedRef.current;
+
     setOpen(true);
 
     pageVisibleRef.current =
@@ -1259,52 +1221,59 @@ export default function AIEnquiryChat() {
       "visible";
 
     // ========================================================================
-    // CHAT ANALYTICS — CHAT WINDOW OPEN
+    // CHAT WINDOW OPEN / REOPEN ANALYTICS
     // ========================================================================
 
-    if (!chatWindowOpenedAtRef.current) {
-      chatWindowOpenedAtRef.current =
-        Date.now();
+    if (isFirstOpen) {
+      chatWindowHasBeenOpenedRef.current =
+        true;
+
+      if (
+        !chatWindowOpenedEventTrackedRef.current &&
+        chatId
+      ) {
+        track("chat_window_opened", {
+          chat_id: chatId,
+        });
+
+        chatWindowOpenedEventTrackedRef.current =
+          true;
+      }
+
+      if (!chatWindowOpenedAtRef.current) {
+        chatWindowOpenedAtRef.current =
+          Date.now();
+      }
+    } else if (isReopen) {
+      if (chatId) {
+        track("chat_window_reopened", {
+          chat_id: chatId,
+        });
+      }
+
+      chatWindowWasClosedOrMinimizedRef.current =
+        false;
     }
 
-    if (!sessionStartedRef.current) {
-      track("chat_window_hit", {
-        chat_id: chatId,
-        action: "open",
-      });
-    } else {
-      track("chat_window_hit", {
-        chat_id: chatId,
-        action: "reopen",
-      });
-    }
+    // ========================================================================
+    // START / RESUME ACTIVE-TIME TRACKING
+    // ========================================================================
 
-    // Start/resume active-time tracking.
     startChatActiveTracking();
 
     // ========================================================================
     // START SESSION ONLY ON FIRST OPEN
     // ========================================================================
 
-    if (
-      !sessionStartedRef.current
-    ) {
+    if (!sessionStartedRef.current) {
       startChatSession();
     }
 
     // ========================================================================
     // INITIAL ENY GREETING
     //
-    // IMPORTANT:
-    // The full ENY introduction is no longer automatically inserted here.
-    //
-    // The visitor initially sees the lightweight:
-    //
-    // "Dear Visitor,
-    //  Need help? Chat with Eny."
-    //
-    // Once the visitor sends a message, the normal /api/ai-chat
-    // flow handles ENY's response.
+    // The lightweight initial visitor prompt remains in the UI.
+    // The full ENY introduction is handled after the visitor sends a message.
     // ========================================================================
 
     setTimeout(() => {
@@ -1319,12 +1288,22 @@ export default function AIEnquiryChat() {
 
   // ==========================================================================
   // CLOSE / MINIMIZE CHAT
+  //
+  // IMPORTANT:
+  //
+  // "minimized" and "closed" are now separate analytics events.
+  //
+  // Minimize button:
+  //     chat_window_minimized
+  //
+  // X button:
+  //     chat_window_closed
   // ==========================================================================
 
   const closeChatWindow = (
     reason = "minimized"
   ) => {
-    // Record the active time up to this exact moment.
+    // Record active time up to this exact moment.
     pauseChatActiveTracking();
 
     if (
@@ -1333,16 +1312,30 @@ export default function AIEnquiryChat() {
       !submittedRef.current &&
       !sessionEndedRef.current
     ) {
-      track("chat_window_minimized", {
-        chat_id: chatId,
-        reason,
-        duration_seconds:
-          Math.floor(
-            chatActiveDurationRef.current /
-              1000
-          ),
-      });
+      const durationSeconds =
+        Math.floor(
+          chatActiveDurationRef.current /
+            1000
+        );
+
+      if (reason === "closed") {
+        track("chat_window_closed", {
+          chat_id: chatId,
+          duration_seconds:
+            durationSeconds,
+        });
+      } else {
+        track("chat_window_minimized", {
+          chat_id: chatId,
+          duration_seconds:
+            durationSeconds,
+        });
+      }
     }
+
+    // Remember that the visitor can now reopen the chat.
+    chatWindowWasClosedOrMinimizedRef.current =
+      true;
 
     setOpen(false);
   };
@@ -1368,6 +1361,13 @@ export default function AIEnquiryChat() {
 
     // ========================================================================
     // CHAT ANALYTICS — USER MESSAGE
+    //
+    // This is the event that allows analytics to determine:
+    //
+    // "Chat Interacted"
+    //
+    // by counting DISTINCT visitor_id values with at least one
+    // chat_message_sent event.
     // ========================================================================
 
     track("chat_message_sent", {
@@ -1386,35 +1386,31 @@ export default function AIEnquiryChat() {
       userMessage,
     ];
 
-    messagesRef.current =
-      updatedMessages;
+    messagesRef.current = updatedMessages;
 
-    setMessages(
-      updatedMessages
-    );
+    setMessages(updatedMessages);
 
     setInput("");
     setIsTyping(true);
 
     try {
-      const response =
-        await fetch(
-          "/api/ai-chat",
-          {
-            method: "POST",
+      const response = await fetch(
+        "/api/ai-chat",
+        {
+          method: "POST",
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
 
-            body: JSON.stringify({
-              chatId,
-              messages:
-                updatedMessages,
-            }),
-          }
-        );
+          body: JSON.stringify({
+            chatId,
+            messages:
+              updatedMessages,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(
@@ -1532,9 +1528,7 @@ export default function AIEnquiryChat() {
   // ENTER KEY
   // ==========================================================================
 
-  const handleKeyDown = (
-    event
-  ) => {
+  const handleKeyDown = (event) => {
     if (
       event.key === "Enter" &&
       !event.shiftKey
@@ -1632,9 +1626,9 @@ export default function AIEnquiryChat() {
             w-[calc(100vw-2rem)]
             sm:w-[360px]
             h-[400px]
-			min-h-[400px]
+            min-h-[400px]
             max-h-[calc(100vh-2rem)]
-			resize-y
+            resize-y
             bg-white
             rounded-2xl
             shadow-2xl
@@ -1686,6 +1680,10 @@ export default function AIEnquiryChat() {
             </div>
 
             <div className="flex items-center gap-2">
+              {/* ========================================================== */}
+              {/* MINIMIZE */}
+              {/* ========================================================== */}
+
               <button
                 onClick={() =>
                   closeChatWindow(
@@ -1701,6 +1699,10 @@ export default function AIEnquiryChat() {
               >
                 <Minimize2 size={18} />
               </button>
+
+              {/* ========================================================== */}
+              {/* CLOSE */}
+              {/* ========================================================== */}
 
               <button
                 onClick={() =>

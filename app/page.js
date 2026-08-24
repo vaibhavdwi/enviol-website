@@ -20,17 +20,12 @@ export default function Home() {
   const [activeBtn, setActiveBtn] = useState("contact");
 
   useEffect(() => {
-	    // Track homepage visit
-  track("page_view", {
-    metadata: {
-      page_type: "home"
-    }
-  });
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+  const interval = setInterval(() => {
+    setCurrent((prev) => (prev + 1) % images.length);
+  }, 4000);
+
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <>

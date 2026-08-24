@@ -68,11 +68,11 @@ export default function Home() {
 
         <div className="relative z-20 max-w-4xl px-6">
           
-            <AnimatedHeading title="Sustainable Polyester & Polyether Polyol Manufacturers for Global Industries"/>
+            <AnimatedHeading title="Polyols & PU System for Polyurethane Industries"/>
          
 
           <p className="text-lg text-gray-200 mb-6">
-            Leading manufacturer of polyester and polyether polyols based Polyurethane systems, specializing in waste upcycling into high-performance polyols for polyurethane based Rigid Foams, Coatings, Adhesives, Sealants, and Elastomers (CASE) applications worldwide.
+            Leading manufacturer of polyester polyols based Polyurethane systems, specializing in waste upcycling into high-performance polyols for polyurethane based Rigid Foams, Coatings, Adhesives, Sealants, and Elastomers (CASE) applications worldwide.
           </p>
 
           <div className="flex gap-6 justify-center">
@@ -146,7 +146,7 @@ export default function Home() {
          
 
           <p className="text-sm text-gray-200 mb-4">
-            Polyester & Polyether Polyols from recycled PET & PU waste.
+            Polyester Polyols from recycled PET & PU waste.
           </p>
 
           <div className="flex flex-col gap-3">
@@ -191,7 +191,7 @@ export default function Home() {
           </h2>
 
           <p className="text-gray-700 max-w-4xl mx-auto">
-            Enviol is a trusted polyester polyol manufacturer and polyether polyol supplier based in India, serving global industries with high-performance and sustainable polyol solutions.
+            Enviol is a trusted polyester polyol manufacturer and supplier based in India, serving global industries with high-performance and sustainable polyol solutions.
           </p>
         </div>
       </section>
@@ -204,14 +204,14 @@ export default function Home() {
           </h2>
 
           <p className="text-center max-w-3xl mx-auto text-gray-700 mb-6">
-            We specialize in chemical recycling of PET and polyurethane waste streams through controlled depolymerization and regeneration processes to produce high-performance polyols with consistent hydroxyl value and viscosity.
+            We specialize in manufacturing of Aliphatic and Aromatic polyester polyols specially developed grades from chemical recycling of PET and polyurethane waste streams through controlled depolymerization and regeneration processes to produce high-performance polyols with consistent hydroxyl value and viscosity.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 text-center">
             {[
               {
                 title: "Sustainable Polyol Recovery",
-                desc: "We recover valuable polyols from industrial waste streams and reprocess them into premium-grade polyester and polyether polyols for CASE applications.",
+                desc: "We recover valuable polyols from industrial waste streams and reprocess them into premium-grade polyester polyols for CASE applications.",
                 icon: "♻️",
               },
               {
