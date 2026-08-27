@@ -36,7 +36,8 @@
     "technical_data": {
       "hydroxyl_number": "150 - 174 mg KOH/g",
       "dynamic_viscosity": "16,000 - 31,000 mPa.s @ 23°C",
-      "water_content": "≤ 0.1%"
+      "water_content": "≤ 0.1%",
+	  "molecular_weight": "2000 KMol/mol"
     },
 
     "compatibility": "Compatible with conventional polyurethane systems and standard isocyanates.",

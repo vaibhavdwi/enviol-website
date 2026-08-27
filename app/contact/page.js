@@ -146,14 +146,15 @@ export default function Contact() {
               <p>127/625, W1 Saket Nagar</p>
               <p>Kanpur, Uttar Pradesh, India</p>
               <p>Phone: <a href="tel:+919625093722" className="text-primary underline">+91 96250 93722</a></p>
-              <p>Email: <a href="mailto:info@enviol.com" className="text-primary underline">info@enviol.com</a></p>
+              <p>Contact Email: <a href="mailto:contact@enviol.com" className="text-primary underline">contact@enviol.com</a></p>
+			  <p>Enquiry Email: <a href="mailto:enquiry@enviol.com" className="text-primary underline">enquiry@enviol.com</a></p>
             </div>
           </div>
 
           {/* RIGHT SIDE */}
           <div className="bg-lightbg p-8 rounded shadow">
             <h2 className="text-2xl font-semibold mb-6">
-              Reach Us
+              Reach Us Directly by filling below information and we will soon get back:
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
