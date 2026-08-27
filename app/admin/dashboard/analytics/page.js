@@ -11,6 +11,17 @@ export default function AnalyticsDashboard() {
   const [error, setError] = useState("");
 
   // ================================================================
+  // KPI DETAILS MODAL
+  // ================================================================
+
+  const [kpiModal, setKpiModal] = useState(null);
+  const [kpiDetails, setKpiDetails] = useState([]);
+  const [kpiDetailsLoading, setKpiDetailsLoading] =
+    useState(false);
+  const [kpiDetailsError, setKpiDetailsError] =
+    useState("");
+
+  // ================================================================
   // VISITOR LIST MODAL
   // ================================================================
 
@@ -76,6 +87,64 @@ export default function AnalyticsDashboard() {
     }
 
     setLoading(false);
+  };
+
+  // ================================================================
+  // OPEN KPI DETAILS
+  //
+  // type:
+  // events
+  // visitors
+  // sessions
+  // page_views
+  // ================================================================
+
+  const openKpiDetails = async (type) => {
+    if (!fromDate || !toDate) {
+      setError("Please select a date range first");
+      return;
+    }
+
+    setKpiModal(type);
+    setKpiDetails([]);
+    setKpiDetailsError("");
+    setKpiDetailsLoading(true);
+
+    try {
+      const res = await fetch(
+        `/api/reports/kpi-details?type=${encodeURIComponent(
+          type
+        )}&from=${encodeURIComponent(
+          fromDate
+        )}&to=${encodeURIComponent(toDate)}`
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed");
+      }
+
+      const json = await res.json();
+
+      setKpiDetails(json.details || []);
+    } catch (err) {
+      console.error(err);
+
+      setKpiDetailsError(
+        "Failed to load KPI details"
+      );
+    }
+
+    setKpiDetailsLoading(false);
+  };
+
+  // ================================================================
+  // CLOSE KPI DETAILS
+  // ================================================================
+
+  const closeKpiDetails = () => {
+    setKpiModal(null);
+    setKpiDetails([]);
+    setKpiDetailsError("");
   };
 
   // ================================================================
@@ -286,29 +355,45 @@ export default function AnalyticsDashboard() {
       )}
 
       {/* ============================================================ */}
-      {/* SUMMARY */}
+      {/* SUMMARY KPI */}
       {/* ============================================================ */}
 
       {data && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card
+          <ClickableKpiCard
             title="Events"
             value={data.summary?.total_events}
+            subtitle="View event-level details"
+            onClick={() =>
+              openKpiDetails("events")
+            }
           />
 
-          <Card
+          <ClickableKpiCard
             title="Visitors"
             value={data.summary?.unique_visitors}
+            subtitle="View visitor-level details"
+            onClick={() =>
+              openKpiDetails("visitors")
+            }
           />
 
-          <Card
+          <ClickableKpiCard
             title="Sessions"
             value={data.summary?.sessions}
+            subtitle="View session-level details"
+            onClick={() =>
+              openKpiDetails("sessions")
+            }
           />
 
-          <Card
+          <ClickableKpiCard
             title="Page Views"
             value={data.summary?.page_views}
+            subtitle="View page-level details"
+            onClick={() =>
+              openKpiDetails("page_views")
+            }
           />
         </div>
       )}
@@ -583,6 +668,21 @@ export default function AnalyticsDashboard() {
       )}
 
       {/* ============================================================ */}
+      {/* KPI DETAILS MODAL */}
+      {/* ============================================================ */}
+
+      {kpiModal && (
+        <KpiDetailsModal
+          type={kpiModal}
+          details={kpiDetails}
+          loading={kpiDetailsLoading}
+          error={kpiDetailsError}
+          onClose={closeKpiDetails}
+          onVisitorClick={openVisitorJourney}
+        />
+      )}
+
+      {/* ============================================================ */}
       {/* VISITOR LIST MODAL */}
       {/* ============================================================ */}
 
@@ -626,6 +726,598 @@ export default function AnalyticsDashboard() {
           onClose={closeVisitorJourney}
         />
       )}
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* KPI DETAILS MODAL */
+/* ====================================================================== */
+
+function KpiDetailsModal({
+  type,
+  details,
+  loading,
+  error,
+  onClose,
+  onVisitorClick,
+}) {
+  const titles = {
+    events: "Event Log",
+    visitors: "Visitor Summary",
+    sessions: "Session Summary",
+    page_views: "Page View Summary",
+  };
+
+  const descriptions = {
+    events:
+      "Individual events generated during the selected date range",
+    visitors:
+      "Unique visitors and their activity during the selected date range",
+    sessions:
+      "Sessions and activity during the selected date range",
+    page_views:
+      "Page-level page view summary during the selected date range",
+  };
+
+  return (
+    <ModalOverlay onClose={onClose}>
+      <div
+        className="bg-white rounded-xl shadow-2xl w-full max-w-[95vw] max-h-[92vh] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* HEADER */}
+
+        <div className="border-b p-5 flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h2 className="text-xl font-bold text-[#1F524F]">
+              {titles[type] || "KPI Details"}
+            </h2>
+
+            <p className="text-sm text-gray-500 mt-1">
+              {descriptions[type]}
+            </p>
+
+            <p className="text-xs text-gray-400 mt-1">
+              {details.length} record
+              {details.length === 1 ? "" : "s"}
+            </p>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-700 text-2xl leading-none"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* BODY */}
+
+        <div className="p-5 overflow-auto max-h-[72vh]">
+          {loading && (
+            <div className="py-10 text-center text-gray-500">
+              Loading details...
+            </div>
+          )}
+
+          {error && (
+            <div className="py-6 text-center text-red-500">
+              {error}
+            </div>
+          )}
+
+          {!loading &&
+            !error &&
+            details.length === 0 && (
+              <div className="py-10 text-center text-gray-500">
+                No details found for the selected date range.
+              </div>
+            )}
+
+          {!loading &&
+            !error &&
+            details.length > 0 && (
+              <>
+                {type === "events" && (
+                  <EventsDetailsTable
+                    details={details}
+                    onVisitorClick={onVisitorClick}
+                  />
+                )}
+
+                {type === "visitors" && (
+                  <VisitorsDetailsTable
+                    details={details}
+                    onVisitorClick={onVisitorClick}
+                  />
+                )}
+
+                {type === "sessions" && (
+                  <SessionsDetailsTable
+                    details={details}
+                    onVisitorClick={onVisitorClick}
+                  />
+                )}
+
+                {type === "page_views" && (
+                  <PageViewsDetailsTable
+                    details={details}
+                  />
+                )}
+              </>
+            )}
+        </div>
+
+        {/* FOOTER */}
+
+        {!loading && (
+          <div className="border-t p-4 flex justify-between items-center text-sm">
+            <span className="text-gray-500">
+              {details.length} record
+              {details.length === 1 ? "" : "s"}
+            </span>
+
+            <button
+              onClick={onClose}
+              className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+            >
+              Close
+            </button>
+          </div>
+        )}
+      </div>
+    </ModalOverlay>
+  );
+}
+
+/* ====================================================================== */
+/* EVENTS DETAILS TABLE */
+/* ====================================================================== */
+
+function EventsDetailsTable({
+  details,
+  onVisitorClick,
+}) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b text-gray-500">
+            <th className="text-left p-3 whitespace-nowrap">
+              Event
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Visitor
+            </th>
+
+            <th className="text-left p-3">
+              Page
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Location
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Timestamp
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Session
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {details.map((item, index) => (
+            <tr
+              key={
+                item.id ||
+                `${item.event}-${item.server_timestamp}-${index}`
+              }
+              className="border-b hover:bg-gray-50"
+            >
+              <td className="p-3 whitespace-nowrap">
+                <span className="font-medium text-[#1F524F]">
+                  {formatEventName(item.event)}
+                </span>
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {item.visitor_id ? (
+                  <button
+                    onClick={() =>
+                      onVisitorClick(
+                        item.visitor_id
+                      )
+                    }
+                    className="text-[#1F524F] font-medium underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
+                    title="View visitor journey"
+                  >
+                    {shortId(
+                      item.visitor_id
+                    )}
+                  </button>
+                ) : (
+                  <span className="text-gray-400">
+                    Unknown
+                  </span>
+                )}
+              </td>
+
+              <td
+                className="p-3 max-w-[280px] truncate"
+                title={item.page || ""}
+              >
+                {item.page || "—"}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatLocation(item)}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatDateTime(
+                  item.event_timestamp ||
+                    item.server_timestamp
+                )}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {item.session_id ? (
+                  <span
+                    className="font-mono text-xs"
+                    title={item.session_id}
+                  >
+                    {shortId(
+                      item.session_id
+                    )}
+                  </span>
+                ) : (
+                  "—"
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* VISITORS DETAILS TABLE */
+/* ====================================================================== */
+
+function VisitorsDetailsTable({
+  details,
+  onVisitorClick,
+}) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b text-gray-500">
+            <th className="text-left p-3 whitespace-nowrap">
+              Visitor
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Location
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              First Seen
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Last Seen
+            </th>
+
+            <th className="text-right p-3 whitespace-nowrap">
+              Pages Visited
+            </th>
+
+            <th className="text-right p-3 whitespace-nowrap">
+              Page Views
+            </th>
+
+            <th className="text-right p-3 whitespace-nowrap">
+              Events
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {details.map((item, index) => (
+            <tr
+              key={
+                item.visitor_id ||
+                `${item.first_seen}-${index}`
+              }
+              className="border-b hover:bg-gray-50"
+            >
+              <td className="p-3 whitespace-nowrap">
+                {item.visitor_id ? (
+                  <button
+                    onClick={() =>
+                      onVisitorClick(
+                        item.visitor_id
+                      )
+                    }
+                    className="text-[#1F524F] font-medium underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
+                    title="View complete visitor journey"
+                  >
+                    {shortId(
+                      item.visitor_id
+                    )}
+                  </button>
+                ) : (
+                  <span className="text-gray-400">
+                    Unknown
+                  </span>
+                )}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatLocation(item)}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatDateTime(
+                  item.first_seen
+                )}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatDateTime(
+                  item.last_seen
+                )}
+              </td>
+
+              <td className="p-3 text-right">
+                {Number(
+                  item.unique_pages
+                ) || 0}
+              </td>
+
+              <td className="p-3 text-right font-medium text-[#1F524F]">
+                {Number(
+                  item.page_views
+                ) || 0}
+              </td>
+
+              <td className="p-3 text-right">
+                {Number(
+                  item.event_count
+                ) || 0}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* SESSIONS DETAILS TABLE */
+/* ====================================================================== */
+
+function SessionsDetailsTable({
+  details,
+  onVisitorClick,
+}) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b text-gray-500">
+            <th className="text-left p-3 whitespace-nowrap">
+              Session
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Visitor
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Location
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Start
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              End
+            </th>
+
+            <th className="text-right p-3 whitespace-nowrap">
+              Duration
+            </th>
+
+            <th className="text-right p-3 whitespace-nowrap">
+              Pages
+            </th>
+
+            <th className="text-right p-3 whitespace-nowrap">
+              Events
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {details.map((item, index) => (
+            <tr
+              key={
+                item.session_id ||
+                `${item.started_at}-${index}`
+              }
+              className="border-b hover:bg-gray-50"
+            >
+              <td className="p-3 whitespace-nowrap">
+                {item.session_id ? (
+                  <span
+                    className="font-mono text-xs"
+                    title={item.session_id}
+                  >
+                    {shortId(
+                      item.session_id
+                    )}
+                  </span>
+                ) : (
+                  "Unknown"
+                )}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {item.visitor_id ? (
+                  <button
+                    onClick={() =>
+                      onVisitorClick(
+                        item.visitor_id
+                      )
+                    }
+                    className="text-[#1F524F] font-medium underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
+                    title="View complete visitor journey"
+                  >
+                    {shortId(
+                      item.visitor_id
+                    )}
+                  </button>
+                ) : (
+                  <span className="text-gray-400">
+                    Unknown
+                  </span>
+                )}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatLocation(item)}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatDateTime(
+                  item.started_at
+                )}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatDateTime(
+                  item.last_activity
+                )}
+              </td>
+
+              <td className="p-3 text-right font-medium text-[#1F524F] whitespace-nowrap">
+                {formatDuration(
+                  getDurationSeconds(
+                    item.started_at,
+                    item.last_activity
+                  )
+                )}
+              </td>
+
+              <td className="p-3 text-right">
+                {Number(
+                  item.unique_pages
+                ) || 0}
+              </td>
+
+              <td className="p-3 text-right">
+                {Number(
+                  item.event_count
+                ) || 0}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ====================================================================== */
+/* PAGE VIEWS DETAILS TABLE */
+/* ====================================================================== */
+
+function PageViewsDetailsTable({
+  details,
+}) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b text-gray-500">
+            <th className="text-left p-3">
+              Page
+            </th>
+
+            <th className="text-right p-3 whitespace-nowrap">
+              Unique Visitors
+            </th>
+
+            <th className="text-right p-3 whitespace-nowrap">
+              Total Views
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              First Viewed
+            </th>
+
+            <th className="text-left p-3 whitespace-nowrap">
+              Last Viewed
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {details.map((item, index) => (
+            <tr
+              key={
+                item.page ||
+                `${item.first_viewed}-${index}`
+              }
+              className="border-b hover:bg-gray-50"
+            >
+              <td
+                className="p-3 max-w-[420px] truncate"
+                title={item.page || ""}
+              >
+                <span className="font-medium text-gray-700">
+                  {item.page || "Unknown"}
+                </span>
+              </td>
+
+              <td className="p-3 text-right">
+                {Number(
+                  item.unique_visitors
+                ) || 0}
+              </td>
+
+              <td className="p-3 text-right font-semibold text-[#1F524F]">
+                {Number(
+                  item.page_views
+                ) || 0}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatDateTime(
+                  item.first_viewed
+                )}
+              </td>
+
+              <td className="p-3 whitespace-nowrap">
+                {formatDateTime(
+                  item.last_viewed
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -722,8 +1414,6 @@ function ChatInteractionsModal({
                       }
                       className="border-b hover:bg-gray-50"
                     >
-                      {/* VISITOR */}
-
                       <td className="p-3">
                         {user.visitor_id ? (
                           <button
@@ -746,13 +1436,9 @@ function ChatInteractionsModal({
                         )}
                       </td>
 
-                      {/* LOCATION */}
-
                       <td className="p-3 whitespace-nowrap">
                         {formatLocation(user)}
                       </td>
-
-                      {/* FIRST INTERACTION */}
 
                       <td className="p-3 whitespace-nowrap">
                         {formatDateTime(
@@ -760,27 +1446,19 @@ function ChatInteractionsModal({
                         )}
                       </td>
 
-                      {/* CHAT TIME */}
-
                       <td className="p-3 text-right font-medium text-[#1F524F] whitespace-nowrap">
                         {formatDuration(
                           user.chat_duration_seconds
                         )}
                       </td>
 
-                      {/* MESSAGES */}
-
                       <td className="p-3 text-right">
                         {user.messages || 0}
                       </td>
 
-                      {/* EXTENSIONS */}
-
                       <td className="p-3 text-right">
                         {user.extensions || 0}
                       </td>
-
-                      {/* SUBMITTED */}
 
                       <td className="p-3 text-center">
                         {user.submitted ? (
@@ -932,72 +1610,84 @@ function VisitorsModal({
 
                   <tbody>
                     {[...visitors]
-  .sort((a, b) => {
-    if (isPage) {
-      return (
-        (Number(b.page_views) || 0) -
-        (Number(a.page_views) || 0)
-      );
-    }
-
-    return (
-      (Number(b.event_count) || 0) -
-      (Number(a.event_count) || 0)
-    );
-  })
-  .map((visitor) => (
-                      <tr
-                        key={
-                          visitor.visitor_id ||
-                          `${visitor.first_seen}-${visitor.last_seen}`
+                      .sort((a, b) => {
+                        if (isPage) {
+                          return (
+                            (Number(
+                              b.page_views
+                            ) || 0) -
+                            (Number(
+                              a.page_views
+                            ) || 0)
+                          );
                         }
-                        className="border-b hover:bg-gray-50"
-                      >
-                        <td className="p-3">
-                          {visitor.visitor_id ? (
-                            <button
-                              onClick={() =>
-                                onVisitorClick(
+
+                        return (
+                          (Number(
+                            b.event_count
+                          ) || 0) -
+                          (Number(
+                            a.event_count
+                          ) || 0)
+                        );
+                      })
+                      .map((visitor) => (
+                        <tr
+                          key={
+                            visitor.visitor_id ||
+                            `${visitor.first_seen}-${visitor.last_seen}`
+                          }
+                          className="border-b hover:bg-gray-50"
+                        >
+                          <td className="p-3">
+                            {visitor.visitor_id ? (
+                              <button
+                                onClick={() =>
+                                  onVisitorClick(
+                                    visitor.visitor_id
+                                  )
+                                }
+                                className="text-[#1F524F] font-medium underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
+                                title="View complete visitor journey"
+                              >
+                                {shortId(
                                   visitor.visitor_id
-                                )
-                              }
-                              className="text-[#1F524F] font-medium underline decoration-dotted underline-offset-4 hover:text-[#42B3A5]"
-                              title="View complete visitor journey"
-                            >
-                              {shortId(
-                                visitor.visitor_id
-                              )}
-                            </button>
-                          ) : (
-                            <span className="text-gray-400">
-                              Unknown
-                            </span>
-                          )}
-                        </td>
+                                )}
+                              </button>
+                            ) : (
+                              <span className="text-gray-400">
+                                Unknown
+                              </span>
+                            )}
+                          </td>
 
-                        <td className="p-3 whitespace-nowrap">
-                          {formatLocation(visitor)}
-                        </td>
+                          <td className="p-3 whitespace-nowrap">
+                            {formatLocation(
+                              visitor
+                            )}
+                          </td>
 
-                        <td className="p-3 whitespace-nowrap">
-                          {formatDateTime(
-                            visitor.first_seen
-                          )}
-                        </td>
+                          <td className="p-3 whitespace-nowrap">
+                            {formatDateTime(
+                              visitor.first_seen
+                            )}
+                          </td>
 
-                        <td className="p-3 whitespace-nowrap">
-                          {formatDateTime(
-                            visitor.last_seen
-                          )}
-                        </td>
+                          <td className="p-3 whitespace-nowrap">
+                            {formatDateTime(
+                              visitor.last_seen
+                            )}
+                          </td>
 
-                        <td className="p-3 text-right">
-                          {isPage
-                            ? visitor.page_views || 0
-                            : visitor.event_count || 0}
-                        </td>
-                      </tr>
-                    ))}
+                          <td className="p-3 text-right">
+                            {isPage
+                              ? visitor.page_views ||
+                                0
+                              : visitor.event_count ||
+                                0}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -1359,23 +2049,42 @@ function GeoBarChart({
 }
 
 /* ====================================================================== */
-/* SUMMARY CARD */
+/* SUMMARY KPI CARD */
 /* ====================================================================== */
 
-function Card({
+function ClickableKpiCard({
   title,
   value,
+  subtitle,
+  onClick,
 }) {
   return (
-    <div className="bg-white border p-4 rounded">
-      <p className="text-gray-500 text-sm">
-        {title}
-      </p>
+    <button
+      type="button"
+      onClick={onClick}
+      className="bg-white border rounded-xl p-4 text-left hover:border-[#42B3A5] hover:shadow-sm transition-all group"
+      title={`View ${title.toLowerCase()} details`}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-gray-500 text-sm">
+          {title}
+        </p>
 
-      <p className="text-2xl font-bold text-[#1F524F]">
+        <span className="text-xs text-[#42B3A5] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          View →
+        </span>
+      </div>
+
+      <p className="text-2xl font-bold text-[#1F524F] mt-1">
         {value || 0}
       </p>
-    </div>
+
+      {subtitle && (
+        <p className="text-xs text-gray-400 mt-1">
+          {subtitle}
+        </p>
+      )}
+    </button>
   );
 }
 
@@ -1493,6 +2202,37 @@ function formatDuration(seconds) {
   }
 
   return `${remainingSeconds}s`;
+}
+
+/* ====================================================================== */
+/* CALCULATE DURATION FROM TWO TIMESTAMPS */
+/* ====================================================================== */
+
+function getDurationSeconds(
+  start,
+  end
+) {
+  if (!start || !end) {
+    return 0;
+  }
+
+  const startTime =
+    new Date(start).getTime();
+
+  const endTime =
+    new Date(end).getTime();
+
+  if (
+    !Number.isFinite(startTime) ||
+    !Number.isFinite(endTime)
+  ) {
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    (endTime - startTime) / 1000
+  );
 }
 
 /* ====================================================================== */
