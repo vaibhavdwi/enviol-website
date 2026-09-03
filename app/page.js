@@ -192,55 +192,76 @@ export default function Home() {
       </section>
 
       {/* WHAT WE DO */}
-      <section className="pt-4 pb-10 bg-yellow-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-primary mb-8">
-            What We Do
-          </h2>
+<section className="pt-4 pb-10 bg-yellow-50">
+  <div className="max-w-6xl mx-auto px-6">
+    <h2 className="text-3xl font-bold text-center text-primary mb-8">
+      What We Do
+    </h2>
 
-          <p className="text-center max-w-3xl mx-auto text-gray-700 mb-6">
-            We specialize in manufacturing of Aliphatic and Aromatic polyester polyols specially developed grades from chemical recycling of PET and polyurethane waste streams through controlled depolymerization and regeneration processes to produce high-performance polyols with consistent hydroxyl value and viscosity.
-          </p>
+    <p className="text-center max-w-3xl mx-auto text-gray-700 mb-8">
+      We specialize in manufacturing of Aliphatic and Aromatic polyester
+      polyols specially developed grades from chemical recycling of PET and
+      polyurethane waste streams through controlled depolymerization and
+      regeneration processes to produce high-performance polyols with
+      consistent hydroxyl value and viscosity.
+    </p>
 
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            {[
-              {
-                title: "Sustainable Polyol Recovery",
-                desc: "We recover valuable polyols from industrial waste streams and reprocess them into premium-grade polyester polyols for CASE applications.",
-                icon: "♻️",
-              },
-              {
-                title: "Advanced Research & Development",
-                desc: "Our R&D-driven processes ensure consistent hydroxyl value, stable viscosity, and reliable industrial performance.",
-                icon: "🧪",
-              },
-              {
-                title: "Circular Chemical Manufacturing",
-                desc: "We help manufacturers reduce raw material dependency and carbon footprint through sustainable circular sourcing.",
-                icon: "🔄",
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="relative group rounded-xl p-[1px] bg-gradient-to-r from-[#42b3a5] to-green-400 hover:scale-105 transition-transform duration-300"
-              >
-                <div className="bg-white h-full rounded-xl p-6 shadow-md group-hover:shadow-xl transition">
-                  <div className="text-4xl mb-4">{item.icon}</div>
+    {/* WHAT WE DO VIDEO */}
+    <div className="flex justify-center mb-10">
+      <div className="w-full max-w-4xl rounded-xl overflow-hidden shadow-xl">
+        <video
+          controls
+          playsInline
+          preload="metadata"
+          className="w-full h-auto"
+        >
+          <source
+            src="/videos/enviol-what-we-do.mp4"
+            type="video/mp4"
+          />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
 
-                  <h3 className="text-xl font-semibold mb-3 group-hover:text-[#42b3a5] transition">
-                    {item.title}
-                  </h3>
+    <div className="grid md:grid-cols-3 gap-8 text-center">
+      {[
+        {
+          title: "Sustainable Polyol Recovery",
+          desc: "We recover valuable polyols from industrial waste streams and reprocess them into premium-grade polyester polyols for CASE applications.",
+          icon: "♻️",
+        },
+        {
+          title: "Advanced Research & Development",
+          desc: "Our R&D-driven processes ensure consistent hydroxyl value, stable viscosity, and reliable industrial performance.",
+          icon: "🧪",
+        },
+        {
+          title: "Circular Chemical Manufacturing",
+          desc: "We help manufacturers reduce raw material dependency and carbon footprint through sustainable circular sourcing.",
+          icon: "🔄",
+        },
+      ].map((item, index) => (
+        <div
+          key={index}
+          className="relative group rounded-xl p-[1px] bg-gradient-to-r from-[#42b3a5] to-green-400 hover:scale-105 transition-transform duration-300"
+        >
+          <div className="bg-white h-full rounded-xl p-6 shadow-md group-hover:shadow-xl transition">
+            <div className="text-4xl mb-4">{item.icon}</div>
 
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
+            <h3 className="text-xl font-semibold mb-3 group-hover:text-[#42b3a5] transition">
+              {item.title}
+            </h3>
+
+            <p className="text-gray-600 text-sm leading-relaxed">
+              {item.desc}
+            </p>
           </div>
         </div>
-      </section>
-	  
+      ))}
+    </div>
+  </div>
+</section>
 	  {/* WHY ENVIOL */}
       <section className="pt-4 pb-10 bg-yellow-50">
         <div className="max-w-6xl mx-auto px-6">

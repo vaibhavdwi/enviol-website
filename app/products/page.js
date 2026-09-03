@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { products } from "../../data/products";
+import productData from "../../data/products.json";
 import AnimatedHeading from "@/components/AnimatedHeading";
+
+const products = Array.isArray(productData) ? productData : [];
 
 export default function ProductsPage() {
   const processSteps = [
@@ -201,7 +203,7 @@ export default function ProductsPage() {
                     group-hover:text-white
                   "
                 >
-                  {product.name}
+                  {product.product_code}
                 </h3>
 
                 <p
